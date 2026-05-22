@@ -43,8 +43,8 @@ class ImageRecord:
 @dataclass(frozen=True)
 class HashRecord:
     image: ImageRecord
-    dhash: int
-    phash: int
+    dhash: int | None
+    phash: int | None
 
 
 def parse_args() -> argparse.Namespace:
@@ -64,6 +64,17 @@ def parse_args() -> argparse.Namespace:
         "--skip-similar",
         action="store_true",
         help="Не искать похожие изображения, а выполнить только проверку и дубликаты.",
+    )
+    parser.add_argument(
+        "--similar-method",
+        choices=("dhash", "phash", "both"),
+        default="both",
+        help="Метод поиска похожих изображений.",
+    )
+    parser.add_argument(
+        "--remove-similar",
+        action="store_true",
+        help="Исключить найденные похожие изображения из data/processed.",
     )
     parser.add_argument(
         "--similar-threshold",
@@ -89,6 +100,28 @@ def parse_args() -> argparse.Namespace:
         help="Удалить существующую папку processed перед новой обработкой.",
     )
     return parser.parse_args()
+
+
+def validate_args(args: argparse.Namespace) -> None:
+    if args.skip_similar and args.remove_similar:
+        raise ValueError("Нельзя использовать --skip-similar вместе с --remove-similar.")
+
+    dhash_threshold, phash_threshold = resolve_thresholds(args)
+    thresholds = {
+        "dHash": dhash_threshold,
+        "pHash": phash_threshold,
+    }
+    for method_name, threshold in thresholds.items():
+        if threshold < 0 or threshold > 16:
+            raise ValueError(
+                f"Порог {method_name} должен быть в диапазоне 0..16, получено {threshold}."
+            )
+
+
+def resolve_thresholds(args: argparse.Namespace) -> tuple[int, int]:
+    if args.similar_threshold is not None:
+        return args.similar_threshold, args.similar_threshold
+    return args.dhash_threshold, args.phash_threshold
 
 
 def iter_source_images(raw_dir: Path) -> tuple[list[tuple[Path, str, str]], list[str]]:
@@ -220,6 +253,13 @@ def write_csv(path: Path, rows: list[dict[str, object]], fieldnames: list[str]) 
         writer.writerows(rows)
 
 
+def remove_stale_report(path: Path) -> None:
+    """Удалить старый отчет, если в текущем режиме он не создается заново."""
+
+    if path.exists():
+        path.unlink()
+
+
 def count_by_class(records: list[ImageRecord]) -> dict[str, int]:
     counts: dict[str, int] = defaultdict(int)
     for record in records:
@@ -346,7 +386,10 @@ def collect_candidate_indexes(
 
 
 def find_similar_pairs(
-    records: list[ImageRecord], dhash_threshold: int, phash_threshold: int
+    records: list[ImageRecord],
+    method: str,
+    dhash_threshold: int,
+    phash_threshold: int,
 ) -> list[dict[str, str | int]]:
     hashes: list[HashRecord] = []
     for record in records:
@@ -355,8 +398,12 @@ def find_similar_pairs(
                 hashes.append(
                     HashRecord(
                         image=record,
-                        dhash=calculate_dhash(image),
-                        phash=calculate_phash(image),
+                        dhash=calculate_dhash(image)
+                        if method in {"dhash", "both"}
+                        else None,
+                        phash=calculate_phash(image)
+                        if method in {"phash", "both"}
+                        else None,
                     )
                 )
         except Exception:
@@ -370,25 +417,38 @@ def find_similar_pairs(
         # Индексы по блокам хеша позволяют не сравнивать каждое изображение
         # с каждым. В кандидаты попадают только хеши, которые теоретически
         # могут пройти заданные пороги dHash или pHash.
-        candidate_indexes = collect_candidate_indexes(
-            dhash_index, current_hashes.dhash, dhash_threshold
-        )
-        candidate_indexes.update(
-            collect_candidate_indexes(phash_index, current_hashes.phash, phash_threshold)
-        )
+        candidate_indexes: set[int] = set()
+        if current_hashes.dhash is not None:
+            candidate_indexes.update(
+                collect_candidate_indexes(
+                    dhash_index, current_hashes.dhash, dhash_threshold
+                )
+            )
+        if current_hashes.phash is not None:
+            candidate_indexes.update(
+                collect_candidate_indexes(
+                    phash_index, current_hashes.phash, phash_threshold
+                )
+            )
 
         for candidate_index in sorted(candidate_indexes):
             candidate_hashes = hashes[candidate_index]
-            dhash_distance = hamming_distance(
-                current_hashes.dhash, candidate_hashes.dhash
+            dhash_distance = (
+                hamming_distance(current_hashes.dhash, candidate_hashes.dhash)
+                if current_hashes.dhash is not None
+                and candidate_hashes.dhash is not None
+                else None
             )
-            phash_distance = hamming_distance(
-                current_hashes.phash, candidate_hashes.phash
+            phash_distance = (
+                hamming_distance(current_hashes.phash, candidate_hashes.phash)
+                if current_hashes.phash is not None
+                and candidate_hashes.phash is not None
+                else None
             )
             matched_by = []
-            if dhash_distance <= dhash_threshold:
+            if dhash_distance is not None and dhash_distance <= dhash_threshold:
                 matched_by.append("dhash")
-            if phash_distance <= phash_threshold:
+            if phash_distance is not None and phash_distance <= phash_threshold:
                 matched_by.append("phash")
 
             if matched_by:
@@ -404,14 +464,57 @@ def find_similar_pairs(
                     }
                 )
 
-        add_hash_to_index(dhash_index, current_hashes.dhash, current_index)
-        add_hash_to_index(phash_index, current_hashes.phash, current_index)
+        if current_hashes.dhash is not None:
+            add_hash_to_index(dhash_index, current_hashes.dhash, current_index)
+        if current_hashes.phash is not None:
+            add_hash_to_index(phash_index, current_hashes.phash, current_index)
 
     return pairs
 
 
+def remove_similar_records(
+    records: list[ImageRecord], similar_pairs: list[dict[str, str | int]]
+) -> tuple[list[ImageRecord], list[dict[str, str | int]]]:
+    """Исключить из processed более поздние изображения из похожих пар.
+
+    Исходные файлы в data/raw не удаляются. Скрипт только не копирует выбранные
+    изображения в data/processed и сохраняет отчет с причиной исключения.
+    """
+
+    records_by_path = {str(record.source_path): record for record in records}
+    removed_paths: set[str] = set()
+    removed_rows: list[dict[str, str | int]] = []
+
+    for pair in similar_pairs:
+        kept_path = str(pair["path_1"])
+        removed_path = str(pair["path_2"])
+
+        if kept_path in removed_paths or removed_path in removed_paths:
+            continue
+
+        removed_record = records_by_path[removed_path]
+        removed_paths.add(removed_path)
+        removed_rows.append(
+            {
+                "removed_path": removed_path,
+                "removed_class": removed_record.class_name,
+                "kept_path": kept_path,
+                "kept_class": str(pair["class_1"]),
+                "dhash_distance": pair["dhash_distance"],
+                "phash_distance": pair["phash_distance"],
+                "matched_by": pair["matched_by"],
+            }
+        )
+
+    filtered_records = [
+        record for record in records if str(record.source_path) not in removed_paths
+    ]
+    return filtered_records, removed_rows
+
+
 def main() -> None:
     args = parse_args()
+    validate_args(args)
 
     raw_dir = args.raw_dir.resolve()
     processed_dir = args.processed_dir.resolve()
@@ -433,8 +536,29 @@ def main() -> None:
     # 3. Оставляем по одному экземпляру каждого точного дубликата.
     unique_records, duplicate_rows = split_exact_duplicates(valid_records)
 
-    # 4. Копируем очищенный датасет без разделения на train/val/test.
-    manifest = write_processed_dataset(unique_records, processed_dir, args.image_size)
+    similar_count = None
+    dhash_threshold, phash_threshold = resolve_thresholds(args)
+    similar_pairs: list[dict[str, str | int]] = []
+    similar_removed_rows: list[dict[str, str | int]] = []
+    processed_records = unique_records
+
+    if not args.skip_similar:
+        # 4. Похожие изображения сохраняем в отчет. Удаление включается только
+        # отдельным флагом --remove-similar и затрагивает только data/processed.
+        similar_pairs = find_similar_pairs(
+            unique_records,
+            method=args.similar_method,
+            dhash_threshold=dhash_threshold,
+            phash_threshold=phash_threshold,
+        )
+        similar_count = len(similar_pairs)
+        if args.remove_similar:
+            processed_records, similar_removed_rows = remove_similar_records(
+                unique_records, similar_pairs
+            )
+
+    # 5. Копируем очищенный датасет без разделения на train/val/test.
+    manifest = write_processed_dataset(processed_records, processed_dir, args.image_size)
 
     write_csv(
         report_dir / "manifest.csv",
@@ -447,19 +571,7 @@ def main() -> None:
         duplicate_rows,
         ["md5", "kept_path", "duplicate_path", "kept_class", "duplicate_class"],
     )
-
-    similar_count = None
-    dhash_threshold = args.similar_threshold or args.dhash_threshold
-    phash_threshold = args.similar_threshold or args.phash_threshold
-
     if not args.skip_similar:
-        # 5. Похожие изображения не удаляем автоматически, а сохраняем в отчет.
-        similar_pairs = find_similar_pairs(
-            unique_records,
-            dhash_threshold=dhash_threshold,
-            phash_threshold=phash_threshold,
-        )
-        similar_count = len(similar_pairs)
         write_csv(
             report_dir / "similar_pairs.csv",
             similar_pairs,
@@ -473,6 +585,25 @@ def main() -> None:
                 "matched_by",
             ],
         )
+    if args.remove_similar:
+        write_csv(
+            report_dir / "removed_similar.csv",
+            similar_removed_rows,
+            [
+                "removed_path",
+                "removed_class",
+                "kept_path",
+                "kept_class",
+                "dhash_distance",
+                "phash_distance",
+                "matched_by",
+            ],
+        )
+    else:
+        remove_stale_report(report_dir / "removed_similar.csv")
+
+    if args.skip_similar:
+        remove_stale_report(report_dir / "similar_pairs.csv")
 
     summary = {
         "raw_dir": str(raw_dir),
@@ -485,8 +616,11 @@ def main() -> None:
         "bad_files": len(bad_files),
         "exact_duplicate_files_removed_from_processed": len(duplicate_rows),
         "unique_images": len(unique_records),
-        "processed_counts": count_by_class(unique_records),
+        "similar_images_removed_from_processed": len(similar_removed_rows),
+        "processed_images": len(processed_records),
+        "processed_counts": count_by_class(processed_records),
         "image_size": args.image_size,
+        "similar_method": None if args.skip_similar else args.similar_method,
         "dhash_threshold": None if args.skip_similar else dhash_threshold,
         "phash_threshold": None if args.skip_similar else phash_threshold,
         "similar_pairs": similar_count,

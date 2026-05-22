@@ -94,6 +94,49 @@ python3 src/preprocess_data.py --overwrite
 python3 src/preprocess_data.py --overwrite --skip-similar
 ```
 
+Поиск похожих изображений можно запускать раздельно:
+
+```bash
+python3 src/preprocess_data.py --overwrite --similar-method dhash
+python3 src/preprocess_data.py --overwrite --similar-method phash
+python3 src/preprocess_data.py --overwrite --similar-method both
+```
+
+Пороги задаются отдельно:
+
+```bash
+python3 src/preprocess_data.py --overwrite --similar-method dhash --dhash-threshold 5
+python3 src/preprocess_data.py --overwrite --similar-method phash --phash-threshold 5
+python3 src/preprocess_data.py --overwrite --similar-method both --dhash-threshold 5 --phash-threshold 5
+```
+
+Если нужно не только найти похожие изображения, но и исключить их из 
+`data/processed`, используется флаг `--remove-similar`:
+
+```bash
+# Исключить из data/processed изображения, похожие по dHash
+python3 src/preprocess_data.py --overwrite --similar-method dhash --dhash-threshold 5 --remove-similar
+
+# Исключить из data/processed изображения, похожие по pHash
+python3 src/preprocess_data.py --overwrite --similar-method phash --phash-threshold 5 --remove-similar
+
+# Исключить из data/processed изображения, похожие по dHash или pHash
+python3 src/preprocess_data.py --overwrite --similar-method both --dhash-threshold 5 --phash-threshold 5 --remove-similar
+```
+
+Эта команда не удаляет файлы из `data/raw`. Она пересоздает `data/processed` 
+и не копирует туда изображения, которые попали в отчет похожих пар. Список 
+исключенных файлов сохраняется в `results/preprocessing/removed_similar.csv`.
+
+Если нужно искать только визуальные дубликаты с полностью одинаковым 
+perceptual hash, можно поставить порог `0`:
+
+```bash
+python3 src/preprocess_data.py --overwrite --similar-method dhash --dhash-threshold 0
+python3 src/preprocess_data.py --overwrite --similar-method phash --phash-threshold 0
+python3 src/preprocess_data.py --overwrite --similar-method both --similar-threshold 0
+```
+
 После очистки данные можно сохранить в отдельную папку:
 
 ```text
