@@ -146,6 +146,98 @@ data/processed/
 └── Late_Blight/
 ```
 
+## Отдельная выборка для первых экспериментов
+
+Очищенный датасет `data/processed` используется как основной подготовленный
+набор данных и не изменяется при создании экспериментальных выборок.
+
+Для первых экспериментов EfficientNet создана отдельная сбалансированная
+выборка:
+
+```text
+data/experiments/balanced_1000_per_class/
+├── Early_Blight/  # 1000 изображений
+├── Healthy/       # 1000 изображений
+└── Late_Blight/   # 1000 изображений
+```
+
+Изображения выбираются случайно из `data/processed`, но с фиксированным
+`seed = 42`, поэтому выборку можно воспроизвести. Сводка и список выбранных
+файлов сохраняются в:
+
+```text
+results/dataset_subsets/balanced_1000_per_class/
+├── manifest.csv
+└── summary.json
+```
+
+Команда для воспроизведения этой выборки:
+
+```bash
+python src/create_balanced_subset.py --source-dir data/processed --output-dir data/experiments/balanced_1000_per_class --report-dir results/dataset_subsets/balanced_1000_per_class --images-per-class 1000 --seed 42
+```
+
+Если нужно пересоздать уже существующую выборку, используется флаг
+`--overwrite`:
+
+```bash
+python src/create_balanced_subset.py --source-dir data/processed --output-dir data/experiments/balanced_1000_per_class --report-dir results/dataset_subsets/balanced_1000_per_class --images-per-class 1000 --seed 42 --overwrite
+```
+
+## Разбиение выборки для экспериментов
+
+Для первых экспериментов выборка `balanced_1000_per_class` разделена на
+`train`, `val` и `test` в соотношении `70/15/15` с тем же `seed = 42`.
+В каждом классе получается:
+
+```text
+train: 700 изображений
+val:   150 изображений
+test:  150 изображений
+```
+
+Разбиение сохраняется отдельно и не изменяет исходную выборку:
+
+```text
+data/experiments/balanced_1000_per_class_split/
+├── train/
+├── val/
+└── test/
+```
+
+Команда для воспроизведения разбиения:
+
+```bash
+python src/split_dataset.py --source-dir data/experiments/balanced_1000_per_class --output-dir data/experiments/balanced_1000_per_class_split --report-dir results/dataset_splits/balanced_1000_per_class --train-ratio 0.7 --val-ratio 0.15 --test-ratio 0.15 --seed 42
+```
+
+Если нужно пересоздать уже существующее разбиение, используется флаг
+`--overwrite`.
+
+## Эксперимент 1: EfficientNetB0, обучение головы
+
+Первый эксперимент соответствует режиму `head_only`: базовая часть
+EfficientNetB0 замораживается, обучается только новая классификационная
+голова для трех классов.
+
+Команда запуска:
+
+```bash
+python src/train_efficientnet.py --dataset-dir data/experiments/balanced_1000_per_class_split --experiment-name exp01_head_only_1000_per_class --training-strategy head_only --image-size 224 --batch-size 32 --epochs-head 10 --learning-rate-head 0.001 --weights imagenet --seed 42
+```
+
+Скрипт сохраняет:
+
+- метрики эксперимента в `results/metrics/`;
+- общий csv с экспериментами в `results/metrics/experiments.csv`;
+- график accuracy/loss в `results/plots/`;
+- confusion matrix в `results/confusion_matrices/`;
+- обученную модель в `models/final/`;
+- время обучения в json/csv с метриками.
+
+При первом запуске с `--weights imagenet` TensorFlow может скачать
+предобученные веса EfficientNetB0, если их еще нет в локальном кэше.
+
 ### 1. Проверка изображений
 
 Сначала нужно убедиться, что все файлы действительно открываются как 
