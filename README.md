@@ -535,3 +535,24 @@ python src/train_efficientnet.py --dataset-dir data/experiments/size_series/size
 python src/train_efficientnet.py --dataset-dir data/experiments/size_series/size_3000_per_class --experiment-name exp09_fine_tune_size3000_per_class --training-strategy fine_tune --image-size 224 --batch-size 32 --epochs-head 10 --epochs-finetune 5 --learning-rate-head 0.001 --learning-rate-finetune 0.00001 --fine-tune-layers 20 --weights imagenet --seed 42
 ```
 
+## Ресурсные метрики моделей
+
+После обучения экспериментов можно дополнительно записать в JSON и общий CSV
+ресурсные характеристики сохраненных моделей:
+
+- размер файла модели;
+- количество параметров;
+- FLOPs на один forward pass;
+- скорость инференса на текущей машине;
+- оценку GFLOPs/s.
+
+Команда:
+
+```bash
+python src/update_model_resource_metrics.py --metrics-dir results/metrics --experiments-csv results/metrics/experiments.csv --image-size 224 --benchmark-batch-size 1 --warmup-runs 3 --benchmark-runs 10
+```
+
+FLOPs на одно изображение показывает вычислительную сложность модели.
+GFLOPs/s зависит от компьютера, версии TensorFlow, CPU/GPU и batch size, поэтому
+эту метрику нужно указывать как измеренную на текущей машине.
+

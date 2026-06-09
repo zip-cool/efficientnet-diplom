@@ -54,5 +54,16 @@
     "Early_Blight",
     "Healthy",
     "Late_Blight"
-  ]
+  ],
+  "model_file_size_bytes": 17108679,
+  "model_file_size_mb": 16.316107749938965,
+  "parameters_total": 4053414,
+  "parameters_trainable": 3843,
+  "parameters_non_trainable": 4049571,
+  "flops_per_inference": 800792873,
+  "gflops_per_inference": 0.800792873,
+  "inference_benchmark_batch_size": 1.0,
+  "inference_images_per_second": 6.258054898866733,
+  "inference_ms_per_image": 159.79406000114977,
+  "estimated_gflops_per_second": 5.011405761855215
 }
