@@ -1,5 +1,5 @@
 {
-  "experiment_name": "exp03_1_head_only_1000_per_class",
+  "experiment_name": "exp03_1_head_only_aug_1000_per_class",
   "model_name": "EfficientNetB0",
   "dataset_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\experiments\\balanced_1000_per_class_split",
   "train_size": 2100,
@@ -46,10 +46,10 @@
   "f1_score": 0.9155931148670423,
   "test_loss": 0.24846558272838593,
   "training_time_seconds": 247.42210510000587,
-  "model_path": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\models\\final\\exp03_1_head_only_1000_per_class.keras",
-  "plot_path": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\results\\plots\\exp03_1_head_only_1000_per_class_history.png",
-  "confusion_matrix_csv_path": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\results\\confusion_matrices\\exp03_1_head_only_1000_per_class_confusion_matrix.csv",
-  "confusion_matrix_png_path": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\results\\confusion_matrices\\exp03_1_head_only_1000_per_class_confusion_matrix.png",
+  "model_path": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\models\\final\\exp03_1_head_only_aug_1000_per_class.keras",
+  "plot_path": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\results\\plots\\exp03_1_head_only_aug_1000_per_class_history.png",
+  "confusion_matrix_csv_path": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\results\\confusion_matrices\\exp03_1_head_only_aug_1000_per_class_confusion_matrix.csv",
+  "confusion_matrix_png_path": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\results\\confusion_matrices\\exp03_1_head_only_aug_1000_per_class_confusion_matrix.png",
   "class_names": [
     "Early_Blight",
     "Healthy",
