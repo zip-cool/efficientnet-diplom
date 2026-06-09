@@ -1,4 +1,9 @@
-"""Create a reproducible stratified train/validation/test split."""
+"""Создание воспроизводимого train/validation/test разбиения.
+
+Скрипт используется для первой серии экспериментов после создания
+сбалансированной подвыборки. Он делит каждый класс отдельно, поэтому в train,
+val и test сохраняется одинаковая структура классов.
+"""
 
 from __future__ import annotations
 
@@ -14,6 +19,8 @@ IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 
 
 def parse_args() -> argparse.Namespace:
+    """Описать параметры командной строки."""
+
     parser = argparse.ArgumentParser(
         description="Split a class-folder image dataset into train, val and test folders."
     )
@@ -45,6 +52,8 @@ def parse_args() -> argparse.Namespace:
 
 
 def validate_ratios(train_ratio: float, val_ratio: float, test_ratio: float) -> None:
+    """Проверить корректность долей train/val/test."""
+
     ratios = (train_ratio, val_ratio, test_ratio)
     if any(ratio <= 0 for ratio in ratios):
         raise ValueError("All split ratios must be greater than zero.")
@@ -53,6 +62,8 @@ def validate_ratios(train_ratio: float, val_ratio: float, test_ratio: float) -> 
 
 
 def list_images(class_dir: Path) -> list[Path]:
+    """Вернуть список изображений класса в стабильном порядке."""
+
     return sorted(
         path
         for path in class_dir.rglob("*")
@@ -61,6 +72,8 @@ def list_images(class_dir: Path) -> list[Path]:
 
 
 def prepare_dir(path: Path, overwrite: bool) -> None:
+    """Создать папку или пересоздать ее при явном --overwrite."""
+
     if path.exists() and any(path.iterdir()):
         if not overwrite:
             raise FileExistsError(f"{path} is not empty. Use --overwrite to recreate it.")
@@ -74,13 +87,28 @@ def split_class_images(
     val_ratio: float,
     rng: random.Random,
 ) -> dict[str, list[Path]]:
+    """Разделить изображения одного класса на train, val и test.
+
+    Разбиение выполняется отдельно для каждого класса. Благодаря этому split
+    получается стратифицированным: каждый класс представлен в train/val/test в
+    той же пропорции.
+    """
+
+    # Копируем список, чтобы не менять исходный порядок image_paths.
     shuffled = image_paths[:]
+
+    # Перемешивание зависит от seed, поэтому при одинаковых параметрах будет
+    # получаться одно и то же разбиение.
     rng.shuffle(shuffled)
 
+    # round дает ожидаемые размеры для 1000 изображений: 700/150/150 при
+    # пропорциях 0.7/0.15/0.15.
     train_count = int(round(len(shuffled) * train_ratio))
     val_count = int(round(len(shuffled) * val_ratio))
     test_count = len(shuffled) - train_count - val_count
 
+    # Даже при маленьких наборах каждый split должен содержать хотя бы одно
+    # изображение класса, иначе оценка модели будет некорректной.
     if min(train_count, val_count, test_count) <= 0:
         raise ValueError("Each split must contain at least one image per class.")
 
@@ -96,6 +124,8 @@ def copy_split(
     source_dir: Path,
     output_dir: Path,
 ) -> list[dict[str, str]]:
+    """Скопировать split в папки train/val/test и подготовить manifest."""
+
     rows: list[dict[str, str]] = []
 
     for class_name, split_images in split_by_class.items():
@@ -105,6 +135,9 @@ def copy_split(
 
             for source_path in image_paths:
                 target_path = target_dir / source_path.name
+
+                # Копируем, а не переносим: исходная balanced_1000_per_class
+                # остается неизменной и может использоваться повторно.
                 shutil.copy2(source_path, target_path)
                 rows.append(
                     {
@@ -120,6 +153,8 @@ def copy_split(
 
 
 def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
+    """Сохранить CSV с точным составом train/val/test."""
+
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as file:
         writer = csv.DictWriter(
@@ -137,6 +172,8 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
 
 
 def count_split(split_by_class: dict[str, dict[str, list[Path]]]) -> dict[str, dict[str, int]]:
+    """Посчитать количество изображений по split и классу."""
+
     counts: dict[str, dict[str, int]] = {"train": {}, "val": {}, "test": {}}
     for class_name, split_images in split_by_class.items():
         for split_name, image_paths in split_images.items():
@@ -146,6 +183,9 @@ def count_split(split_by_class: dict[str, dict[str, list[Path]]]) -> dict[str, d
 
 def main() -> None:
     args = parse_args()
+
+    # Проверяем ratios до любых операций с файлами, чтобы не получить частично
+    # созданное разбиение при ошибочной конфигурации.
     validate_ratios(args.train_ratio, args.val_ratio, args.test_ratio)
 
     source_dir = args.source_dir.resolve()
@@ -155,9 +195,12 @@ def main() -> None:
     if not source_dir.exists():
         raise FileNotFoundError(f"Source dataset directory not found: {source_dir}")
 
+    # Отдельный генератор случайных чисел делает разбиение воспроизводимым.
     rng = random.Random(args.seed)
     split_by_class: dict[str, dict[str, list[Path]]] = {}
 
+    # Каждый класс делится отдельно. Это и есть стратифицированное разбиение для
+    # структуры папок class -> images.
     for class_dir in sorted(path for path in source_dir.iterdir() if path.is_dir()):
         image_paths = list_images(class_dir)
         if not image_paths:
@@ -172,6 +215,8 @@ def main() -> None:
     if not split_by_class:
         raise ValueError(f"No class directories found in {source_dir}")
 
+    # Папки результата создаются только после успешного построения split.
+    # При --overwrite удаляются только output/report директории этого скрипта.
     prepare_dir(output_dir, args.overwrite)
     prepare_dir(report_dir, args.overwrite)
 
@@ -179,6 +224,9 @@ def main() -> None:
     write_manifest(report_dir / "manifest.csv", manifest_rows)
 
     split_counts = count_split(split_by_class)
+
+    # summary.json нужен для быстрой проверки размеров split без чтения всего
+    # manifest.csv.
     summary = {
         "source_dir": str(source_dir),
         "output_dir": str(output_dir),
@@ -197,6 +245,8 @@ def main() -> None:
         json.dumps(summary, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+
+    # Печатаем ту же сводку в консоль, чтобы сразу видеть результат запуска.
     print(json.dumps(summary, ensure_ascii=False, indent=2))
 
 
