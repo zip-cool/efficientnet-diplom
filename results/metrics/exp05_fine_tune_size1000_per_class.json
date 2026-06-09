@@ -1,0 +1,58 @@
+{
+  "experiment_name": "exp05_fine_tune_size1000_per_class",
+  "model_name": "EfficientNetB0",
+  "dataset_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\experiments\\size_series\\size_1000_per_class",
+  "train_size": 2400,
+  "val_size": 600,
+  "test_size": 1500,
+  "total_size": 4500,
+  "images_per_class": 1500,
+  "split_counts": {
+    "train": {
+      "Early_Blight": 800,
+      "Healthy": 800,
+      "Late_Blight": 800
+    },
+    "val": {
+      "Early_Blight": 200,
+      "Healthy": 200,
+      "Late_Blight": 200
+    },
+    "test": {
+      "Early_Blight": 500,
+      "Healthy": 500,
+      "Late_Blight": 500
+    }
+  },
+  "training_strategy": "fine_tune",
+  "augmentation": false,
+  "weights": "imagenet",
+  "seed": 42,
+  "image_size": 224,
+  "batch_size": 32,
+  "epochs_head": 10,
+  "epochs_finetune": 5,
+  "fine_tune_layers": 20,
+  "learning_rate_head": 0.001,
+  "learning_rate_finetune": 1e-05,
+  "train_accuracy": 0.9666666388511658,
+  "val_accuracy": 0.8816666603088379,
+  "train_loss": 0.09530661255121231,
+  "val_loss": 0.3232775032520294,
+  "test_accuracy": 0.8926666378974915,
+  "accuracy": 0.8926666666666667,
+  "precision": 0.8958452169515873,
+  "recall": 0.8926666666666666,
+  "f1_score": 0.8918174124719137,
+  "test_loss": 0.28529059886932373,
+  "training_time_seconds": 405.2183268000372,
+  "model_path": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\models\\final\\exp05_fine_tune_size1000_per_class.keras",
+  "plot_path": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\results\\plots\\exp05_fine_tune_size1000_per_class_history.png",
+  "confusion_matrix_csv_path": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\results\\confusion_matrices\\exp05_fine_tune_size1000_per_class_confusion_matrix.csv",
+  "confusion_matrix_png_path": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\results\\confusion_matrices\\exp05_fine_tune_size1000_per_class_confusion_matrix.png",
+  "class_names": [
+    "Early_Blight",
+    "Healthy",
+    "Late_Blight"
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "source_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\processed",
+  "output_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\experiments\\size_series",
+  "report_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\results\\dataset_splits\\size_series",
+  "seed": 42,
+  "test_selection_method": "phash_farthest_first",
+  "train_val_selection_method": "random_from_non_test_pool",
+  "test_per_class": 500,
+  "sample_sizes": [
+    500,
+    1000,
+    1500,
+    2000,
+    2500,
+    3000
+  ],
+  "train_ratio": 0.8,
+  "val_ratio": 0.19999999999999996,
+  "available_counts": {
+    "Early_Blight": 3729,
+    "Healthy": 3805,
+    "Late_Blight": 3652
+  },
+  "fixed_test_counts": {
+    "Early_Blight": 500,
+    "Healthy": 500,
+    "Late_Blight": 500
+  },
+  "splits": {
+    "size_500_per_class": {
+      "dataset_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\experiments\\size_series\\size_500_per_class",
+      "sample_size_per_class": 500,
+      "train_per_class": 400,
+      "val_per_class": 100,
+      "test_per_class": 500,
+      "train_size": 1200,
+      "val_size": 300,
+      "test_size": 1500,
+      "total_train_val_size": 1500,
+      "split_counts": {
+        "train": {
+          "Early_Blight": 400,
+          "Healthy": 400,
+          "Late_Blight": 400
+        },
+        "val": {
+          "Early_Blight": 100,
+          "Healthy": 100,
+          "Late_Blight": 100
+        },
+        "test": {
+          "Early_Blight": 500,
+          "Healthy": 500,
+          "Late_Blight": 500
+        }
+      }
+    },
+    "size_1000_per_class": {
+      "dataset_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\experiments\\size_series\\size_1000_per_class",
+      "sample_size_per_class": 1000,
+      "train_per_class": 800,
+      "val_per_class": 200,
+      "test_per_class": 500,
+      "train_size": 2400,
+      "val_size": 600,
+      "test_size": 1500,
+      "total_train_val_size": 3000,
+      "split_counts": {
+        "train": {
+          "Early_Blight": 800,
+          "Healthy": 800,
+          "Late_Blight": 800
+        },
+        "val": {
+          "Early_Blight": 200,
+          "Healthy": 200,
+          "Late_Blight": 200
+        },
+        "test": {
+          "Early_Blight": 500,
+          "Healthy": 500,
+          "Late_Blight": 500
+        }
+      }
+    },
+    "size_1500_per_class": {
+      "dataset_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\experiments\\size_series\\size_1500_per_class",
+      "sample_size_per_class": 1500,
+      "train_per_class": 1200,
+      "val_per_class": 300,
+      "test_per_class": 500,
+      "train_size": 3600,
+      "val_size": 900,
+      "test_size": 1500,
+      "total_train_val_size": 4500,
+      "split_counts": {
+        "train": {
+          "Early_Blight": 1200,
+          "Healthy": 1200,
+          "Late_Blight": 1200
+        },
+        "val": {
+          "Early_Blight": 300,
+          "Healthy": 300,
+          "Late_Blight": 300
+        },
+        "test": {
+          "Early_Blight": 500,
+          "Healthy": 500,
+          "Late_Blight": 500
+        }
+      }
+    },
+    "size_2000_per_class": {
+      "dataset_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\experiments\\size_series\\size_2000_per_class",
+      "sample_size_per_class": 2000,
+      "train_per_class": 1600,
+      "val_per_class": 400,
+      "test_per_class": 500,
+      "train_size": 4800,
+      "val_size": 1200,
+      "test_size": 1500,
+      "total_train_val_size": 6000,
+      "split_counts": {
+        "train": {
+          "Early_Blight": 1600,
+          "Healthy": 1600,
+          "Late_Blight": 1600
+        },
+        "val": {
+          "Early_Blight": 400,
+          "Healthy": 400,
+          "Late_Blight": 400
+        },
+        "test": {
+          "Early_Blight": 500,
+          "Healthy": 500,
+          "Late_Blight": 500
+        }
+      }
+    },
+    "size_2500_per_class": {
+      "dataset_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\experiments\\size_series\\size_2500_per_class",
+      "sample_size_per_class": 2500,
+      "train_per_class": 2000,
+      "val_per_class": 500,
+      "test_per_class": 500,
+      "train_size": 6000,
+      "val_size": 1500,
+      "test_size": 1500,
+      "total_train_val_size": 7500,
+      "split_counts": {
+        "train": {
+          "Early_Blight": 2000,
+          "Healthy": 2000,
+          "Late_Blight": 2000
+        },
+        "val": {
+          "Early_Blight": 500,
+          "Healthy": 500,
+          "Late_Blight": 500
+        },
+        "test": {
+          "Early_Blight": 500,
+          "Healthy": 500,
+          "Late_Blight": 500
+        }
+      }
+    },
+    "size_3000_per_class": {
+      "dataset_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\experiments\\size_series\\size_3000_per_class",
+      "sample_size_per_class": 3000,
+      "train_per_class": 2400,
+      "val_per_class": 600,
+      "test_per_class": 500,
+      "train_size": 7200,
+      "val_size": 1800,
+      "test_size": 1500,
+      "total_train_val_size": 9000,
+      "split_counts": {
+        "train": {
+          "Early_Blight": 2400,
+          "Healthy": 2400,
+          "Late_Blight": 2400
+        },
+        "val": {
+          "Early_Blight": 600,
+          "Healthy": 600,
+          "Late_Blight": 600
+        },
+        "test": {
+          "Early_Blight": 500,
+          "Healthy": 500,
+          "Late_Blight": 500
+        }
+      }
+    }
+  }
+}

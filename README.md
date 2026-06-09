@@ -288,6 +288,76 @@ python src/train_efficientnet.py --dataset-dir data/experiments/balanced_1000_pe
 устойчивость модели к разным условиям съемки и уменьшить путаницу между
 классами болезней.
 
+На всякий случай (head_only с аугментацией):
+```bash
+python src/train_efficientnet.py --dataset-dir data/experiments/balanced_1000_per_class_split --experiment-name exp03_1_head_only_1000_per_class --training-strategy head_only --augmentation --image-size 224 --batch-size 32 --epochs-head 10 --learning-rate-head 0.001 --weights imagenet --seed 42
+```
+
+
+
+## Вторая серия: влияние объема обучающей выборки
+
+Во второй серии экспериментов меняется только объем данных. Режим обучения
+фиксируется по результатам первой серии:
+
+```text
+training_strategy: fine_tune
+augmentation: false
+fine_tune_layers: 20
+learning_rate_head: 0.001
+learning_rate_finetune: 0.00001
+epochs_head: 10
+epochs_finetune: 5
+batch_size: 32
+seed: 42
+```
+
+Перед обучением создана фиксированная тестовая выборка с визуально
+разнообразными изображениями:
+
+```text
+test_per_class: 500
+test_size: 1500
+selection_method: pHash + farthest-first sampling
+```
+
+Эта test-выборка одинаковая для всех экспериментов второй серии. Train и val
+формируются из оставшихся изображений.
+
+Команда подготовки splits второй серии:
+
+```bash
+python src/create_size_series_splits.py --source-dir data/processed --output-dir data/experiments/size_series --report-dir results/dataset_splits/size_series --test-per-class 500 --sample-sizes 500 1000 1500 2000 2500 3000 --train-ratio 0.8 --seed 42
+```
+
+Если нужно пересоздать папки второй серии, добавляется `--overwrite`.
+
+Команды запуска экспериментов:
+
+```bash
+python src/train_efficientnet.py --dataset-dir data/experiments/size_series/size_500_per_class --experiment-name exp04_fine_tune_size500_per_class --training-strategy fine_tune --image-size 224 --batch-size 32 --epochs-head 10 --epochs-finetune 5 --learning-rate-head 0.001 --learning-rate-finetune 0.00001 --fine-tune-layers 20 --weights imagenet --seed 42
+```
+
+```bash
+python src/train_efficientnet.py --dataset-dir data/experiments/size_series/size_1000_per_class --experiment-name exp05_fine_tune_size1000_per_class --training-strategy fine_tune --image-size 224 --batch-size 32 --epochs-head 10 --epochs-finetune 5 --learning-rate-head 0.001 --learning-rate-finetune 0.00001 --fine-tune-layers 20 --weights imagenet --seed 42
+```
+
+```bash
+python src/train_efficientnet.py --dataset-dir data/experiments/size_series/size_1500_per_class --experiment-name exp06_fine_tune_size1500_per_class --training-strategy fine_tune --image-size 224 --batch-size 32 --epochs-head 10 --epochs-finetune 5 --learning-rate-head 0.001 --learning-rate-finetune 0.00001 --fine-tune-layers 20 --weights imagenet --seed 42
+```
+
+```bash
+python src/train_efficientnet.py --dataset-dir data/experiments/size_series/size_2000_per_class --experiment-name exp07_fine_tune_size2000_per_class --training-strategy fine_tune --image-size 224 --batch-size 32 --epochs-head 10 --epochs-finetune 5 --learning-rate-head 0.001 --learning-rate-finetune 0.00001 --fine-tune-layers 20 --weights imagenet --seed 42
+```
+
+```bash
+python src/train_efficientnet.py --dataset-dir data/experiments/size_series/size_2500_per_class --experiment-name exp08_fine_tune_size2500_per_class --training-strategy fine_tune --image-size 224 --batch-size 32 --epochs-head 10 --epochs-finetune 5 --learning-rate-head 0.001 --learning-rate-finetune 0.00001 --fine-tune-layers 20 --weights imagenet --seed 42
+```
+
+```bash
+python src/train_efficientnet.py --dataset-dir data/experiments/size_series/size_3000_per_class --experiment-name exp09_fine_tune_size3000_per_class --training-strategy fine_tune --image-size 224 --batch-size 32 --epochs-head 10 --epochs-finetune 5 --learning-rate-head 0.001 --learning-rate-finetune 0.00001 --fine-tune-layers 20 --weights imagenet --seed 42
+```
+
 ### 1. Проверка изображений
 
 Сначала нужно убедиться, что все файлы действительно открываются как 
