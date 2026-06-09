@@ -107,6 +107,48 @@ def load_split_dataset(
     )
 
 
+def count_images_by_class(split_dir: Path) -> dict[str, int]:
+    """Посчитать количество изображений в split по каждому классу."""
+
+    image_extensions = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
+    counts: dict[str, int] = {}
+
+    for class_dir in sorted(path for path in split_dir.iterdir() if path.is_dir()):
+        counts[class_dir.name] = sum(
+            1
+            for image_path in class_dir.rglob("*")
+            if image_path.is_file() and image_path.suffix.lower() in image_extensions
+        )
+
+    return counts
+
+
+def total_count(counts: dict[str, int]) -> int:
+    """Вернуть общее количество изображений по словарю class -> count."""
+
+    return sum(counts.values())
+
+
+def infer_images_per_class(split_counts: dict[str, dict[str, int]]) -> int | None:
+    """Определить размер исходной сбалансированной выборки на класс.
+
+    Для текущих экспериментов после split 700/150/150 по каждому классу
+    складывается обратно в 1000. Если классы окажутся несбалансированными,
+    возвращаем None, чтобы не вводить в заблуждение.
+    """
+
+    class_totals: dict[str, int] = {}
+    for counts in split_counts.values():
+        for class_name, count in counts.items():
+            class_totals[class_name] = class_totals.get(class_name, 0) + count
+
+    unique_totals = set(class_totals.values())
+    if len(unique_totals) != 1:
+        return None
+
+    return unique_totals.pop() if unique_totals else None
+
+
 def build_model(
     image_size: int,
     class_names: list[str],
@@ -326,6 +368,20 @@ def main() -> None:
     test_ds = load_split_dataset(test_dir, args.image_size, args.batch_size, False, args.seed)
     class_names = train_ds.class_names
 
+    # Размеры split считаем по файловой структуре, а не по confusion matrix.
+    # Confusion matrix отражает только test split, поэтому поле dataset_size
+    # раньше могло сбивать с толку.
+    split_counts = {
+        "train": count_images_by_class(train_dir),
+        "val": count_images_by_class(val_dir),
+        "test": count_images_by_class(test_dir),
+    }
+    train_size = total_count(split_counts["train"])
+    val_size = total_count(split_counts["val"])
+    test_size = total_count(split_counts["test"])
+    total_size = train_size + val_size + test_size
+    images_per_class = infer_images_per_class(split_counts)
+
     # Prefetch подготавливает следующий batch параллельно с обучением текущего,
     # что обычно ускоряет обучение без изменения результатов эксперимента.
     autotune = tf.data.AUTOTUNE
@@ -419,7 +475,12 @@ def main() -> None:
         "experiment_name": args.experiment_name,
         "model_name": "EfficientNetB0",
         "dataset_dir": str(dataset_dir),
-        "dataset_size": int(sum(cm.flatten())),
+        "train_size": train_size,
+        "val_size": val_size,
+        "test_size": test_size,
+        "total_size": total_size,
+        "images_per_class": images_per_class,
+        "split_counts": split_counts,
         "training_strategy": args.training_strategy,
         "augmentation": args.augmentation,
         "weights": args.weights,
@@ -465,7 +526,11 @@ def main() -> None:
     # head_only, fine_tune, augmentation и разные объемы данных.
     append_metrics_row(
         metrics_csv_path,
-        {key: value for key, value in final_metrics.items() if key != "class_names"},
+        {
+            key: value
+            for key, value in final_metrics.items()
+            if key not in {"class_names", "split_counts"}
+        },
     )
 
     # Печатаем тот же словарь в консоль, чтобы после запуска сразу видеть

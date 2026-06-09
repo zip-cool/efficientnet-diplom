@@ -238,6 +238,56 @@ python src/train_efficientnet.py --dataset-dir data/experiments/balanced_1000_pe
 При первом запуске с `--weights imagenet` TensorFlow может скачать
 предобученные веса EfficientNetB0, если их еще нет в локальном кэше.
 
+## Эксперимент 2: EfficientNetB0, fine-tuning последних слоев
+
+Второй эксперимент соответствует режиму `fine_tune`. Сначала выполняется тот
+же этап, что и в первом эксперименте: обучается новая классификационная голова
+при замороженной EfficientNetB0. Затем размораживаются последние слои базовой
+модели и выполняется дообучение с малым learning rate.
+
+Условия остаются такими же, как в первом эксперименте:
+
+- тот же датасет `balanced_1000_per_class_split`;
+- то же разбиение `train/val/test`;
+- тот же `seed = 42`;
+- тот же размер изображения `224`;
+- тот же `batch_size = 32`.
+
+Команда запуска:
+
+```bash
+python src/train_efficientnet.py --dataset-dir data/experiments/balanced_1000_per_class_split --experiment-name exp02_fine_tune_1000_per_class --training-strategy fine_tune --image-size 224 --batch-size 32 --epochs-head 10 --epochs-finetune 5 --learning-rate-head 0.001 --learning-rate-finetune 0.00001 --fine-tune-layers 20 --weights imagenet --seed 42
+```
+
+Этот эксперимент нужен, чтобы проверить, дает ли дообучение последних слоев
+EfficientNetB0 прирост качества по сравнению с обучением только
+классификационной головы.
+
+## Эксперимент 3: EfficientNetB0, fine-tuning с аугментацией
+
+Третий эксперимент проверяет влияние аугментации данных. Используется тот же
+режим обучения, что во втором эксперименте (`fine_tune`), но дополнительно
+включаются случайные преобразования изображений во время обучения:
+
+- горизонтальное отражение;
+- небольшой поворот;
+- масштабирование;
+- небольшой сдвиг;
+- изменение контрастности.
+
+Validation и test изображения не аугментируются. Это важно, потому что модель
+должна оцениваться на реальных неизмененных изображениях.
+
+Команда запуска:
+
+```bash
+python src/train_efficientnet.py --dataset-dir data/experiments/balanced_1000_per_class_split --experiment-name exp03_fine_tune_aug_1000_per_class --training-strategy fine_tune --augmentation --image-size 224 --batch-size 32 --epochs-head 10 --epochs-finetune 5 --learning-rate-head 0.001 --learning-rate-finetune 0.00001 --fine-tune-layers 20 --weights imagenet --seed 42
+```
+
+Этот эксперимент нужен, чтобы проверить, помогает ли аугментация повысить
+устойчивость модели к разным условиям съемки и уменьшить путаницу между
+классами болезней.
+
 ### 1. Проверка изображений
 
 Сначала нужно убедиться, что все файлы действительно открываются как 
