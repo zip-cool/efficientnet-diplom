@@ -465,9 +465,11 @@ python src/train_efficientnet.py --dataset-dir data/experiments/balanced_1000_pe
 устойчивость модели к разным условиям съемки и уменьшить путаницу между
 классами болезней.
 
-На всякий случай (head_only с аугментацией):
+## Эксперимент 4: EfficientNetB0, на всякий случай (head_only с аугментацией)
+
+
 ```bash
-python src/train_efficientnet.py --dataset-dir data/experiments/balanced_1000_per_class_split --experiment-name exp03_1_head_only_1000_per_class --training-strategy head_only --augmentation --image-size 224 --batch-size 32 --epochs-head 10 --learning-rate-head 0.001 --weights imagenet --seed 42
+python src/train_efficientnet.py --dataset-dir data/experiments/balanced_1000_per_class_split --experiment-name exp03_1_head_only_aug_1000_per_class --training-strategy head_only --augmentation --image-size 224 --batch-size 32 --epochs-head 10 --learning-rate-head 0.001 --weights imagenet --seed 42
 ```
 
 
