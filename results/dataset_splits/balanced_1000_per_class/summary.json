@@ -1,0 +1,29 @@
+{
+  "source_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\experiments\\balanced_1000_per_class",
+  "output_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\experiments\\balanced_1000_per_class_split",
+  "report_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\results\\dataset_splits\\balanced_1000_per_class",
+  "seed": 42,
+  "ratios": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "split_counts": {
+    "train": {
+      "Early_Blight": 700,
+      "Healthy": 700,
+      "Late_Blight": 700
+    },
+    "val": {
+      "Early_Blight": 150,
+      "Healthy": 150,
+      "Late_Blight": 150
+    },
+    "test": {
+      "Early_Blight": 150,
+      "Healthy": 150,
+      "Late_Blight": 150
+    }
+  },
+  "total_images": 3000
+}

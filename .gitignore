@@ -14,18 +14,8 @@ data/
 *.rar
 *.7z
 
-# Models
-models/
-*.pt
-*.pth
-*.h5
-*.onnx
-*.ckpt
 
-# Results
-results/
-runs/
-logs/
+
 
 # System files
 .DS_Store

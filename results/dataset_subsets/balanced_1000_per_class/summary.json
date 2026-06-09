@@ -1,0 +1,18 @@
+{
+  "source_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\processed",
+  "output_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\experiments\\balanced_1000_per_class",
+  "report_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\results\\dataset_subsets\\balanced_1000_per_class",
+  "images_per_class": 1000,
+  "seed": 42,
+  "available_counts": {
+    "Early_Blight": 3729,
+    "Healthy": 3805,
+    "Late_Blight": 3652
+  },
+  "subset_counts": {
+    "Early_Blight": 1000,
+    "Healthy": 1000,
+    "Late_Blight": 1000
+  },
+  "total_images": 3000
+}
