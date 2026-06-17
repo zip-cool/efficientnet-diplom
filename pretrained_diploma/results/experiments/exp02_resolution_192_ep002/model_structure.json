@@ -1,0 +1,21 @@
+{
+  "model_name": "pretrained_efficientnet_exp02_resolution_192_ep002",
+  "weights": "imagenet",
+  "input_size": 192,
+  "cut_layer": "top_activation",
+  "cut_point": "full_model",
+  "tail_type": "gap",
+  "base_layers": 238,
+  "model_layers": 241,
+  "parameter_count": 4053414,
+  "cut_output_shape": [
+    null,
+    6,
+    6,
+    1280
+  ],
+  "finetune_prefixes": [
+    "block7",
+    "top_"
+  ]
+}

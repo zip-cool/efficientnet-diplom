@@ -560,6 +560,11 @@ GFLOPs/s зависит от компьютера, версии TensorFlow, CPU/
 
 ## Новая часть диплома: архитектурные эксперименты EfficientNet
 
+> Важно: этот раздел относится к ранней scratch-версии, где EfficientNet-подобная
+> модель обучалась с нуля. После пересмотра плана актуальной является серия
+> `pretrained_diploma/` ниже. Для новых запусков используйте команды из раздела
+> "Новая актуальная серия: предобученная EfficientNetB0".
+
 Для новой версии дипломной работы создана отдельная папка:
 
 ```text
@@ -720,13 +725,13 @@ exp00_baseline_ep100
 Запуск одного эксперимента на конкретное число эпох:
 
 ```bash
-python architectural_diploma/scripts/run_experiment.py --experiment exp00_baseline --epochs 20
+# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
 ```
 
 Запуск одного эксперимента сразу для всех чисел эпох:
 
 ```bash
-python architectural_diploma/scripts/run_experiment.py --experiment exp00_baseline --all-epoch-values
+# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
 ```
 
 Если папка результата уже существует, повторный запуск без флага `--overwrite`
@@ -735,7 +740,7 @@ python architectural_diploma/scripts/run_experiment.py --experiment exp00_baseli
 Принудительная перезапись:
 
 ```bash
-python architectural_diploma/scripts/run_experiment.py --experiment exp00_baseline --epochs 20 --overwrite
+# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
 ```
 
 ### Запуск всех экспериментов
@@ -743,13 +748,13 @@ python architectural_diploma/scripts/run_experiment.py --experiment exp00_baseli
 Запуск всех обязательных архитектурных экспериментов для всех чисел эпох:
 
 ```bash
-python architectural_diploma/scripts/run_all_experiments.py
+# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
 ```
 
 Запуск вместе с дополнительным `exp15_head_160`:
 
 ```bash
-python architectural_diploma/scripts/run_all_experiments.py --include-optional
+# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
 ```
 
 ### Что сохраняется для каждого запуска
@@ -788,7 +793,7 @@ architectural_diploma/results/experiments/exp00_baseline_ep020/
 ### Повторное построение графиков
 
 ```bash
-python architectural_diploma/scripts/plot_history.py --experiment exp00_baseline_ep020
+# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
 ```
 
 Скрипт читает:
@@ -802,7 +807,7 @@ architectural_diploma/results/experiments/exp00_baseline_ep020/history.csv
 ### Восстановление общей сводной таблицы
 
 ```bash
-python architectural_diploma/scripts/rebuild_summary.py
+# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
 ```
 
 Скрипт заново собирает:
@@ -818,7 +823,7 @@ architectural_diploma/results/tables/experiments_summary.csv
 Для построения таблиц по числу эпох используется:
 
 ```bash
-python architectural_diploma/scripts/build_epoch_tables.py
+# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
 ```
 
 Результаты сохраняются в:
@@ -852,7 +857,95 @@ architectural_diploma/results/tables/by_epochs/
 ### Сравнительные графики
 
 ```bash
-python architectural_diploma/scripts/compare_experiments.py
+# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
+```
+
+## Новая актуальная серия: предобученная EfficientNetB0
+
+После пересмотра плана добавлена отдельная папка:
+
+```text
+pretrained_diploma/
+```
+
+Она предназначена для экспериментов на основе
+`EfficientNetB0(weights="imagenet")`. В этой серии модель не обучается с нуля:
+оставшиеся слои EfficientNetB0 используют ImageNet-веса, а с нуля обучаются
+только новая классификационная головка и добавленные хвосты. Fine-tuning
+предобученных стадий отключен, потому что предыдущие эксперименты показали его
+неэффективность для этой задачи. Аугментация в актуальной серии также
+отключена.
+
+Основная документация:
+
+```text
+pretrained_diploma/docs/pretrained_experiments.md
+```
+
+Используемый датасет:
+
+```text
+pretrained_diploma/data/balanced_1000_per_class_split/
+```
+
+Для актуальной pretrained-серии используется по `1000` изображений на класс:
+
+- train - 700 изображений;
+- validation - 150 изображений;
+- test - 150 изображений.
+
+Сетка эпох для каждого эксперимента:
+
+```text
+1, 2, 4, 6, 8, 10
+```
+
+Команда для проверки слоев EfficientNetB0 и границ стадий:
+
+```bash
+python pretrained_diploma/scripts/inspect_efficientnet_layers.py
+```
+
+Запуск базового эксперимента:
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp00_full_model --epochs 1
+```
+
+Запуск базового эксперимента для всех чисел эпох:
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp00_full_model --all-epoch-values
+```
+
+Запуск всех pretrained-экспериментов:
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py
+```
+
+Восстановление графиков без обучения:
+
+```bash
+python pretrained_diploma/scripts/plot_history.py --experiment exp01_resolution_224_ep001
+```
+
+Восстановление общей таблицы:
+
+```bash
+python pretrained_diploma/scripts/rebuild_summary.py
+```
+
+Построение таблиц по числу эпох:
+
+```bash
+python pretrained_diploma/scripts/build_epoch_tables.py
+```
+
+Построение сравнительных графиков:
+
+```bash
+python pretrained_diploma/scripts/compare_experiments.py
 ```
 
 Скрипт строит:
@@ -866,37 +959,43 @@ python architectural_diploma/scripts/compare_experiments.py
 Результаты сохраняются в:
 
 ```text
-architectural_diploma/results/experiments/comparison_plots/
+pretrained_diploma/results/comparison_plots/
 ```
 
 ### Краткая последовательность работы
 
-1. Запустить baseline:
+1. Проверить один короткий pretrained-эксперимент:
 
 ```bash
-python architectural_diploma/scripts/run_experiment.py --experiment exp00_baseline --all-epoch-values
+python pretrained_diploma/scripts/run_experiment.py --experiment exp00_full_model --epochs 1
 ```
 
-2. Запустить остальные обязательные эксперименты:
+2. Запустить этот же эксперимент для всех чисел эпох:
 
 ```bash
-python architectural_diploma/scripts/run_all_experiments.py
+python pretrained_diploma/scripts/run_experiment.py --experiment exp00_full_model --all-epoch-values
 ```
 
-3. Восстановить сводную таблицу:
+3. Запустить все pretrained-эксперименты:
 
 ```bash
-python architectural_diploma/scripts/rebuild_summary.py
+python pretrained_diploma/scripts/run_all_experiments.py
 ```
 
-4. Построить таблицы по числу эпох:
+4. Восстановить сводную таблицу:
 
 ```bash
-python architectural_diploma/scripts/build_epoch_tables.py
+python pretrained_diploma/scripts/rebuild_summary.py
 ```
 
-5. Построить сравнительные графики:
+5. Построить таблицы по числу эпох:
 
 ```bash
-python architectural_diploma/scripts/compare_experiments.py
+python pretrained_diploma/scripts/build_epoch_tables.py
+```
+
+6. Построить сравнительные графики:
+
+```bash
+python pretrained_diploma/scripts/compare_experiments.py
 ```

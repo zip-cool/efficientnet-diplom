@@ -1,0 +1,98 @@
+{
+  "exp00_full_model": {
+    "series": "baseline",
+    "description": "Baseline full pretrained EfficientNetB0 with input resolution 224",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap"
+  },
+  "exp01_resolution_224": {
+    "series": "resolution",
+    "description": "Full EfficientNetB0 with input resolution 224",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap"
+  },
+  "exp02_resolution_192": {
+    "series": "resolution",
+    "description": "Full EfficientNetB0 with input resolution 192",
+    "input_size": 192,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap"
+  },
+  "exp03_resolution_160": {
+    "series": "resolution",
+    "description": "Full EfficientNetB0 with input resolution 160",
+    "input_size": 160,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap"
+  },
+  "exp04_resolution_128": {
+    "series": "resolution",
+    "description": "Full EfficientNetB0 with input resolution 128",
+    "input_size": 128,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap"
+  },
+  "exp06_without_stage7": {
+    "series": "depth_cut",
+    "description": "Pretrained EfficientNetB0 cut after stage 6",
+    "input_size": 224,
+    "cut_layer": "block6d_add",
+    "cut_point": "without_stage7",
+    "tail_type": "gap"
+  },
+  "exp07_without_stages6_7": {
+    "series": "depth_cut",
+    "description": "Pretrained EfficientNetB0 cut after stage 5",
+    "input_size": 224,
+    "cut_layer": "block5c_add",
+    "cut_point": "without_stages6_7",
+    "tail_type": "gap"
+  },
+  "exp08_without_stages5_7": {
+    "series": "depth_cut",
+    "description": "Pretrained EfficientNetB0 cut after stage 4",
+    "input_size": 224,
+    "cut_layer": "block4c_add",
+    "cut_point": "without_stages5_7",
+    "tail_type": "gap"
+  },
+  "exp09_tail_gap": {
+    "series": "tail",
+    "description": "Selected cut point with GAP tail",
+    "input_size": 224,
+    "cut_layer": "block6d_add",
+    "cut_point": "selected_after_stage6",
+    "tail_type": "gap"
+  },
+  "exp10_tail_conv1x1": {
+    "series": "tail",
+    "description": "Selected cut point with compact Conv2D 1x1 tail",
+    "input_size": 224,
+    "cut_layer": "block6d_add",
+    "cut_point": "selected_after_stage6",
+    "tail_type": "conv1x1"
+  },
+  "exp11_tail_separable_conv": {
+    "series": "tail",
+    "description": "Selected cut point with SeparableConv2D tail",
+    "input_size": 224,
+    "cut_layer": "block6d_add",
+    "cut_point": "selected_after_stage6",
+    "tail_type": "separable_conv"
+  },
+  "exp12_tail_simple_mbconv": {
+    "series": "tail",
+    "description": "Selected cut point with simple MBConv tail",
+    "input_size": 224,
+    "cut_layer": "block6d_add",
+    "cut_point": "selected_after_stage6",
+    "tail_type": "simple_mbconv"
+  }
+}

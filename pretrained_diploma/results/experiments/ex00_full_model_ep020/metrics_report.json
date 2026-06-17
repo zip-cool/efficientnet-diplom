@@ -1,0 +1,73 @@
+{
+  "experiment_name": "exp00_full_model_ep020",
+  "model_name": "pretrained_efficientnet_exp00_full_model_ep020",
+  "dataset_dir": "pretrained_diploma/data/balanced_1000_per_class_split",
+  "train_size": 2100,
+  "val_size": 450,
+  "test_size": 450,
+  "total_size": 3000,
+  "images_per_class": 1000,
+  "split_counts": {
+    "train": {
+      "Early_Blight": 700,
+      "Healthy": 700,
+      "Late_Blight": 700
+    },
+    "val": {
+      "Early_Blight": 150,
+      "Healthy": 150,
+      "Late_Blight": 150
+    },
+    "test": {
+      "Early_Blight": 150,
+      "Healthy": 150,
+      "Late_Blight": 150
+    }
+  },
+  "training_strategy": "head_only",
+  "augmentation": false,
+  "weights": "imagenet",
+  "seed": 42,
+  "image_size": 224,
+  "batch_size": 32,
+  "epochs_head": 20,
+  "epochs_finetune": 0,
+  "fine_tune_layers": 0,
+  "learning_rate_head": 0.001,
+  "learning_rate_finetune": 0,
+  "train_accuracy": 0.9595237970352173,
+  "val_accuracy": 0.9311110973358154,
+  "train_loss": 0.13084737956523895,
+  "val_loss": 0.1895362138748169,
+  "test_accuracy": 0.9222221970558167,
+  "accuracy": 0.9222222222222223,
+  "precision": 0.9224784483653132,
+  "recall": 0.9222222222222222,
+  "f1_score": 0.9222644357083717,
+  "test_loss": 0.18201130628585815,
+  "training_time_seconds": 469.1894398997538,
+  "head_training_time_seconds": 469.1894398997538,
+  "finetune_training_time_seconds": 0.0,
+  "total_training_time_seconds": 469.1894398997538,
+  "completed_epochs": 20,
+  "model_path": "pretrained_diploma\\results\\experiments\\exp00_full_model_ep020\\best_model.keras",
+  "plot_path": "pretrained_diploma\\results\\experiments\\exp00_full_model_ep020\\plots\\accuracy.png",
+  "confusion_matrix_csv_path": "pretrained_diploma\\results\\experiments\\exp00_full_model_ep020\\confusion_matrix.csv",
+  "confusion_matrix_png_path": "pretrained_diploma\\results\\experiments\\exp00_full_model_ep020\\confusion_matrix.png",
+  "class_names": [
+    "Early_Blight",
+    "Healthy",
+    "Late_Blight"
+  ],
+  "model_file_size_bytes": 17087794,
+  "model_file_size_mb": 16.29619026184082,
+  "parameters_total": 4053414,
+  "parameters_trainable": 3843,
+  "parameters_non_trainable": 4049571,
+  "flops_per_inference": 800792873,
+  "gflops_per_inference": 0.800792873,
+  "inference_benchmark_batch_size": 1,
+  "inference_images_per_second": 6.038944184679348,
+  "inference_ms_per_image": 165.5918600037694,
+  "estimated_gflops_per_second": 4.835943463536018
+}

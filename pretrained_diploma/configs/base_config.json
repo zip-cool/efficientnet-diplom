@@ -1,0 +1,25 @@
+{
+  "dataset_dir": "pretrained_diploma/data/balanced_1000_per_class_split",
+  "results_dir": "pretrained_diploma/results/experiments",
+  "summary_csv": "pretrained_diploma/results/tables/experiments_summary.csv",
+  "num_classes": 3,
+  "epoch_values": [1, 2, 4, 6, 8, 10],
+  "batch_size": 32,
+  "head_learning_rate": 0.001,
+  "finetune_learning_rate": 0.00001,
+  "finetune_enabled": false,
+  "optimizer": "adam",
+  "loss": "categorical_crossentropy",
+  "metric": "accuracy",
+  "random_seed": 42,
+  "dropout_rate": 0.2,
+  "head_epoch_fraction": 1.0,
+  "augmentation": {
+    "enabled": false,
+    "random_flip": "horizontal",
+    "random_rotation": 0.08,
+    "random_zoom": 0.1,
+    "random_translation": 0.05,
+    "random_contrast": 0.1
+  }
+}
