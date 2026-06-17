@@ -198,8 +198,7 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp12_tail_simp
 Серия 4. Компактная замена хвоста после stage 5:
 
 ```bash
-python pretrained_diploma/scripts/run_experiment.py --experiment exp13_stage5_tail_gap --all-epoch-values
-```
+python pretrained_diploma/scripts/run_experiment.py --experiment exp13_stage5_tail_gap --all-epoch-value
 
 ```bash
 python pretrained_diploma/scripts/run_experiment.py --experiment exp14_stage5_tail_conv1x1 --all-epoch-values
