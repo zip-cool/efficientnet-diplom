@@ -1,0 +1,10 @@
+{
+  "test_accuracy": 0.8622221946716309,
+  "accuracy": 0.8622222222222222,
+  "precision": 0.8625429604968051,
+  "recall": 0.8622222222222223,
+  "f1_score": 0.8601601476777735,
+  "test_loss": 0.3630051612854004,
+  "evaluated_model": "best_model.keras",
+  "test_samples": 450
+}

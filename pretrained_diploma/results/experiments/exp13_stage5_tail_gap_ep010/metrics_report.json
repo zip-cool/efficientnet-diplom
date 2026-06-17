@@ -1,0 +1,73 @@
+{
+  "experiment_name": "exp13_stage5_tail_gap_ep010",
+  "model_name": "pretrained_efficientnet_exp13_stage5_tail_gap_ep010",
+  "dataset_dir": "pretrained_diploma/data/balanced_1000_per_class_split",
+  "train_size": 2100,
+  "val_size": 450,
+  "test_size": 450,
+  "total_size": 3000,
+  "images_per_class": 1000,
+  "split_counts": {
+    "train": {
+      "Early_Blight": 700,
+      "Healthy": 700,
+      "Late_Blight": 700
+    },
+    "val": {
+      "Early_Blight": 150,
+      "Healthy": 150,
+      "Late_Blight": 150
+    },
+    "test": {
+      "Early_Blight": 150,
+      "Healthy": 150,
+      "Late_Blight": 150
+    }
+  },
+  "training_strategy": "head_only",
+  "augmentation": false,
+  "weights": "imagenet",
+  "seed": 42,
+  "image_size": 224,
+  "batch_size": 32,
+  "epochs_head": 10,
+  "epochs_finetune": 0,
+  "fine_tune_layers": 0,
+  "learning_rate_head": 0.001,
+  "learning_rate_finetune": 0,
+  "train_accuracy": 0.8233333230018616,
+  "val_accuracy": 0.8822222352027893,
+  "train_loss": 0.4244077801704407,
+  "val_loss": 0.30980339646339417,
+  "test_accuracy": 0.8622221946716309,
+  "accuracy": 0.8622222222222222,
+  "precision": 0.8639430712399202,
+  "recall": 0.8622222222222223,
+  "f1_score": 0.8617486520562873,
+  "test_loss": 0.3177802860736847,
+  "training_time_seconds": 203.31253710016608,
+  "head_training_time_seconds": 203.31253710016608,
+  "finetune_training_time_seconds": 0.0,
+  "total_training_time_seconds": 203.31253710016608,
+  "completed_epochs": 10,
+  "model_path": "pretrained_diploma\\results\\experiments\\exp13_stage5_tail_gap_ep010\\best_model.keras",
+  "plot_path": "pretrained_diploma\\results\\experiments\\exp13_stage5_tail_gap_ep010\\plots\\accuracy.png",
+  "confusion_matrix_csv_path": "pretrained_diploma\\results\\experiments\\exp13_stage5_tail_gap_ep010\\confusion_matrix.csv",
+  "confusion_matrix_png_path": "pretrained_diploma\\results\\experiments\\exp13_stage5_tail_gap_ep010\\confusion_matrix.png",
+  "class_names": [
+    "Early_Blight",
+    "Healthy",
+    "Late_Blight"
+  ],
+  "model_file_size_bytes": 4058280,
+  "model_file_size_mb": 3.8702774047851562,
+  "parameters_total": 868314,
+  "parameters_trainable": 339,
+  "parameters_non_trainable": 867975,
+  "flops_per_inference": 515056277,
+  "gflops_per_inference": 0.515056277,
+  "inference_benchmark_batch_size": 1,
+  "inference_images_per_second": 8.275017902419867,
+  "inference_ms_per_image": 120.84566000849009,
+  "estimated_gflops_per_second": 4.262099912928726
+}

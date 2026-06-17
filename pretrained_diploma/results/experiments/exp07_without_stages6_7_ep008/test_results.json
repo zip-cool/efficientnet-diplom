@@ -6,5 +6,7 @@
   "f1_score": 0.8574491865281842,
   "test_loss": 0.3414081931114197,
   "evaluated_model": "best_model.keras",
-  "test_samples": 450
+  "test_samples": 450,
+  "train_eval_accuracy": 0.8609523773193359,
+  "val_eval_accuracy": 0.8644444346427917
 }

@@ -71,15 +71,29 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp00_full_mode
 - `exp07_without_stages6_7`;
 - `exp08_without_stages5_7`.
 
-Серия компактных хвостов:
+Серия компактных хвостов после stage 6 (`block6d_add`):
 
 - `exp09_tail_gap`;
 - `exp10_tail_conv1x1`;
 - `exp11_tail_separable_conv`;
 - `exp12_tail_simple_mbconv`.
 
-По умолчанию хвостовые эксперименты используют точку `block6d_add`. Ее можно
-изменить в `pretrained_diploma/configs/experiments.json` после анализа серии 2.
+Дополнительная серия компактных хвостов после stage 5 (`block5c_add`):
+
+- `exp13_stage5_tail_gap`;
+- `exp14_stage5_tail_conv1x1`;
+- `exp15_stage5_tail_separable_conv`;
+- `exp16_stage5_tail_simple_mbconv`.
+
+Дополнительная серия компактных хвостов после stage 4 (`block4c_add`):
+
+- `exp17_stage4_tail_gap`;
+- `exp18_stage4_tail_conv1x1`;
+- `exp19_stage4_tail_separable_conv`;
+- `exp20_stage4_tail_simple_mbconv`.
+
+Эти дополнительные серии нужны, чтобы проверить, может ли более выразительный
+хвост компенсировать падение точности после более сильной обрезки модели.
 
 ## Инспекция слоев EfficientNetB0
 
@@ -181,6 +195,42 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp11_tail_sepa
 python pretrained_diploma/scripts/run_experiment.py --experiment exp12_tail_simple_mbconv --all-epoch-values
 ```
 
+Серия 4. Компактная замена хвоста после stage 5:
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp13_stage5_tail_gap --all-epoch-values
+```
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp14_stage5_tail_conv1x1 --all-epoch-values
+```
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp15_stage5_tail_separable_conv --all-epoch-values
+```
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp16_stage5_tail_simple_mbconv --all-epoch-values
+```
+
+Серия 5. Компактная замена хвоста после stage 4:
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp17_stage4_tail_gap --all-epoch-values
+```
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp18_stage4_tail_conv1x1 --all-epoch-values
+```
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp19_stage4_tail_separable_conv --all-epoch-values
+```
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp20_stage4_tail_simple_mbconv --all-epoch-values
+```
+
 ## Результаты
 
 Каждый запуск сохраняется в:
@@ -238,6 +288,22 @@ python pretrained_diploma/scripts/plot_custom_series.py --accuracy-experiments e
 
 ```bash
 python pretrained_diploma/scripts/plot_custom_series.py --accuracy-experiments exp00_full_model exp02_resolution_192 --accuracy-epochs 1 2 4 6 8 10 --accuracy-metrics train test --include-val-accuracy --time-experiments exp00_full_model exp02_resolution_192 --time-epochs 1 2 4 6 8 10
+```
+
+Для честного сравнения train/test accuracy лучше использовать `train_eval`:
+это train accuracy, посчитанная после обучения в inference-режиме, то есть с
+выключенным Dropout и так же, как считается test accuracy.
+
+Для уже готовых запусков такие метрики можно досчитать без повторного обучения:
+
+```bash
+python pretrained_diploma/scripts/backfill_eval_metrics.py --experiments exp00_full_model --epochs 1 2 4 6 8 10
+```
+
+После этого график строится так:
+
+```bash
+python pretrained_diploma/scripts/plot_custom_series.py --accuracy-experiments exp00_full_model --accuracy-epochs 1 2 4 6 8 10 --accuracy-metrics train_eval test --time-experiments exp00_full_model --time-epochs 1 2 4 6 8 10
 ```
 
 По умолчанию результаты сохраняются в:

@@ -303,7 +303,8 @@ def build_full_metrics_report(
     stage_times: dict[str, float],
 
     test_metrics: dict[str, Any],
-
+    train_eval_metrics: dict[str, Any] | None,
+    val_eval_metrics: dict[str, Any] | None,
     dataset_info: dict[str, Any],
 
     model: tf.keras.Model,
@@ -367,13 +368,19 @@ def build_full_metrics_report(
         "learning_rate_finetune": 0 if not finetune_enabled else config["finetune_learning_rate"],
 
         "train_accuracy": last_epoch.get("accuracy"),
-
         "val_accuracy": last_epoch.get("val_accuracy"),
-
         "train_loss": last_epoch.get("loss"),
-
         "val_loss": last_epoch.get("val_loss"),
-
+        "train_eval_accuracy": train_eval_metrics["accuracy"] if train_eval_metrics else None,
+        "train_eval_loss": train_eval_metrics["loss"] if train_eval_metrics else None,
+        "train_eval_precision": train_eval_metrics["precision"] if train_eval_metrics else None,
+        "train_eval_recall": train_eval_metrics["recall"] if train_eval_metrics else None,
+        "train_eval_f1_score": train_eval_metrics["f1_score"] if train_eval_metrics else None,
+        "val_eval_accuracy": val_eval_metrics["accuracy"] if val_eval_metrics else None,
+        "val_eval_loss": val_eval_metrics["loss"] if val_eval_metrics else None,
+        "val_eval_precision": val_eval_metrics["precision"] if val_eval_metrics else None,
+        "val_eval_recall": val_eval_metrics["recall"] if val_eval_metrics else None,
+        "val_eval_f1_score": val_eval_metrics["f1_score"] if val_eval_metrics else None,
         "test_accuracy": test_metrics["accuracy"],
 
         "accuracy": test_metrics["sklearn_accuracy"],
@@ -445,16 +452,15 @@ def save_artifacts(
     stage_times: dict[str, float],
 
     test_metrics: dict[str, Any],
-
     dataset_info: dict[str, Any],
-
     output_dir: Path,
-
     summary_csv: Path,
+    train_eval_metrics: dict[str, Any] | None = None,
+    val_eval_metrics: dict[str, Any] | None = None,
 
 ) -> None:
 
-    """????????? ??? ???????????? ????? ?????? pretrained-????????????."""
+    """Сохранить все обязательные файлы одного pretrained-эксперимента."""
 
     save_json(output_dir / "config.json", config)
 
@@ -493,7 +499,8 @@ def save_artifacts(
         stage_times=stage_times,
 
         test_metrics=test_metrics,
-
+        train_eval_metrics=train_eval_metrics,
+        val_eval_metrics=val_eval_metrics,
         dataset_info=dataset_info,
 
         model=model,
@@ -518,8 +525,9 @@ def save_artifacts(
 
         {
 
+            "train_eval_accuracy": train_eval_metrics["accuracy"] if train_eval_metrics else None,
+            "val_eval_accuracy": val_eval_metrics["accuracy"] if val_eval_metrics else None,
             "test_accuracy": test_metrics["accuracy"],
-
             "accuracy": test_metrics["sklearn_accuracy"],
 
             "precision": test_metrics["precision"],

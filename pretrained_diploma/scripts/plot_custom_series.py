@@ -11,7 +11,9 @@ import pandas as pd
 
 ACCURACY_METRICS = {
     "train": ("train_accuracy", "train accuracy"),
+    "train_eval": ("train_eval_accuracy", "train accuracy after training"),
     "val": ("val_accuracy", "validation accuracy"),
+    "val_eval": ("val_eval_accuracy", "validation accuracy after training"),
     "test": ("test_accuracy", "test accuracy"),
 }
 
@@ -86,6 +88,8 @@ def load_run_metrics(results_dir: Path, experiment: str, epoch_count: int) -> di
         "completed_epochs": epoch_count,
         "train_accuracy": float(last_epoch["accuracy"]),
         "val_accuracy": float(last_epoch["val_accuracy"]),
+        "train_eval_accuracy": metrics.get("train_eval_accuracy"),
+        "val_eval_accuracy": metrics.get("val_eval_accuracy"),
         "test_accuracy": float(metrics["test_accuracy"]),
         "train_loss": float(last_epoch["loss"]),
         "val_loss": float(last_epoch["val_loss"]),
