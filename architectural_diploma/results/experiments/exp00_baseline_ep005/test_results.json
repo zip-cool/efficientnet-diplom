@@ -1,0 +1,7 @@
+{
+  "test_accuracy": 0.3333333432674408,
+  "test_loss": 1.1159884929656982,
+  "evaluated_model": "best_model.keras",
+  "best_checkpoint_path": "architectural_diploma\\results\\experiments\\exp00_baseline_ep005\\best_model.keras",
+  "test_samples": 675
+}
