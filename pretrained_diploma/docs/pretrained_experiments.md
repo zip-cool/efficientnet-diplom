@@ -95,6 +95,150 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp00_full_mode
 Эти дополнительные серии нужны, чтобы проверить, может ли более выразительный
 хвост компенсировать падение точности после более сильной обрезки модели.
 
+### Подробно о слоях в сериях 4 и 5
+
+Серии 4 и 5 повторяют идею серии 3, но используют более ранние точки обрезки
+EfficientNetB0. Во всех этих экспериментах ранняя часть EfficientNetB0 остается
+предобученной на ImageNet и замороженной, а новые слои хвоста обучаются с нуля.
+
+Серия 4 использует выход слоя:
+
+```text
+block5c_add
+```
+
+Это соответствует модели, обрезанной после stage 5. Все слои EfficientNetB0,
+которые идут после `block5c_add`, не используются:
+
+```text
+block6*
+block7*
+top_conv
+top_bn
+top_activation
+```
+
+После `block5c_add` добавляются новые хвосты:
+
+- `exp13_stage5_tail_gap`
+
+```text
+GlobalAveragePooling2D
+→ Dropout
+→ Dense(3, activation="softmax")
+```
+
+- `exp14_stage5_tail_conv1x1`
+
+```text
+Conv2D(256, kernel_size=1)
+→ BatchNormalization
+→ Swish
+→ GlobalAveragePooling2D
+→ Dropout
+→ Dense(3, activation="softmax")
+```
+
+- `exp15_stage5_tail_separable_conv`
+
+```text
+SeparableConv2D(256, kernel_size=3, padding="same")
+→ BatchNormalization
+→ Swish
+→ GlobalAveragePooling2D
+→ Dropout
+→ Dense(3, activation="softmax")
+```
+
+- `exp16_stage5_tail_simple_mbconv`
+
+```text
+Conv2D(filters_in * 2, kernel_size=1)
+→ BatchNormalization
+→ Swish
+→ DepthwiseConv2D(kernel_size=3, padding="same")
+→ BatchNormalization
+→ Swish
+→ Conv2D(filters_in, kernel_size=1)
+→ BatchNormalization
+→ residual connection, если формы совпадают
+→ GlobalAveragePooling2D
+→ Dropout
+→ Dense(3, activation="softmax")
+```
+
+Серия 5 использует выход слоя:
+
+```text
+block4c_add
+```
+
+Это соответствует модели, обрезанной после stage 4. Все слои EfficientNetB0,
+которые идут после `block4c_add`, не используются:
+
+```text
+block5*
+block6*
+block7*
+top_conv
+top_bn
+top_activation
+```
+
+После `block4c_add` добавляются такие же четыре типа хвоста:
+
+- `exp17_stage4_tail_gap`
+
+```text
+GlobalAveragePooling2D
+→ Dropout
+→ Dense(3, activation="softmax")
+```
+
+- `exp18_stage4_tail_conv1x1`
+
+```text
+Conv2D(256, kernel_size=1)
+→ BatchNormalization
+→ Swish
+→ GlobalAveragePooling2D
+→ Dropout
+→ Dense(3, activation="softmax")
+```
+
+- `exp19_stage4_tail_separable_conv`
+
+```text
+SeparableConv2D(256, kernel_size=3, padding="same")
+→ BatchNormalization
+→ Swish
+→ GlobalAveragePooling2D
+→ Dropout
+→ Dense(3, activation="softmax")
+```
+
+- `exp20_stage4_tail_simple_mbconv`
+
+```text
+Conv2D(filters_in * 2, kernel_size=1)
+→ BatchNormalization
+→ Swish
+→ DepthwiseConv2D(kernel_size=3, padding="same")
+→ BatchNormalization
+→ Swish
+→ Conv2D(filters_in, kernel_size=1)
+→ BatchNormalization
+→ residual connection, если формы совпадают
+→ GlobalAveragePooling2D
+→ Dropout
+→ Dense(3, activation="softmax")
+```
+
+Таким образом, серии 4 и 5 проверяют, можно ли компенсировать удаление более
+глубоких стадий EfficientNetB0 за счет небольшого обучаемого хвоста. Если
+точность заметно восстанавливается при небольшом росте времени, такой хвост
+может быть полезным компромиссом между качеством и вычислительной сложностью.
+
 ## Инспекция слоев EfficientNetB0
 
 ```bash
@@ -198,7 +342,8 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp12_tail_simp
 Серия 4. Компактная замена хвоста после stage 5:
 
 ```bash
-python pretrained_diploma/scripts/run_experiment.py --experiment exp13_stage5_tail_gap --all-epoch-value
+python pretrained_diploma/scripts/run_experiment.py --experiment exp13_stage5_tail_gap --all-epoch-values
+```
 
 ```bash
 python pretrained_diploma/scripts/run_experiment.py --experiment exp14_stage5_tail_conv1x1 --all-epoch-values
