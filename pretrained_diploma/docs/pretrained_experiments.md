@@ -95,6 +95,22 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp00_full_mode
 Эти дополнительные серии нужны, чтобы проверить, может ли более выразительный
 хвост компенсировать падение точности после более сильной обрезки модели.
 
+Серия сокращения повторяющихся MBConv-блоков внутри стадий:
+
+- `exp21_repeat_full` - реконструкция полной EfficientNetB0 с повторами `[1, 2, 2, 3, 3, 4, 1]`;
+- `exp22_repeat_light` - мягкое сокращение `[1, 2, 2, 2, 2, 3, 1]`;
+- `exp23_repeat_medium` - среднее сокращение `[1, 1, 1, 2, 2, 2, 1]`;
+- `exp24_repeat_minimal` - по одному MBConv-блоку на стадию `[1, 1, 1, 1, 1, 1, 1]`.
+
+В этой серии не удаляются целые поздние стадии. Все семь стадий остаются, но
+сокращается число повторных блоков внутри стадий. Первый блок каждой стадии
+сохраняется, потому что он может менять spatial-размер и число каналов. Удаляются
+только последние повторные блоки, которые сохраняют форму тензора.
+
+Перед запуском сокращенных вариантов проверяется `exp21_repeat_full`: после
+переноса ImageNet-весов она должна совпадать со стандартной `EfficientNetB0`.
+Результат проверки сохраняется в `pretrained_diploma/results/validation/architecture_validation.json`.
+
 ### Подробно о слоях в сериях 4 и 5
 
 Серии 4 и 5 повторяют идею серии 3, но используют более ранние точки обрезки
@@ -375,6 +391,32 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp19_stage4_ta
 python pretrained_diploma/scripts/run_experiment.py --experiment exp20_stage4_tail_simple_mbconv --all-epoch-values
 ```
 
+Серия 6. Сокращение повторяющихся MBConv-блоков:
+
+Сначала проверить полную реконструкцию EfficientNetB0:
+
+```bash
+python pretrained_diploma/scripts/validate_repeat_reconstruction.py
+```
+
+После успешной проверки можно запускать серию:
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp21_repeat_full --all-epoch-values
+```
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp22_repeat_light --all-epoch-values
+```
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp23_repeat_medium --all-epoch-values
+```
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp24_repeat_minimal --all-epoch-values
+```
+
 ## Результаты
 
 Каждый запуск сохраняется в:
@@ -387,6 +429,7 @@ pretrained_diploma/results/experiments/<experiment_id>/
 
 - `config.json`;
 - `model_structure.json`;
+- `weight_transfer_report.txt` для серии сокращения повторов;
 - `model_summary.txt`;
 - `history.csv`;
 - `history.json`;

@@ -368,6 +368,8 @@ def build_full_metrics_report(
         "split_counts": dataset_info["split_counts"],
 
         "training_strategy": "head_only" if not finetune_enabled else "head_then_finetune",
+        "stage_repeats": config.get("stage_repeats"),
+        "removed_blocks": config.get("removed_blocks"),
 
         "augmentation": bool(config.get("augmentation", {}).get("enabled", False)),
 

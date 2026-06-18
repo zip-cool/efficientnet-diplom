@@ -159,7 +159,7 @@
     "cut_point": "after_stage4",
     "tail_type": "simple_mbconv"
   },
-  "exp_repeat_full": {
+  "exp21_repeat_full": {
     "series": "repeat_reduction",
     "description": "Reconstructed full EfficientNetB0 stage repeats baseline",
     "input_size": 224,
@@ -177,7 +177,7 @@
     "cut_layer": "top_activation",
     "tail_type": "gap"
   },
-  "exp_repeat_light": {
+  "exp22_repeat_light": {
     "series": "repeat_reduction",
     "description": "Light reduction of repeated MBConv blocks",
     "input_size": 224,
@@ -199,7 +199,7 @@
     "cut_layer": "top_activation",
     "tail_type": "gap"
   },
-  "exp_repeat_medium": {
+  "exp23_repeat_medium": {
     "series": "repeat_reduction",
     "description": "Medium reduction of repeated MBConv blocks",
     "input_size": 224,
@@ -224,7 +224,7 @@
     "cut_layer": "top_activation",
     "tail_type": "gap"
   },
-  "exp_repeat_minimal": {
+  "exp24_repeat_minimal": {
     "series": "repeat_reduction",
     "description": "Minimal one-block-per-stage EfficientNetB0",
     "input_size": 224,

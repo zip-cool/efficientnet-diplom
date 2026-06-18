@@ -153,6 +153,8 @@ def transfer_imagenet_weights(target_model: tf.keras.Model, input_size: int) -> 
             continue
 
         target_layer.set_weights(source_weights)
+        if isinstance(target_layer, tf.keras.layers.Normalization) and hasattr(target_layer, "finalize_state"):
+            target_layer.finalize_state()
         transferred_layers.append(target_layer.name)
 
     return {
