@@ -158,5 +158,98 @@
     "cut_layer": "block4c_add",
     "cut_point": "after_stage4",
     "tail_type": "simple_mbconv"
+  },
+  "exp_repeat_full": {
+    "series": "repeat_reduction",
+    "description": "Reconstructed full EfficientNetB0 stage repeats baseline",
+    "input_size": 224,
+    "stage_repeats": [
+      1,
+      2,
+      2,
+      3,
+      3,
+      4,
+      1
+    ],
+    "removed_blocks": [],
+    "cut_point": "repeated_blocks_full",
+    "cut_layer": "top_activation",
+    "tail_type": "gap"
+  },
+  "exp_repeat_light": {
+    "series": "repeat_reduction",
+    "description": "Light reduction of repeated MBConv blocks",
+    "input_size": 224,
+    "stage_repeats": [
+      1,
+      2,
+      2,
+      2,
+      2,
+      3,
+      1
+    ],
+    "removed_blocks": [
+      "block4c",
+      "block5c",
+      "block6d"
+    ],
+    "cut_point": "repeat_light",
+    "cut_layer": "top_activation",
+    "tail_type": "gap"
+  },
+  "exp_repeat_medium": {
+    "series": "repeat_reduction",
+    "description": "Medium reduction of repeated MBConv blocks",
+    "input_size": 224,
+    "stage_repeats": [
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      1
+    ],
+    "removed_blocks": [
+      "block2b",
+      "block3b",
+      "block4c",
+      "block5c",
+      "block6c",
+      "block6d"
+    ],
+    "cut_point": "repeat_medium",
+    "cut_layer": "top_activation",
+    "tail_type": "gap"
+  },
+  "exp_repeat_minimal": {
+    "series": "repeat_reduction",
+    "description": "Minimal one-block-per-stage EfficientNetB0",
+    "input_size": 224,
+    "stage_repeats": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "removed_blocks": [
+      "block2b",
+      "block3b",
+      "block4b",
+      "block4c",
+      "block5b",
+      "block5c",
+      "block6b",
+      "block6c",
+      "block6d"
+    ],
+    "cut_point": "repeat_minimal",
+    "cut_layer": "top_activation",
+    "tail_type": "gap"
   }
 }

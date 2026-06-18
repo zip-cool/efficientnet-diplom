@@ -88,6 +88,28 @@ def save_model_summary(model: tf.keras.Model, path: Path) -> None:
 
     path.write_text(buffer.getvalue(), encoding="utf-8")
 
+
+def save_weight_transfer_report(structure: dict[str, Any], output_dir: Path) -> None:
+    """Сохранить текстовый отчет о переносе ImageNet-весов."""
+
+    report = structure.get("weight_transfer_report")
+    if not report:
+        return
+
+    lines = [
+        f"source_model: {report.get('source_model')}",
+        f"transferred_layer_count: {report.get('transferred_layer_count')}",
+        f"skipped_layer_count: {report.get('skipped_layer_count')}",
+        "",
+        "transferred_layers:",
+    ]
+    lines.extend(f"- {layer_name}" for layer_name in report.get("transferred_layers", []))
+    lines.extend(["", "skipped_layers:"])
+    for skipped in report.get("skipped_layers", []):
+        lines.append(f"- {skipped.get('layer')}: {skipped.get('reason')}")
+
+    (output_dir / "weight_transfer_report.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
 def save_history(history_rows: list[dict[str, Any]], output_dir: Path) -> Path:
 
     """Сохранить историю обучения в формате, пригодном для восстановления графиков."""
@@ -465,6 +487,7 @@ def save_artifacts(
     save_json(output_dir / "config.json", config)
 
     save_json(output_dir / "model_structure.json", structure)
+    save_weight_transfer_report(structure, output_dir)
 
     save_model_summary(model, output_dir / "model_summary.txt")
 

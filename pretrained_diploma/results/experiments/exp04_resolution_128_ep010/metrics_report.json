@@ -69,5 +69,15 @@
   "inference_benchmark_batch_size": 1,
   "inference_images_per_second": 6.3784671128896635,
   "inference_ms_per_image": 156.77747996523976,
-  "estimated_gflops_per_second": 1.6738696467004324
+  "estimated_gflops_per_second": 1.6738696467004324,
+  "train_eval_accuracy": 0.9204761981964111,
+  "train_eval_loss": 0.23522162437438965,
+  "train_eval_precision": 0.920273740255532,
+  "train_eval_recall": 0.9204761904761903,
+  "train_eval_f1_score": 0.920117421847225,
+  "val_eval_accuracy": 0.8666666746139526,
+  "val_eval_loss": 0.3254721164703369,
+  "val_eval_precision": 0.8663371275454246,
+  "val_eval_recall": 0.8666666666666666,
+  "val_eval_f1_score": 0.8659328358162842
 }
