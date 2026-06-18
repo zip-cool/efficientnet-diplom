@@ -102,6 +102,12 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp00_full_mode
 - `exp23_repeat_medium` - среднее сокращение `[1, 1, 1, 2, 2, 2, 1]`;
 - `exp24_repeat_minimal` - по одному MBConv-блоку на стадию `[1, 1, 1, 1, 1, 1, 1]`.
 
+Серия компактных хвостов для варианта `exp23_repeat_medium`:
+
+- `exp25_repeat_medium_tail_conv1x1`;
+- `exp26_repeat_medium_tail_separable_conv`;
+- `exp27_repeat_medium_tail_simple_mbconv`.
+
 В этой серии не удаляются целые поздние стадии. Все семь стадий остаются, но
 сокращается число повторных блоков внутри стадий. Первый блок каждой стадии
 сохраняется, потому что он может менять spatial-размер и число каналов. Удаляются
@@ -110,6 +116,8 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp00_full_mode
 Перед запуском сокращенных вариантов проверяется `exp21_repeat_full`: после
 переноса ImageNet-весов она должна совпадать со стандартной `EfficientNetB0`.
 Результат проверки сохраняется в `pretrained_diploma/results/validation/architecture_validation.json`.
+
+Серия `exp25`-`exp27` использует ту же сокращённую по повторам основу, что и `exp23_repeat_medium`: сохраняются все семь стадий EfficientNetB0, но часть повторных MBConv-блоков удалена. После выхода `top_activation` добавляется один из компактных хвостов, аналогичных экспериментам `exp14`-`exp16`. Слои перенесённой EfficientNetB0 остаются предобученными на ImageNet и замороженными, а новые слои хвоста обучаются с нуля.
 
 ### Подробно о слоях в сериях 4 и 5
 
@@ -415,6 +423,20 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp23_repeat_me
 
 ```bash
 python pretrained_diploma/scripts/run_experiment.py --experiment exp24_repeat_minimal --all-epoch-values
+```
+
+Серия 7. Компактные хвосты для `exp23_repeat_medium`:
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp25_repeat_medium_tail_conv1x1 --all-epoch-values
+```
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp26_repeat_medium_tail_separable_conv --all-epoch-values
+```
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp27_repeat_medium_tail_simple_mbconv --all-epoch-values
 ```
 
 ## Результаты

@@ -251,5 +251,80 @@
     "cut_point": "repeat_minimal",
     "cut_layer": "top_activation",
     "tail_type": "gap"
+  },
+  "exp25_repeat_medium_tail_conv1x1": {
+    "series": "repeat_medium_tail",
+    "description": "Medium repeated-block reduction with compact Conv2D 1x1 tail",
+    "input_size": 224,
+    "stage_repeats": [
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      1
+    ],
+    "removed_blocks": [
+      "block2b",
+      "block3b",
+      "block4c",
+      "block5c",
+      "block6c",
+      "block6d"
+    ],
+    "cut_point": "repeat_medium",
+    "cut_layer": "top_activation",
+    "tail_type": "conv1x1"
+  },
+  "exp26_repeat_medium_tail_separable_conv": {
+    "series": "repeat_medium_tail",
+    "description": "Medium repeated-block reduction with SeparableConv2D tail",
+    "input_size": 224,
+    "stage_repeats": [
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      1
+    ],
+    "removed_blocks": [
+      "block2b",
+      "block3b",
+      "block4c",
+      "block5c",
+      "block6c",
+      "block6d"
+    ],
+    "cut_point": "repeat_medium",
+    "cut_layer": "top_activation",
+    "tail_type": "separable_conv"
+  },
+  "exp27_repeat_medium_tail_simple_mbconv": {
+    "series": "repeat_medium_tail",
+    "description": "Medium repeated-block reduction with simple MBConv tail",
+    "input_size": 224,
+    "stage_repeats": [
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      1
+    ],
+    "removed_blocks": [
+      "block2b",
+      "block3b",
+      "block4c",
+      "block5c",
+      "block6c",
+      "block6d"
+    ],
+    "cut_point": "repeat_medium",
+    "cut_layer": "top_activation",
+    "tail_type": "simple_mbconv"
   }
 }
