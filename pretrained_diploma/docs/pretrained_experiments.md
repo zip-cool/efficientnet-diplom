@@ -451,10 +451,14 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp27_repeat_me
 - `400/class`: train `280`, validation `60`, test `60`;
 - `500/class`: train `350`, validation `75`, test `75`;
 - `600/class`: train `420`, validation `90`, test `90`;
-- `800/class`: train `560`, validation `120`, test `120`.
-- `1000/class`: train `700`, validation `150`, test `150`.
+- `800/class`: train `560`, validation `120`, test `120`;
+- `900/class`: train `630`, validation `135`, test `135`;
+- `1000/class`: train `700`, validation `150`, test `150`;
+- `1100/class`: train `770`, validation `165`, test `165`;
 - `1200/class`: train `840`, validation `180`, test `180`;
-- `1400/class`: train `980`, validation `210`, test `210`.
+- `1300/class`: train `910`, validation `195`, test `195`;
+- `1400/class`: train `980`, validation `210`, test `210`;
+- `1500/class`: train `1050`, validation `225`, test `225`.
 
 Датасеты `50/class`, `150/class`, `300/class`, `500/class`, `1200/class` и `1400/class` собраны из `data/processed` с исключением всех изображений из независимой holdout-выборки `holdout_not_train_val_300_per_class`, чтобы holdout не пересекался с новыми train/validation/test split.
 
@@ -471,7 +475,7 @@ pretrained_diploma/results/dataset_splits/dataset_size_variants/summary.json
 pretrained_diploma/results/dataset_splits/dataset_size_variants/manifest.csv
 ```
 
-Эксперименты серии начинаются с `exp30`. Один эксперимент запускается на всех размерах датасета через параметр `--all-dataset-sizes`, а в имени результата появляется суффикс вида `data0100`, `data0200`, `data0400`, `data0600`, `data0800`, `data1000`.
+Эксперименты серии начинаются с `exp30`. Один эксперимент запускается на всех размерах датасета через параметр `--all-dataset-sizes`, а в имени результата появляется суффикс вида `data0050`, `data0100`, `data0150`, `data0200`, `data0300`, `data0400`, `data0500`, `data0600`, `data0800`, `data0900`, `data1000`, `data1100`, `data1200`, `data1300`, `data1400`, `data1500`.
 
 Соответствие новым экспериментам:
 
@@ -523,7 +527,7 @@ python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 30 -
 python pretrained_diploma/scripts/plot_accuracy_by_dataset_size.py --make-combined-plot
 ```
 
-В этих графиках ось X показывает не размер на класс, а общее число изображений во всех классах: `150`, `300`, `450`, `600`, `900`, `1200`, `1500`, `1800`, `2400`, `3000`, `3600`, `4200`.
+В этих графиках ось X показывает не размер на класс, а общее число изображений во всех классах: `150`, `300`, `450`, `600`, `900`, `1200`, `1500`, `1800`, `2400`, `2700`, `3000`, `3300`, `3600`, `3900`, `4200`, `4500`.
 
 ## Независимая holdout-выборка
 

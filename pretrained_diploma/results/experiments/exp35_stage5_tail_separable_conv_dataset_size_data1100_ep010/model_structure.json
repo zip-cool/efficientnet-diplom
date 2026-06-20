@@ -1,0 +1,20 @@
+{
+  "model_name": "pretrained_efficientnet_exp35_stage5_tail_separable_conv_dataset_size_data1100_ep010",
+  "weights": "imagenet",
+  "input_size": 224,
+  "cut_layer": "block5c_add",
+  "cut_point": "after_stage5",
+  "tail_type": "separable_conv",
+  "base_layers": 238,
+  "model_layers": 169,
+  "parameter_count": 899450,
+  "cut_output_shape": [
+    null,
+    14,
+    14,
+    112
+  ],
+  "finetune_prefixes": [
+    "block5"
+  ]
+}
