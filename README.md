@@ -924,7 +924,7 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp00_full_mode
 python pretrained_diploma/scripts/run_all_experiments.py
 ```
 
-Новая серия `exp30`-`exp46` проверяет влияние размера датасета. Для неё созданы датасеты по `100`, `200`, `400`, `600` и `800` изображений на класс, а точка `1000` изображений на класс добавлена копиями уже готовых запусков на основном датасете:
+Новая серия `exp30`-`exp46` проверяет влияние размера датасета. Для неё созданы датасеты по `100`, `200`, `400`, `600`, `800`, `1200` и `1400` изображений на класс, а точка `1000` изображений на класс добавлена копиями уже готовых запусков на основном датасете. Датасеты `1200` и `1400` на класс собраны без изображений из holdout:
 
 ```text
 pretrained_diploma/data/dataset_size_variants/
@@ -934,6 +934,12 @@ pretrained_diploma/data/dataset_size_variants/
 
 ```bash
 python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 30 --experiment-end 46 --epochs 10 --all-dataset-sizes
+```
+
+Запуск серии только на выбранных размерах:
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 30 --experiment-end 46 --epochs 10 --dataset-size 1200 1400
 ```
 
 Графики точности от суммарного размера выборки:

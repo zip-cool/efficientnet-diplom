@@ -35,6 +35,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--sizes", type=int, nargs="+", default=[100, 200, 400, 600, 800])
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--exclude-manifest-images", type=Path, nargs="+", default=None)
     parser.add_argument("--overwrite", action="store_true")
     return parser.parse_args()
 
@@ -49,14 +50,41 @@ def list_images(class_dir: Path) -> list[Path]:
     )
 
 
-def prepare_dir(path: Path, overwrite: bool) -> None:
+def prepare_dir(path: Path, overwrite: bool, allow_existing: bool = False) -> None:
     """Создать папку или пересоздать её при явном флаге overwrite."""
 
     if path.exists() and any(path.iterdir()):
+        if allow_existing and not overwrite:
+            return
         if not overwrite:
             raise FileExistsError(f"{path} is not empty. Use --overwrite to recreate it.")
         shutil.rmtree(path)
     path.mkdir(parents=True, exist_ok=True)
+
+
+def collect_excluded_identities(manifest_paths: list[Path] | None) -> set[tuple[str, str]]:
+    """Собрать пары class_name + filename, которые нельзя включать в новые датасеты."""
+
+    excluded: set[tuple[str, str]] = set()
+    if not manifest_paths:
+        return excluded
+
+    for manifest_path in manifest_paths:
+        with manifest_path.open(encoding="utf-8") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                class_name = row.get("class_name")
+                if not class_name:
+                    continue
+                for field_name in ("source_path", "target_path", "split_path", "subset_path", "processed_path"):
+                    field_value = row.get(field_name)
+                    if not field_value:
+                        continue
+                    image_path = Path(field_value)
+                    if image_path.suffix.lower() in IMAGE_EXTENSIONS:
+                        excluded.add((class_name, image_path.name))
+
+    return excluded
 
 
 def split_counts_for_size(images_per_class: int) -> dict[str, int]:
@@ -117,25 +145,58 @@ def main() -> None:
     if any(size <= 0 for size in args.sizes):
         raise ValueError("All dataset sizes must be greater than zero.")
 
-    prepare_dir(output_root, args.overwrite)
+    prepare_dir(output_root, args.overwrite, allow_existing=True)
     prepare_dir(report_dir, args.overwrite)
 
     rng = random.Random(args.seed)
-    class_names = sorted(path.name for path in (source_dir / "train").iterdir() if path.is_dir())
+    excluded_identities = collect_excluded_identities(args.exclude_manifest_images)
+    split_source_dirs = {
+        split_name: source_dir / split_name
+        for split_name in ("train", "val", "test")
+        if (source_dir / split_name).exists()
+    }
+    has_existing_splits = set(split_source_dirs) == {"train", "val", "test"}
+    class_root = source_dir / "train" if has_existing_splits else source_dir
+    class_names = sorted(path.name for path in class_root.iterdir() if path.is_dir())
     if not class_names:
-        raise ValueError(f"No class directories found in {source_dir / 'train'}")
+        raise ValueError(f"No class directories found in {class_root}")
 
     selected_by_split: dict[str, dict[str, list[Path]]] = {}
     available_counts: dict[str, dict[str, int]] = {"train": {}, "val": {}, "test": {}}
 
-    for split_name in ("train", "val", "test"):
-        selected_by_split[split_name] = {}
+    if has_existing_splits:
+        for split_name in ("train", "val", "test"):
+            selected_by_split[split_name] = {}
+            for class_name in class_names:
+                image_paths = [
+                    image_path
+                    for image_path in list_images(source_dir / split_name / class_name)
+                    if (class_name, image_path.name) not in excluded_identities
+                ]
+                shuffled_paths = image_paths[:]
+                rng.shuffle(shuffled_paths)
+                selected_by_split[split_name][class_name] = shuffled_paths
+                available_counts[split_name][class_name] = len(image_paths)
+    else:
+        selected_by_split = {"train": {}, "val": {}, "test": {}}
         for class_name in class_names:
-            image_paths = list_images(source_dir / split_name / class_name)
+            image_paths = [
+                image_path
+                for image_path in list_images(source_dir / class_name)
+                if (class_name, image_path.name) not in excluded_identities
+            ]
             shuffled_paths = image_paths[:]
             rng.shuffle(shuffled_paths)
-            selected_by_split[split_name][class_name] = shuffled_paths
-            available_counts[split_name][class_name] = len(image_paths)
+            available_counts["train"][class_name] = len(image_paths)
+            available_counts["val"][class_name] = len(image_paths)
+            available_counts["test"][class_name] = len(image_paths)
+
+            cursor = 0
+            max_counts = split_counts_for_size(max(args.sizes))
+            for split_name in ("train", "val", "test"):
+                split_count = max_counts[split_name]
+                selected_by_split[split_name][class_name] = shuffled_paths[cursor : cursor + split_count]
+                cursor += split_count
 
     manifest_rows: list[dict[str, object]] = []
     summary: dict[str, object] = {
@@ -144,6 +205,8 @@ def main() -> None:
         "report_dir": str(report_dir),
         "seed": args.seed,
         "split_ratios": SPLIT_RATIOS,
+        "excluded_manifest_images": [str(path) for path in args.exclude_manifest_images or []],
+        "excluded_identity_count": len(excluded_identities),
         "available_counts": available_counts,
         "datasets": {},
     }

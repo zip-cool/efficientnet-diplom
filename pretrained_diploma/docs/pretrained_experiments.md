@@ -441,7 +441,7 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp27_repeat_me
 
 Серия 8. Влияние размера датасета при фиксированных 10 эпохах:
 
-Созданы датасеты по `100`, `200`, `400`, `600` и `800` изображений на класс. Также в эту же серию добавляется контрольная точка `1000` изображений на класс: для неё используются уже готовые результаты соответствующих экспериментов на основном датасете `balanced_1000_per_class_split`. Каждый датасет сохраняет пропорцию текущего разбиения `70/15/15`:
+Созданы датасеты по `100`, `200`, `400`, `600`, `800`, `1200` и `1400` изображений на класс. Также в эту же серию добавляется контрольная точка `1000` изображений на класс: для неё используются уже готовые результаты соответствующих экспериментов на основном датасете `balanced_1000_per_class_split`. Каждый датасет сохраняет пропорцию текущего разбиения `70/15/15`:
 
 - `100/class`: train `70`, validation `15`, test `15`;
 - `200/class`: train `140`, validation `30`, test `30`;
@@ -449,6 +449,10 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp27_repeat_me
 - `600/class`: train `420`, validation `90`, test `90`;
 - `800/class`: train `560`, validation `120`, test `120`.
 - `1000/class`: train `700`, validation `150`, test `150`.
+- `1200/class`: train `840`, validation `180`, test `180`;
+- `1400/class`: train `980`, validation `210`, test `210`.
+
+Датасеты `1200/class` и `1400/class` собраны из `data/processed` с исключением всех изображений из независимой holdout-выборки `holdout_not_train_val_300_per_class`, чтобы holdout не пересекался с новыми train/validation/test split.
 
 Папки датасетов:
 
@@ -503,13 +507,19 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp30_full_mode
 python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 30 --experiment-end 46 --epochs 10 --all-dataset-sizes
 ```
 
+Запустить всю серию `exp30`-`exp46` только на выбранных размерах датасета:
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 30 --experiment-end 46 --epochs 10 --dataset-size 1200 1400
+```
+
 Построить для каждого эксперимента график зависимости точности от суммарного размера выборки:
 
 ```bash
 python pretrained_diploma/scripts/plot_accuracy_by_dataset_size.py --make-combined-plot
 ```
 
-В этих графиках ось X показывает не размер на класс, а общее число изображений во всех классах: `300`, `600`, `1200`, `1800`, `2400`, `3000`.
+В этих графиках ось X показывает не размер на класс, а общее число изображений во всех классах: `300`, `600`, `1200`, `1800`, `2400`, `3000`, `3600`, `4200`.
 
 ## Независимая holdout-выборка
 

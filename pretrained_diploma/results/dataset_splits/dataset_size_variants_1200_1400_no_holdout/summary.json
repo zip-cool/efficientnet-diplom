@@ -1,0 +1,90 @@
+{
+  "source_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\processed",
+  "output_root": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\pretrained_diploma\\data\\dataset_size_variants",
+  "report_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\pretrained_diploma\\results\\dataset_splits\\dataset_size_variants_1200_1400_no_holdout",
+  "seed": 42,
+  "split_ratios": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "excluded_manifest_images": [
+    "pretrained_diploma\\results\\dataset_splits\\holdout_not_train_val_300_per_class\\manifest.csv"
+  ],
+  "excluded_identity_count": 900,
+  "available_counts": {
+    "train": {
+      "Early_Blight": 3429,
+      "Healthy": 3505,
+      "Late_Blight": 3352
+    },
+    "val": {
+      "Early_Blight": 3429,
+      "Healthy": 3505,
+      "Late_Blight": 3352
+    },
+    "test": {
+      "Early_Blight": 3429,
+      "Healthy": 3505,
+      "Late_Blight": 3352
+    }
+  },
+  "datasets": {
+    "balanced_1200_per_class_split": {
+      "dataset_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\pretrained_diploma\\data\\dataset_size_variants\\balanced_1200_per_class_split",
+      "images_per_class": 1200,
+      "train_per_class": 840,
+      "val_per_class": 180,
+      "test_per_class": 180,
+      "train_size": 2520,
+      "val_size": 540,
+      "test_size": 540,
+      "total_size": 3600,
+      "split_counts": {
+        "train": {
+          "Early_Blight": 840,
+          "Healthy": 840,
+          "Late_Blight": 840
+        },
+        "val": {
+          "Early_Blight": 180,
+          "Healthy": 180,
+          "Late_Blight": 180
+        },
+        "test": {
+          "Early_Blight": 180,
+          "Healthy": 180,
+          "Late_Blight": 180
+        }
+      }
+    },
+    "balanced_1400_per_class_split": {
+      "dataset_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\pretrained_diploma\\data\\dataset_size_variants\\balanced_1400_per_class_split",
+      "images_per_class": 1400,
+      "train_per_class": 980,
+      "val_per_class": 210,
+      "test_per_class": 210,
+      "train_size": 2940,
+      "val_size": 630,
+      "test_size": 630,
+      "total_size": 4200,
+      "split_counts": {
+        "train": {
+          "Early_Blight": 980,
+          "Healthy": 980,
+          "Late_Blight": 980
+        },
+        "val": {
+          "Early_Blight": 210,
+          "Healthy": 210,
+          "Late_Blight": 210
+        },
+        "test": {
+          "Early_Blight": 210,
+          "Healthy": 210,
+          "Late_Blight": 210
+        }
+      }
+    }
+  }
+}

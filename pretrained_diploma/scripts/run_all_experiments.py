@@ -26,6 +26,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run all pretrained EfficientNetB0 experiments.")
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument("--epochs", type=int, default=None)
+    parser.add_argument("--dataset-size", dest="dataset_sizes", type=int, nargs="+", default=None)
     parser.add_argument("--all-dataset-sizes", action="store_true")
     parser.add_argument("--experiment-prefix", default=None)
     parser.add_argument("--experiment-start", type=int, default=None)
@@ -50,7 +51,12 @@ def main() -> None:
         if args.experiment_end is not None and (number is None or number > args.experiment_end):
             continue
         epoch_values = [args.epochs] if args.epochs is not None else base_config["epoch_values"]
-        dataset_sizes = base_config["dataset_size_values"] if args.all_dataset_sizes else [None]
+        if args.all_dataset_sizes:
+            dataset_sizes = base_config["dataset_size_values"]
+        elif args.dataset_sizes is not None:
+            dataset_sizes = args.dataset_sizes
+        else:
+            dataset_sizes = [None]
         for dataset_size in dataset_sizes:
             for epoch_value in epoch_values:
                 config = load_experiment_config(
