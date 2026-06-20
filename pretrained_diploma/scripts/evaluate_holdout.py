@@ -242,6 +242,7 @@ def main() -> None:
         raise FileNotFoundError(f"Holdout directory not found: {args.holdout_dir}")
 
     evaluated = 0
+    matched_run_ids: set[str] = set()
     for run_dir in sorted(path for path in args.results_dir.iterdir() if path.is_dir()):
         config_path = run_dir / "config.json"
         final_metrics_path = run_dir / "final_metrics.json"
@@ -252,8 +253,14 @@ def main() -> None:
         if not should_evaluate(run_dir, config, args):
             continue
 
+        matched_run_ids.add(run_dir.name)
         if evaluate_run(run_dir, args.holdout_dir, args.summary_csv, args.overwrite):
             evaluated += 1
+
+    if args.run_ids is not None:
+        missing_run_ids = sorted(set(args.run_ids) - matched_run_ids)
+        for run_id in missing_run_ids:
+            print(f"Requested run-id not found or incomplete: {run_id}")
 
     print(f"Holdout evaluation finished. Newly evaluated runs: {evaluated}")
 

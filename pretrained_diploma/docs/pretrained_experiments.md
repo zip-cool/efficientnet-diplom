@@ -451,8 +451,8 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp27_repeat_me
 - `400/class`: train `280`, validation `60`, test `60`;
 - `500/class`: train `350`, validation `75`, test `75`;
 - `600/class`: train `420`, validation `90`, test `90`;
-- `800/class`: train `560`, validation `120`, test `120`;
-- `1000/class`: train `700`, validation `150`, test `150`;
+- `800/class`: train `560`, validation `120`, test `120`.
+- `1000/class`: train `700`, validation `150`, test `150`.
 - `1200/class`: train `840`, validation `180`, test `180`;
 - `1400/class`: train `980`, validation `210`, test `210`.
 

@@ -31,12 +31,18 @@
   },
   "default_dataset_size": 1000,
   "dataset_size_values": [
+    50,
     100,
+    150,
     200,
+    300,
     400,
+    500,
     600,
     800,
-    1000
+    1000,
+    1200,
+    1400
   ],
   "dataset_size_dirs": {
     "100": "pretrained_diploma/data/dataset_size_variants/balanced_100_per_class_split",
@@ -44,7 +50,13 @@
     "400": "pretrained_diploma/data/dataset_size_variants/balanced_400_per_class_split",
     "600": "pretrained_diploma/data/dataset_size_variants/balanced_600_per_class_split",
     "800": "pretrained_diploma/data/dataset_size_variants/balanced_800_per_class_split",
-    "1000": "pretrained_diploma/data/balanced_1000_per_class_split"
+    "1000": "pretrained_diploma/data/balanced_1000_per_class_split",
+    "1200": "pretrained_diploma/data/dataset_size_variants/balanced_1200_per_class_split",
+    "1400": "pretrained_diploma/data/dataset_size_variants/balanced_1400_per_class_split",
+    "50": "pretrained_diploma/data/dataset_size_variants/balanced_50_per_class_split",
+    "150": "pretrained_diploma/data/dataset_size_variants/balanced_150_per_class_split",
+    "300": "pretrained_diploma/data/dataset_size_variants/balanced_300_per_class_split",
+    "500": "pretrained_diploma/data/dataset_size_variants/balanced_500_per_class_split"
   },
   "series": "dataset_size",
   "description": "Dataset-size series based on exp00_full_model",

@@ -1,4 +1,6 @@
 {
+  "train_eval_accuracy": 0.9519047737121582,
+  "val_eval_accuracy": 0.9200000166893005,
   "test_accuracy": 0.9155555367469788,
   "accuracy": 0.9155555555555556,
   "precision": 0.9158092360393414,
@@ -6,13 +8,5 @@
   "f1_score": 0.9155971299373283,
   "test_loss": 0.20324884355068207,
   "evaluated_model": "best_model.keras",
-  "test_samples": 450,
-  "train_eval_accuracy": 0.9519047737121582,
-  "val_eval_accuracy": 0.9200000166893005,
-  "experiment_id": "exp30_full_model_dataset_size_data1000_ep010",
-  "base_experiment_id": "exp30_full_model_dataset_size",
-  "experiment_name": "exp30_full_model_dataset_size_data1000_ep010",
-  "source_experiment_id": "exp00_full_model",
-  "dataset_size": 1000,
-  "dataset_dir": "pretrained_diploma/data/balanced_1000_per_class_split"
+  "test_samples": 450
 }
