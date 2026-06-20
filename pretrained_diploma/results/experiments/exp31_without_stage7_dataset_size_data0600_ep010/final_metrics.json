@@ -82,5 +82,16 @@
   "inference_benchmark_batch_size": 1,
   "inference_images_per_second": 6.5111517139887685,
   "inference_ms_per_image": 153.58266001567245,
-  "estimated_gflops_per_second": 4.562238946300959
+  "estimated_gflops_per_second": 4.562238946300959,
+  "holdout_dataset_dir": "pretrained_diploma\\data\\holdout_not_train_val_300_per_class\\test",
+  "holdout_evaluated_model": "best_model.keras",
+  "holdout_accuracy": 0.8500000238418579,
+  "holdout_sklearn_accuracy": 0.85,
+  "holdout_loss": 0.4841286540031433,
+  "holdout_precision": 0.8538649045221341,
+  "holdout_recall": 0.85,
+  "holdout_f1_score": 0.8491025324728726,
+  "holdout_samples": 900,
+  "holdout_confusion_matrix_csv_path": "pretrained_diploma\\results\\experiments\\exp31_without_stage7_dataset_size_data0600_ep010\\holdout_confusion_matrix.csv",
+  "holdout_confusion_matrix_png_path": "pretrained_diploma\\results\\experiments\\exp31_without_stage7_dataset_size_data0600_ep010\\holdout_confusion_matrix.png"
 }

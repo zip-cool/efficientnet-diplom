@@ -83,5 +83,16 @@
   "experiment_id": "exp33_without_stages5_7_dataset_size_data1000_ep010",
   "base_experiment_id": "exp33_without_stages5_7_dataset_size",
   "source_experiment_id": "exp08_without_stages5_7",
-  "dataset_size": 1000
+  "dataset_size": 1000,
+  "holdout_dataset_dir": "pretrained_diploma\\data\\holdout_not_train_val_300_per_class\\test",
+  "holdout_evaluated_model": "best_model.keras",
+  "holdout_accuracy": 0.8288888931274414,
+  "holdout_sklearn_accuracy": 0.8288888888888889,
+  "holdout_loss": 0.4309963881969452,
+  "holdout_precision": 0.8281874039938556,
+  "holdout_recall": 0.8288888888888888,
+  "holdout_f1_score": 0.8280761258714904,
+  "holdout_samples": 900,
+  "holdout_confusion_matrix_csv_path": "pretrained_diploma\\results\\experiments\\exp33_without_stages5_7_dataset_size_data1000_ep010\\holdout_confusion_matrix.csv",
+  "holdout_confusion_matrix_png_path": "pretrained_diploma\\results\\experiments\\exp33_without_stages5_7_dataset_size_data1000_ep010\\holdout_confusion_matrix.png"
 }

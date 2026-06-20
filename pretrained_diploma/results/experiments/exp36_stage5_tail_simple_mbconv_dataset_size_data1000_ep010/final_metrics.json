@@ -83,5 +83,16 @@
   "experiment_id": "exp36_stage5_tail_simple_mbconv_dataset_size_data1000_ep010",
   "base_experiment_id": "exp36_stage5_tail_simple_mbconv_dataset_size",
   "source_experiment_id": "exp16_stage5_tail_simple_mbconv",
-  "dataset_size": 1000
+  "dataset_size": 1000,
+  "holdout_dataset_dir": "pretrained_diploma\\data\\holdout_not_train_val_300_per_class\\test",
+  "holdout_evaluated_model": "best_model.keras",
+  "holdout_accuracy": 0.945555567741394,
+  "holdout_sklearn_accuracy": 0.9455555555555556,
+  "holdout_loss": 0.15682387351989746,
+  "holdout_precision": 0.9457523730420673,
+  "holdout_recall": 0.9455555555555556,
+  "holdout_f1_score": 0.9456418210885693,
+  "holdout_samples": 900,
+  "holdout_confusion_matrix_csv_path": "pretrained_diploma\\results\\experiments\\exp36_stage5_tail_simple_mbconv_dataset_size_data1000_ep010\\holdout_confusion_matrix.csv",
+  "holdout_confusion_matrix_png_path": "pretrained_diploma\\results\\experiments\\exp36_stage5_tail_simple_mbconv_dataset_size_data1000_ep010\\holdout_confusion_matrix.png"
 }

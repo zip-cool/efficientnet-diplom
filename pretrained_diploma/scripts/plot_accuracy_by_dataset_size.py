@@ -32,7 +32,7 @@ def parse_args() -> argparse.Namespace:
         default=Path("pretrained_diploma/results/dataset_size_plots"),
     )
     parser.add_argument("--experiment-start", type=int, default=30)
-    parser.add_argument("--experiment-end", type=int, default=43)
+    parser.add_argument("--experiment-end", type=int, default=46)
     parser.add_argument("--experiments", nargs="+", default=None)
     parser.add_argument("--dataset-sizes", nargs="+", type=int, default=None)
     parser.add_argument("--metric", choices=sorted(METRIC_LABELS), default="test_accuracy")

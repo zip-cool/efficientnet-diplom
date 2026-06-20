@@ -924,7 +924,7 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp00_full_mode
 python pretrained_diploma/scripts/run_all_experiments.py
 ```
 
-Новая серия `exp30`-`exp43` проверяет влияние размера датасета. Для неё созданы датасеты по `100`, `200`, `400`, `600` и `800` изображений на класс, а точка `1000` изображений на класс добавлена копиями уже готовых запусков на основном датасете:
+Новая серия `exp30`-`exp46` проверяет влияние размера датасета. Для неё созданы датасеты по `100`, `200`, `400`, `600` и `800` изображений на класс, а точка `1000` изображений на класс добавлена копиями уже готовых запусков на основном датасете:
 
 ```text
 pretrained_diploma/data/dataset_size_variants/
@@ -933,13 +933,27 @@ pretrained_diploma/data/dataset_size_variants/
 Запуск всей серии на 10 эпохах:
 
 ```bash
-python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 30 --experiment-end 43 --epochs 10 --all-dataset-sizes
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 30 --experiment-end 46 --epochs 10 --all-dataset-sizes
 ```
 
 Графики точности от суммарного размера выборки:
 
 ```bash
 python pretrained_diploma/scripts/plot_accuracy_by_dataset_size.py --make-combined-plot
+```
+
+Независимая holdout-выборка для повторной проверки test accuracy:
+
+```text
+pretrained_diploma/data/holdout_not_train_val_300_per_class/test/
+```
+
+Она содержит `300` изображений на класс и не пересекается с train/validation по найденным manifest-файлам.
+
+Проверка сохранённых моделей на holdout-выборке:
+
+```bash
+python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 30 --experiment-end 46
 ```
 
 Восстановление графиков без обучения:

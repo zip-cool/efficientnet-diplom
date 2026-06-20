@@ -481,6 +481,9 @@ pretrained_diploma/results/dataset_splits/dataset_size_variants/manifest.csv
 - `exp41_repeat_light_dataset_size` повторяет `exp22_repeat_light`;
 - `exp42_repeat_medium_dataset_size` повторяет `exp23_repeat_medium`;
 - `exp43_repeat_minimal_dataset_size` повторяет `exp24_repeat_minimal`.
+- `exp44_repeat_medium_tail_conv1x1_dataset_size` повторяет `exp25_repeat_medium_tail_conv1x1`;
+- `exp45_repeat_medium_tail_separable_conv_dataset_size` повторяет `exp26_repeat_medium_tail_separable_conv`;
+- `exp46_repeat_medium_tail_simple_mbconv_dataset_size` повторяет `exp27_repeat_medium_tail_simple_mbconv`.
 
 Создать датасеты заново:
 
@@ -494,10 +497,10 @@ python pretrained_diploma/scripts/create_dataset_size_variants.py --overwrite
 python pretrained_diploma/scripts/run_experiment.py --experiment exp30_full_model_dataset_size --epochs 10 --all-dataset-sizes
 ```
 
-Запустить всю серию `exp30`-`exp43` на всех размерах датасета:
+Запустить всю серию `exp30`-`exp46` на всех размерах датасета:
 
 ```bash
-python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 30 --experiment-end 43 --epochs 10 --all-dataset-sizes
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 30 --experiment-end 46 --epochs 10 --all-dataset-sizes
 ```
 
 Построить для каждого эксперимента график зависимости точности от суммарного размера выборки:
@@ -507,6 +510,64 @@ python pretrained_diploma/scripts/plot_accuracy_by_dataset_size.py --make-combin
 ```
 
 В этих графиках ось X показывает не размер на класс, а общее число изображений во всех классах: `300`, `600`, `1200`, `1800`, `2400`, `3000`.
+
+## Независимая holdout-выборка
+
+Для повторной проверки test accuracy создана отдельная holdout-выборка, изображения которой не встречались ни в одном `train` или `validation` split из найденных `manifest.csv`.
+
+Папка выборки:
+
+```text
+pretrained_diploma/data/holdout_not_train_val_300_per_class/test/
+```
+
+Состав:
+
+- `Early_Blight` - 300 изображений;
+- `Healthy` - 300 изображений;
+- `Late_Blight` - 300 изображений;
+- всего - 900 изображений.
+
+Отчёты:
+
+```text
+pretrained_diploma/results/dataset_splits/holdout_not_train_val_300_per_class/summary.json
+pretrained_diploma/results/dataset_splits/holdout_not_train_val_300_per_class/manifest.csv
+```
+
+Правило отбора: исключается любое изображение с той же парой `class_name + filename`, если оно встречалось в `train`, `val` или `validation` хотя бы в одном manifest-файле. Контрольная проверка показала `0` пересечений с train/validation.
+
+Пересоздать выборку:
+
+```bash
+python pretrained_diploma/scripts/create_holdout_not_train_val.py --overwrite
+```
+
+Проверить сохранённые модели на этой holdout-выборке и дописать метрики в финальные отчёты:
+
+```bash
+python pretrained_diploma/scripts/evaluate_holdout.py
+```
+
+Проверить только серию с разными размерами датасета:
+
+```bash
+python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 30 --experiment-end 46
+```
+
+Проверить один конкретный запуск:
+
+```bash
+python pretrained_diploma/scripts/evaluate_holdout.py --run-ids exp30_full_model_dataset_size_data1000_ep010
+```
+
+Скрипт сохраняет:
+
+- `holdout_results.json`;
+- `holdout_confusion_matrix.csv`;
+- `holdout_confusion_matrix.png`;
+- поля `holdout_accuracy`, `holdout_loss`, `holdout_precision`, `holdout_recall`, `holdout_f1_score`, `holdout_samples` в `final_metrics.json` и `metrics_report.json`;
+- поля `holdout_accuracy`, `holdout_loss`, `holdout_samples` в общей таблице `experiments_summary.csv`.
 
 ## Результаты
 

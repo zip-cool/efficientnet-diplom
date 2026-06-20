@@ -1,0 +1,26 @@
+{
+  "source_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\processed",
+  "output_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\pretrained_diploma\\data\\holdout_not_train_val_300_per_class",
+  "report_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\pretrained_diploma\\results\\dataset_splits\\holdout_not_train_val_300_per_class",
+  "images_per_class": 300,
+  "total_images": 900,
+  "seed": 42,
+  "selection_rule": "exclude every class+filename found in any train or validation manifest",
+  "used_manifests": [
+    "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\pretrained_diploma\\results\\dataset_splits\\balanced_1000_per_class\\manifest.csv",
+    "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\pretrained_diploma\\results\\dataset_splits\\dataset_size_variants\\manifest.csv",
+    "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\results\\dataset_splits\\balanced_1000_per_class\\manifest.csv",
+    "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\results\\dataset_splits\\size_series\\manifest.csv"
+  ],
+  "excluded_train_val_identities": 9984,
+  "eligible_counts": {
+    "Early_Blight": 405,
+    "Healthy": 405,
+    "Late_Blight": 392
+  },
+  "selected_counts": {
+    "Early_Blight": 300,
+    "Healthy": 300,
+    "Late_Blight": 300
+  }
+}

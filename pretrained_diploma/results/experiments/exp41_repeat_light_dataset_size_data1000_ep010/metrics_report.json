@@ -97,5 +97,16 @@
   "experiment_id": "exp41_repeat_light_dataset_size_data1000_ep010",
   "base_experiment_id": "exp41_repeat_light_dataset_size",
   "source_experiment_id": "exp22_repeat_light",
-  "dataset_size": 1000
+  "dataset_size": 1000,
+  "holdout_dataset_dir": "pretrained_diploma\\data\\holdout_not_train_val_300_per_class\\test",
+  "holdout_evaluated_model": "best_model.keras",
+  "holdout_accuracy": 0.898888885974884,
+  "holdout_sklearn_accuracy": 0.8988888888888888,
+  "holdout_loss": 0.2668948769569397,
+  "holdout_precision": 0.8997240907717506,
+  "holdout_recall": 0.898888888888889,
+  "holdout_f1_score": 0.8983807473700051,
+  "holdout_samples": 900,
+  "holdout_confusion_matrix_csv_path": "pretrained_diploma\\results\\experiments\\exp41_repeat_light_dataset_size_data1000_ep010\\holdout_confusion_matrix.csv",
+  "holdout_confusion_matrix_png_path": "pretrained_diploma\\results\\experiments\\exp41_repeat_light_dataset_size_data1000_ep010\\holdout_confusion_matrix.png"
 }

@@ -56,6 +56,12 @@ SUMMARY_FIELDS = [
 
     "test_loss",
 
+    "holdout_accuracy",
+
+    "holdout_loss",
+
+    "holdout_samples",
+
     "head_training_time_seconds",
 
     "finetune_training_time_seconds",
@@ -148,7 +154,15 @@ def upsert_summary(summary_csv: Path, row: dict[str, Any]) -> None:
 
             ]
 
-    rows.append({field: row.get(field) for field in SUMMARY_FIELDS})
+    rows.append(row)
+
+    normalized_rows = [
+
+        {field: existing_row.get(field) for field in SUMMARY_FIELDS}
+
+        for existing_row in rows
+
+    ]
 
     with summary_csv.open("w", newline="", encoding="utf-8") as file:
 
@@ -156,7 +170,7 @@ def upsert_summary(summary_csv: Path, row: dict[str, Any]) -> None:
 
         writer.writeheader()
 
-        writer.writerows(rows)
+        writer.writerows(normalized_rows)
 
 def save_confusion_matrix(matrix: np.ndarray, class_names: list[str], output_dir: Path) -> tuple[Path, Path]:
 
@@ -606,6 +620,12 @@ def save_artifacts(
             "test_accuracy": test_metrics["accuracy"],
 
             "test_loss": test_metrics["loss"],
+
+            "holdout_accuracy": None,
+
+            "holdout_loss": None,
+
+            "holdout_samples": None,
 
             "head_training_time_seconds": stage_times["head"],
 
