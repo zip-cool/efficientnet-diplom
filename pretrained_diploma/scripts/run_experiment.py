@@ -19,9 +19,11 @@ def result_matches_current_config(output_dir: Path, config: dict) -> bool:
     if not config_path.exists():
         return False
     saved_config = load_json(config_path)
+    saved_dataset_size = saved_config.get("dataset_size", config.get("dataset_size"))
     return (
         saved_config.get("dataset_dir") == config.get("dataset_dir")
-        and saved_config.get("epochs") == config.get("epochs")
+        and saved_config.get("max_epochs") == config.get("max_epochs")
+        and saved_dataset_size == config.get("dataset_size")
     )
 
 
@@ -32,6 +34,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--experiment", required=True)
     parser.add_argument("--epochs", type=int, default=None)
     parser.add_argument("--all-epoch-values", action="store_true")
+    parser.add_argument("--dataset-size", type=int, default=None)
+    parser.add_argument("--all-dataset-sizes", action="store_true")
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument("--base-config", type=Path, default=Path("pretrained_diploma/configs/base_config.json"))
     parser.add_argument("--experiments", type=Path, default=Path("pretrained_diploma/configs/experiments.json"))
@@ -42,22 +46,31 @@ def main() -> None:
     """Запустить один эксперимент для одного или всех чисел эпох."""
 
     args = parse_args()
-    epoch_values = load_json(args.base_config)["epoch_values"] if args.all_epoch_values else [args.epochs]
-    for epoch_value in epoch_values:
-        config = load_experiment_config(args.experiment, args.base_config, args.experiments, epoch_value)
-        output_dir = Path(config["results_dir"]) / config["experiment_id"]
-        if output_dir.exists() and (output_dir / "final_metrics.json").exists() and not args.overwrite:
-            if result_matches_current_config(output_dir, config):
-                print(f"Skipping completed experiment: {output_dir}")
-                continue
-            raise FileExistsError(
-                f"{output_dir} already contains results for another dataset or epoch count. "
-                "Use --overwrite to restart it with the current config."
+    base_config = load_json(args.base_config)
+    epoch_values = base_config["epoch_values"] if args.all_epoch_values else [args.epochs]
+    dataset_sizes = base_config["dataset_size_values"] if args.all_dataset_sizes else [args.dataset_size]
+    for dataset_size in dataset_sizes:
+        for epoch_value in epoch_values:
+            config = load_experiment_config(
+                args.experiment,
+                args.base_config,
+                args.experiments,
+                epoch_value,
+                dataset_size=dataset_size,
             )
-        if output_dir.exists() and not args.overwrite:
-            raise FileExistsError(f"{output_dir} exists but is incomplete. Use --overwrite to restart it.")
-        print(f"Running {config['experiment_id']}")
-        print(f"Result directory: {run_experiment(config, overwrite=args.overwrite)}")
+            output_dir = Path(config["results_dir"]) / config["experiment_id"]
+            if output_dir.exists() and (output_dir / "final_metrics.json").exists() and not args.overwrite:
+                if result_matches_current_config(output_dir, config):
+                    print(f"Skipping completed experiment: {output_dir}")
+                    continue
+                raise FileExistsError(
+                    f"{output_dir} already contains results for another dataset or epoch count. "
+                    "Use --overwrite to restart it with the current config."
+                )
+            if output_dir.exists() and not args.overwrite:
+                raise FileExistsError(f"{output_dir} exists but is incomplete. Use --overwrite to restart it.")
+            print(f"Running {config['experiment_id']}")
+            print(f"Result directory: {run_experiment(config, overwrite=args.overwrite)}")
 
 
 if __name__ == "__main__":

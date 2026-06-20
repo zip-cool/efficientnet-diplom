@@ -326,5 +326,206 @@
     "cut_point": "repeat_medium",
     "cut_layer": "top_activation",
     "tail_type": "simple_mbconv"
+  },
+  "exp30_full_model_dataset_size": {
+    "series": "dataset_size",
+    "description": "Dataset-size series based on exp00_full_model",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "source_experiment_id": "exp00_full_model",
+    "fixed_epochs": 10
+  },
+  "exp31_without_stage7_dataset_size": {
+    "series": "dataset_size",
+    "description": "Dataset-size series based on exp06_without_stage7",
+    "input_size": 224,
+    "cut_layer": "block6d_add",
+    "cut_point": "without_stage7",
+    "tail_type": "gap",
+    "source_experiment_id": "exp06_without_stage7",
+    "fixed_epochs": 10
+  },
+  "exp32_without_stages6_7_dataset_size": {
+    "series": "dataset_size",
+    "description": "Dataset-size series based on exp07_without_stages6_7",
+    "input_size": 224,
+    "cut_layer": "block5c_add",
+    "cut_point": "without_stages6_7",
+    "tail_type": "gap",
+    "source_experiment_id": "exp07_without_stages6_7",
+    "fixed_epochs": 10
+  },
+  "exp33_without_stages5_7_dataset_size": {
+    "series": "dataset_size",
+    "description": "Dataset-size series based on exp08_without_stages5_7",
+    "input_size": 224,
+    "cut_layer": "block4c_add",
+    "cut_point": "without_stages5_7",
+    "tail_type": "gap",
+    "source_experiment_id": "exp08_without_stages5_7",
+    "fixed_epochs": 10
+  },
+  "exp34_stage5_tail_conv1x1_dataset_size": {
+    "series": "dataset_size",
+    "description": "Dataset-size series based on exp14_stage5_tail_conv1x1",
+    "input_size": 224,
+    "cut_layer": "block5c_add",
+    "cut_point": "after_stage5",
+    "tail_type": "conv1x1",
+    "source_experiment_id": "exp14_stage5_tail_conv1x1",
+    "fixed_epochs": 10
+  },
+  "exp35_stage5_tail_separable_conv_dataset_size": {
+    "series": "dataset_size",
+    "description": "Dataset-size series based on exp15_stage5_tail_separable_conv",
+    "input_size": 224,
+    "cut_layer": "block5c_add",
+    "cut_point": "after_stage5",
+    "tail_type": "separable_conv",
+    "source_experiment_id": "exp15_stage5_tail_separable_conv",
+    "fixed_epochs": 10
+  },
+  "exp36_stage5_tail_simple_mbconv_dataset_size": {
+    "series": "dataset_size",
+    "description": "Dataset-size series based on exp16_stage5_tail_simple_mbconv",
+    "input_size": 224,
+    "cut_layer": "block5c_add",
+    "cut_point": "after_stage5",
+    "tail_type": "simple_mbconv",
+    "source_experiment_id": "exp16_stage5_tail_simple_mbconv",
+    "fixed_epochs": 10
+  },
+  "exp37_stage4_tail_conv1x1_dataset_size": {
+    "series": "dataset_size",
+    "description": "Dataset-size series based on exp18_stage4_tail_conv1x1",
+    "input_size": 224,
+    "cut_layer": "block4c_add",
+    "cut_point": "after_stage4",
+    "tail_type": "conv1x1",
+    "source_experiment_id": "exp18_stage4_tail_conv1x1",
+    "fixed_epochs": 10
+  },
+  "exp38_stage4_tail_separable_conv_dataset_size": {
+    "series": "dataset_size",
+    "description": "Dataset-size series based on exp19_stage4_tail_separable_conv",
+    "input_size": 224,
+    "cut_layer": "block4c_add",
+    "cut_point": "after_stage4",
+    "tail_type": "separable_conv",
+    "source_experiment_id": "exp19_stage4_tail_separable_conv",
+    "fixed_epochs": 10
+  },
+  "exp39_stage4_tail_simple_mbconv_dataset_size": {
+    "series": "dataset_size",
+    "description": "Dataset-size series based on exp20_stage4_tail_simple_mbconv",
+    "input_size": 224,
+    "cut_layer": "block4c_add",
+    "cut_point": "after_stage4",
+    "tail_type": "simple_mbconv",
+    "source_experiment_id": "exp20_stage4_tail_simple_mbconv",
+    "fixed_epochs": 10
+  },
+  "exp40_repeat_full_dataset_size": {
+    "series": "dataset_size",
+    "description": "Dataset-size series based on exp21_repeat_full",
+    "input_size": 224,
+    "stage_repeats": [
+      1,
+      2,
+      2,
+      3,
+      3,
+      4,
+      1
+    ],
+    "removed_blocks": [],
+    "cut_point": "repeated_blocks_full",
+    "cut_layer": "top_activation",
+    "tail_type": "gap",
+    "source_experiment_id": "exp21_repeat_full",
+    "fixed_epochs": 10
+  },
+  "exp41_repeat_light_dataset_size": {
+    "series": "dataset_size",
+    "description": "Dataset-size series based on exp22_repeat_light",
+    "input_size": 224,
+    "stage_repeats": [
+      1,
+      2,
+      2,
+      2,
+      2,
+      3,
+      1
+    ],
+    "removed_blocks": [
+      "block4c",
+      "block5c",
+      "block6d"
+    ],
+    "cut_point": "repeat_light",
+    "cut_layer": "top_activation",
+    "tail_type": "gap",
+    "source_experiment_id": "exp22_repeat_light",
+    "fixed_epochs": 10
+  },
+  "exp42_repeat_medium_dataset_size": {
+    "series": "dataset_size",
+    "description": "Dataset-size series based on exp23_repeat_medium",
+    "input_size": 224,
+    "stage_repeats": [
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      1
+    ],
+    "removed_blocks": [
+      "block2b",
+      "block3b",
+      "block4c",
+      "block5c",
+      "block6c",
+      "block6d"
+    ],
+    "cut_point": "repeat_medium",
+    "cut_layer": "top_activation",
+    "tail_type": "gap",
+    "source_experiment_id": "exp23_repeat_medium",
+    "fixed_epochs": 10
+  },
+  "exp43_repeat_minimal_dataset_size": {
+    "series": "dataset_size",
+    "description": "Dataset-size series based on exp24_repeat_minimal",
+    "input_size": 224,
+    "stage_repeats": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "removed_blocks": [
+      "block2b",
+      "block3b",
+      "block4b",
+      "block4c",
+      "block5b",
+      "block5c",
+      "block6b",
+      "block6c",
+      "block6d"
+    ],
+    "cut_point": "repeat_minimal",
+    "cut_layer": "top_activation",
+    "tail_type": "gap",
+    "source_experiment_id": "exp24_repeat_minimal",
+    "fixed_epochs": 10
   }
 }

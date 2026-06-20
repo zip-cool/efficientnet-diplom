@@ -439,6 +439,75 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp26_repeat_me
 python pretrained_diploma/scripts/run_experiment.py --experiment exp27_repeat_medium_tail_simple_mbconv --all-epoch-values
 ```
 
+Серия 8. Влияние размера датасета при фиксированных 10 эпохах:
+
+Созданы датасеты по `100`, `200`, `400`, `600` и `800` изображений на класс. Также в эту же серию добавляется контрольная точка `1000` изображений на класс: для неё используются уже готовые результаты соответствующих экспериментов на основном датасете `balanced_1000_per_class_split`. Каждый датасет сохраняет пропорцию текущего разбиения `70/15/15`:
+
+- `100/class`: train `70`, validation `15`, test `15`;
+- `200/class`: train `140`, validation `30`, test `30`;
+- `400/class`: train `280`, validation `60`, test `60`;
+- `600/class`: train `420`, validation `90`, test `90`;
+- `800/class`: train `560`, validation `120`, test `120`.
+- `1000/class`: train `700`, validation `150`, test `150`.
+
+Папки датасетов:
+
+```text
+pretrained_diploma/data/dataset_size_variants/
+```
+
+Отчёт о составе датасетов:
+
+```text
+pretrained_diploma/results/dataset_splits/dataset_size_variants/summary.json
+pretrained_diploma/results/dataset_splits/dataset_size_variants/manifest.csv
+```
+
+Эксперименты серии начинаются с `exp30`. Один эксперимент запускается на всех размерах датасета через параметр `--all-dataset-sizes`, а в имени результата появляется суффикс вида `data0100`, `data0200`, `data0400`, `data0600`, `data0800`, `data1000`.
+
+Соответствие новым экспериментам:
+
+- `exp30_full_model_dataset_size` повторяет `exp00_full_model`;
+- `exp31_without_stage7_dataset_size` повторяет `exp06_without_stage7`;
+- `exp32_without_stages6_7_dataset_size` повторяет `exp07_without_stages6_7`;
+- `exp33_without_stages5_7_dataset_size` повторяет `exp08_without_stages5_7`;
+- `exp34_stage5_tail_conv1x1_dataset_size` повторяет `exp14_stage5_tail_conv1x1`;
+- `exp35_stage5_tail_separable_conv_dataset_size` повторяет `exp15_stage5_tail_separable_conv`;
+- `exp36_stage5_tail_simple_mbconv_dataset_size` повторяет `exp16_stage5_tail_simple_mbconv`;
+- `exp37_stage4_tail_conv1x1_dataset_size` повторяет `exp18_stage4_tail_conv1x1`;
+- `exp38_stage4_tail_separable_conv_dataset_size` повторяет `exp19_stage4_tail_separable_conv`;
+- `exp39_stage4_tail_simple_mbconv_dataset_size` повторяет `exp20_stage4_tail_simple_mbconv`;
+- `exp40_repeat_full_dataset_size` повторяет `exp21_repeat_full`;
+- `exp41_repeat_light_dataset_size` повторяет `exp22_repeat_light`;
+- `exp42_repeat_medium_dataset_size` повторяет `exp23_repeat_medium`;
+- `exp43_repeat_minimal_dataset_size` повторяет `exp24_repeat_minimal`.
+
+Создать датасеты заново:
+
+```bash
+python pretrained_diploma/scripts/create_dataset_size_variants.py --overwrite
+```
+
+Запустить один эксперимент на всех размерах датасета:
+
+```bash
+python pretrained_diploma/scripts/run_experiment.py --experiment exp30_full_model_dataset_size --epochs 10 --all-dataset-sizes
+```
+
+Запустить всю серию `exp30`-`exp43` на всех размерах датасета:
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 30 --experiment-end 43 --epochs 10 --all-dataset-sizes
+```
+
+Построить для каждого эксперимента график зависимости точности от суммарного размера выборки:
+
+```bash
+python pretrained_diploma/scripts/plot_accuracy_by_dataset_size.py --make-combined-plot
+```
+
+В этих графиках ось X показывает не размер на класс, а общее число изображений во всех классах: `300`, `600`, `1200`, `1800`, `2400`, `3000`.
+
 ## Результаты
 
 Каждый запуск сохраняется в:

@@ -1,0 +1,18 @@
+{
+  "train_eval_accuracy": 0.9552381038665771,
+  "val_eval_accuracy": 0.9133333563804626,
+  "test_accuracy": 0.9266666769981384,
+  "accuracy": 0.9266666666666666,
+  "precision": 0.9275604650126943,
+  "recall": 0.9266666666666667,
+  "f1_score": 0.9267859908913371,
+  "test_loss": 0.20920614898204803,
+  "evaluated_model": "best_model.keras",
+  "test_samples": 450,
+  "experiment_id": "exp42_repeat_medium_dataset_size_data1000_ep010",
+  "base_experiment_id": "exp42_repeat_medium_dataset_size",
+  "experiment_name": "exp42_repeat_medium_dataset_size_data1000_ep010",
+  "source_experiment_id": "exp23_repeat_medium",
+  "dataset_size": 1000,
+  "dataset_dir": "pretrained_diploma/data/balanced_1000_per_class_split"
+}

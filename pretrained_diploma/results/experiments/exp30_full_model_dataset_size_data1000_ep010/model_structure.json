@@ -1,0 +1,27 @@
+{
+  "model_name": "pretrained_efficientnet_exp30_full_model_dataset_size_data1000_ep010",
+  "weights": "imagenet",
+  "input_size": 224,
+  "cut_layer": "top_activation",
+  "cut_point": "full_model",
+  "tail_type": "gap",
+  "base_layers": 238,
+  "model_layers": 241,
+  "parameter_count": 4053414,
+  "cut_output_shape": [
+    null,
+    7,
+    7,
+    1280
+  ],
+  "finetune_prefixes": [
+    "block7",
+    "top_"
+  ],
+  "experiment_id": "exp30_full_model_dataset_size_data1000_ep010",
+  "base_experiment_id": "exp30_full_model_dataset_size",
+  "experiment_name": "exp30_full_model_dataset_size_data1000_ep010",
+  "source_experiment_id": "exp00_full_model",
+  "dataset_size": 1000,
+  "dataset_dir": "pretrained_diploma/data/balanced_1000_per_class_split"
+}

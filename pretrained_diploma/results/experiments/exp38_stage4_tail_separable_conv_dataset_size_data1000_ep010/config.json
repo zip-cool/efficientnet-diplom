@@ -1,0 +1,63 @@
+{
+  "dataset_dir": "pretrained_diploma/data/balanced_1000_per_class_split",
+  "results_dir": "pretrained_diploma/results/experiments",
+  "summary_csv": "pretrained_diploma/results/tables/experiments_summary.csv",
+  "num_classes": 3,
+  "epoch_values": [
+    1,
+    2,
+    4,
+    6,
+    8,
+    10
+  ],
+  "batch_size": 32,
+  "head_learning_rate": 0.001,
+  "finetune_learning_rate": 1e-05,
+  "finetune_enabled": false,
+  "optimizer": "adam",
+  "loss": "categorical_crossentropy",
+  "metric": "accuracy",
+  "random_seed": 42,
+  "dropout_rate": 0.2,
+  "head_epoch_fraction": 1.0,
+  "augmentation": {
+    "enabled": false,
+    "random_flip": "horizontal",
+    "random_rotation": 0.08,
+    "random_zoom": 0.1,
+    "random_translation": 0.05,
+    "random_contrast": 0.1
+  },
+  "default_dataset_size": 1000,
+  "dataset_size_values": [
+    100,
+    200,
+    400,
+    600,
+    800,
+    1000
+  ],
+  "dataset_size_dirs": {
+    "100": "pretrained_diploma/data/dataset_size_variants/balanced_100_per_class_split",
+    "200": "pretrained_diploma/data/dataset_size_variants/balanced_200_per_class_split",
+    "400": "pretrained_diploma/data/dataset_size_variants/balanced_400_per_class_split",
+    "600": "pretrained_diploma/data/dataset_size_variants/balanced_600_per_class_split",
+    "800": "pretrained_diploma/data/dataset_size_variants/balanced_800_per_class_split",
+    "1000": "pretrained_diploma/data/balanced_1000_per_class_split"
+  },
+  "series": "dataset_size",
+  "description": "Dataset-size series based on exp19_stage4_tail_separable_conv",
+  "input_size": 224,
+  "cut_layer": "block4c_add",
+  "cut_point": "after_stage4",
+  "tail_type": "separable_conv",
+  "source_experiment_id": "exp19_stage4_tail_separable_conv",
+  "fixed_epochs": 10,
+  "dataset_size": 1000,
+  "base_experiment_id": "exp38_stage4_tail_separable_conv_dataset_size",
+  "experiment_id": "exp38_stage4_tail_separable_conv_dataset_size_data1000_ep010",
+  "experiment_name": "exp38_stage4_tail_separable_conv_dataset_size",
+  "max_epochs": 10,
+  "model_name": "pretrained_efficientnet_exp38_stage4_tail_separable_conv_dataset_size_data1000_ep010"
+}

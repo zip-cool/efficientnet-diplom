@@ -3,7 +3,12 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import sys
 from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from pretrained_diploma.src.utils.result_saver import SUMMARY_FIELDS
 
@@ -39,6 +44,8 @@ def main() -> None:
                 "base_experiment_id": config["base_experiment_id"],
                 "experiment_name": config["experiment_name"],
                 "series": config["series"],
+                "dataset_size": config.get("dataset_size"),
+                "dataset_dir": config["dataset_dir"],
                 "resolution": config["input_size"],
                 "cut_point": config["cut_point"],
                 "cut_layer": config["cut_layer"],

@@ -924,6 +924,24 @@ python pretrained_diploma/scripts/run_experiment.py --experiment exp00_full_mode
 python pretrained_diploma/scripts/run_all_experiments.py
 ```
 
+Новая серия `exp30`-`exp43` проверяет влияние размера датасета. Для неё созданы датасеты по `100`, `200`, `400`, `600` и `800` изображений на класс, а точка `1000` изображений на класс добавлена копиями уже готовых запусков на основном датасете:
+
+```text
+pretrained_diploma/data/dataset_size_variants/
+```
+
+Запуск всей серии на 10 эпохах:
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 30 --experiment-end 43 --epochs 10 --all-dataset-sizes
+```
+
+Графики точности от суммарного размера выборки:
+
+```bash
+python pretrained_diploma/scripts/plot_accuracy_by_dataset_size.py --make-combined-plot
+```
+
 Восстановление графиков без обучения:
 
 ```bash

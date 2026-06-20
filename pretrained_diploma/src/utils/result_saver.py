@@ -40,6 +40,10 @@ SUMMARY_FIELDS = [
 
     "series",
 
+    "dataset_size",
+
+    "dataset_dir",
+
     "resolution",
 
     "cut_point",
@@ -355,6 +359,8 @@ def build_full_metrics_report(
 
         "dataset_dir": config["dataset_dir"],
 
+        "dataset_size": config.get("dataset_size", dataset_info["images_per_class"]),
+
         "train_size": dataset_info["train_size"],
 
         "val_size": dataset_info["val_size"],
@@ -584,6 +590,10 @@ def save_artifacts(
             "experiment_name": config["experiment_name"],
 
             "series": config["series"],
+
+            "dataset_size": config.get("dataset_size", dataset_info["images_per_class"]),
+
+            "dataset_dir": config["dataset_dir"],
 
             "resolution": config["input_size"],
 

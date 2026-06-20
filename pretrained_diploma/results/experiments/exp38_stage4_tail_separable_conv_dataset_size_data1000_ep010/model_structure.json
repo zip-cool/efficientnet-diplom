@@ -1,0 +1,26 @@
+{
+  "model_name": "pretrained_efficientnet_exp38_stage4_tail_separable_conv_dataset_size_data1000_ep010",
+  "weights": "imagenet",
+  "input_size": 224,
+  "cut_layer": "block4c_add",
+  "cut_point": "after_stage4",
+  "tail_type": "separable_conv",
+  "base_layers": 238,
+  "model_layers": 126,
+  "parameter_count": 339854,
+  "cut_output_shape": [
+    null,
+    14,
+    14,
+    80
+  ],
+  "finetune_prefixes": [
+    "block4"
+  ],
+  "experiment_id": "exp38_stage4_tail_separable_conv_dataset_size_data1000_ep010",
+  "base_experiment_id": "exp38_stage4_tail_separable_conv_dataset_size",
+  "experiment_name": "exp38_stage4_tail_separable_conv_dataset_size_data1000_ep010",
+  "source_experiment_id": "exp19_stage4_tail_separable_conv",
+  "dataset_size": 1000,
+  "dataset_dir": "pretrained_diploma/data/balanced_1000_per_class_split"
+}

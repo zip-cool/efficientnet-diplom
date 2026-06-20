@@ -1,0 +1,18 @@
+{
+  "train_eval_accuracy": 0.9747619032859802,
+  "val_eval_accuracy": 0.9555555582046509,
+  "test_accuracy": 0.95333331823349,
+  "accuracy": 0.9533333333333334,
+  "precision": 0.9564438849927072,
+  "recall": 0.9533333333333333,
+  "f1_score": 0.9530940353796478,
+  "test_loss": 0.14709259569644928,
+  "evaluated_model": "best_model.keras",
+  "test_samples": 450,
+  "experiment_id": "exp39_stage4_tail_simple_mbconv_dataset_size_data1000_ep010",
+  "base_experiment_id": "exp39_stage4_tail_simple_mbconv_dataset_size",
+  "experiment_name": "exp39_stage4_tail_simple_mbconv_dataset_size_data1000_ep010",
+  "source_experiment_id": "exp20_stage4_tail_simple_mbconv",
+  "dataset_size": 1000,
+  "dataset_dir": "pretrained_diploma/data/balanced_1000_per_class_split"
+}

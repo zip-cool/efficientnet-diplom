@@ -16,6 +16,7 @@ def load_experiment_config(
     base_config_path: Path,
     experiments_path: Path,
     max_epochs: int | None = None,
+    dataset_size: int | None = None,
 ) -> dict[str, Any]:
     """Собрать полный конфиг одного запуска.
 
@@ -29,14 +30,29 @@ def load_experiment_config(
         known = ", ".join(sorted(experiments))
         raise KeyError(f"Unknown experiment '{experiment_id}'. Available: {known}")
 
-    resolved_epochs = int(max_epochs if max_epochs is not None else base_config["epoch_values"][0])
     experiment = experiments[experiment_id]
+    resolved_epochs = int(
+        max_epochs if max_epochs is not None else experiment.get("fixed_epochs", base_config["epoch_values"][0])
+    )
     config = {**base_config, **experiment}
+    dataset_suffix = ""
+    if dataset_size is not None:
+        dataset_key = str(int(dataset_size))
+        dataset_dirs = base_config.get("dataset_size_dirs", {})
+        if dataset_key not in dataset_dirs:
+            known = ", ".join(sorted(dataset_dirs))
+            raise KeyError(f"Unknown dataset size '{dataset_key}'. Available: {known}")
+        config["dataset_size"] = int(dataset_size)
+        config["dataset_dir"] = dataset_dirs[dataset_key]
+        dataset_suffix = f"_data{int(dataset_size):04d}"
+    else:
+        config["dataset_size"] = base_config.get("default_dataset_size")
+
     config["base_experiment_id"] = experiment_id
-    config["experiment_id"] = f"{experiment_id}_ep{resolved_epochs:03d}"
+    config["experiment_id"] = f"{experiment_id}{dataset_suffix}_ep{resolved_epochs:03d}"
     config["experiment_name"] = experiment_id
     config["max_epochs"] = resolved_epochs
-    config["model_name"] = f"pretrained_efficientnet_{experiment_id}_ep{resolved_epochs:03d}"
+    config["model_name"] = f"pretrained_efficientnet_{experiment_id}{dataset_suffix}_ep{resolved_epochs:03d}"
     return config
 
 
