@@ -1,0 +1,4 @@
+true/pred,Early_Blight,Healthy,Late_Blight
+Early_Blight,39,1,5
+Healthy,6,39,0
+Late_Blight,4,1,40
