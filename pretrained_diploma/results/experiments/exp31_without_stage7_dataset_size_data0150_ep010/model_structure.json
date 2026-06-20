@@ -1,0 +1,20 @@
+{
+  "model_name": "pretrained_efficientnet_exp31_without_stage7_dataset_size_data0150_ep010",
+  "weights": "imagenet",
+  "input_size": 224,
+  "cut_layer": "block6d_add",
+  "cut_point": "without_stage7",
+  "tail_type": "gap",
+  "base_layers": 238,
+  "model_layers": 225,
+  "parameter_count": 2912950,
+  "cut_output_shape": [
+    null,
+    7,
+    7,
+    192
+  ],
+  "finetune_prefixes": [
+    "block6"
+  ]
+}

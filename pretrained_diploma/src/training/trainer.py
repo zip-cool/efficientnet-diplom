@@ -349,13 +349,17 @@ def run_experiment(config: dict[str, Any], overwrite: bool = False) -> Path:
 
     history_rows: list[dict[str, Any]] = []
 
+    checkpoint_path = output_dir / "best_model.weights.h5"
+
     checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
 
-        output_dir / "best_model.keras",
+        checkpoint_path,
 
         monitor="val_loss",
 
         save_best_only=True,
+
+        save_weights_only=True,
 
     )
 
@@ -423,8 +427,9 @@ def run_experiment(config: dict[str, Any], overwrite: bool = False) -> Path:
 
     model.save(output_dir / "final_model.keras")
 
-    if (output_dir / "best_model.keras").exists():
-        model = tf.keras.models.load_model(output_dir / "best_model.keras")
+    if checkpoint_path.exists():
+        model.load_weights(checkpoint_path)
+        model.save(output_dir / "best_model.keras")
 
     train_eval_metrics = evaluate_model(model, train_eval_ds, class_names)
     val_eval_metrics = evaluate_model(model, val_ds, class_names)
