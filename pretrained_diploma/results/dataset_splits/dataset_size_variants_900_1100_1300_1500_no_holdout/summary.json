@@ -1,0 +1,146 @@
+{
+  "source_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\data\\processed",
+  "output_root": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\pretrained_diploma\\data\\dataset_size_variants",
+  "report_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\pretrained_diploma\\results\\dataset_splits\\dataset_size_variants_900_1100_1300_1500_no_holdout",
+  "seed": 42,
+  "split_ratios": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "excluded_manifest_images": [
+    "pretrained_diploma\\results\\dataset_splits\\holdout_not_train_val_300_per_class\\manifest.csv"
+  ],
+  "excluded_identity_count": 900,
+  "available_counts": {
+    "train": {
+      "Early_Blight": 3429,
+      "Healthy": 3505,
+      "Late_Blight": 3352
+    },
+    "val": {
+      "Early_Blight": 3429,
+      "Healthy": 3505,
+      "Late_Blight": 3352
+    },
+    "test": {
+      "Early_Blight": 3429,
+      "Healthy": 3505,
+      "Late_Blight": 3352
+    }
+  },
+  "datasets": {
+    "balanced_900_per_class_split": {
+      "dataset_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\pretrained_diploma\\data\\dataset_size_variants\\balanced_900_per_class_split",
+      "images_per_class": 900,
+      "train_per_class": 630,
+      "val_per_class": 135,
+      "test_per_class": 135,
+      "train_size": 1890,
+      "val_size": 405,
+      "test_size": 405,
+      "total_size": 2700,
+      "split_counts": {
+        "train": {
+          "Early_Blight": 630,
+          "Healthy": 630,
+          "Late_Blight": 630
+        },
+        "val": {
+          "Early_Blight": 135,
+          "Healthy": 135,
+          "Late_Blight": 135
+        },
+        "test": {
+          "Early_Blight": 135,
+          "Healthy": 135,
+          "Late_Blight": 135
+        }
+      }
+    },
+    "balanced_1100_per_class_split": {
+      "dataset_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\pretrained_diploma\\data\\dataset_size_variants\\balanced_1100_per_class_split",
+      "images_per_class": 1100,
+      "train_per_class": 770,
+      "val_per_class": 165,
+      "test_per_class": 165,
+      "train_size": 2310,
+      "val_size": 495,
+      "test_size": 495,
+      "total_size": 3300,
+      "split_counts": {
+        "train": {
+          "Early_Blight": 770,
+          "Healthy": 770,
+          "Late_Blight": 770
+        },
+        "val": {
+          "Early_Blight": 165,
+          "Healthy": 165,
+          "Late_Blight": 165
+        },
+        "test": {
+          "Early_Blight": 165,
+          "Healthy": 165,
+          "Late_Blight": 165
+        }
+      }
+    },
+    "balanced_1300_per_class_split": {
+      "dataset_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\pretrained_diploma\\data\\dataset_size_variants\\balanced_1300_per_class_split",
+      "images_per_class": 1300,
+      "train_per_class": 910,
+      "val_per_class": 195,
+      "test_per_class": 195,
+      "train_size": 2730,
+      "val_size": 585,
+      "test_size": 585,
+      "total_size": 3900,
+      "split_counts": {
+        "train": {
+          "Early_Blight": 910,
+          "Healthy": 910,
+          "Late_Blight": 910
+        },
+        "val": {
+          "Early_Blight": 195,
+          "Healthy": 195,
+          "Late_Blight": 195
+        },
+        "test": {
+          "Early_Blight": 195,
+          "Healthy": 195,
+          "Late_Blight": 195
+        }
+      }
+    },
+    "balanced_1500_per_class_split": {
+      "dataset_dir": "C:\\Users\\Admin\\Desktop\\xzxxzxzxzxz\\my_work\\efficientnet-diplom\\pretrained_diploma\\data\\dataset_size_variants\\balanced_1500_per_class_split",
+      "images_per_class": 1500,
+      "train_per_class": 1050,
+      "val_per_class": 225,
+      "test_per_class": 225,
+      "train_size": 3150,
+      "val_size": 675,
+      "test_size": 675,
+      "total_size": 4500,
+      "split_counts": {
+        "train": {
+          "Early_Blight": 1050,
+          "Healthy": 1050,
+          "Late_Blight": 1050
+        },
+        "val": {
+          "Early_Blight": 225,
+          "Healthy": 225,
+          "Late_Blight": 225
+        },
+        "test": {
+          "Early_Blight": 225,
+          "Healthy": 225,
+          "Late_Blight": 225
+        }
+      }
+    }
+  }
+}
