@@ -1,12 +1,12 @@
 {
-  "train_eval_accuracy": 0.5031746029853821,
-  "val_eval_accuracy": 0.39259257912635803,
-  "test_accuracy": 0.43703705072402954,
-  "accuracy": 0.43703703703703706,
-  "precision": 0.43284237726098196,
-  "recall": 0.43703703703703695,
-  "f1_score": 0.39476448616840254,
-  "test_loss": 1.1183828115463257,
+  "train_eval_accuracy": 0.7126984000205994,
+  "val_eval_accuracy": 0.6962962746620178,
+  "test_accuracy": 0.6370370388031006,
+  "accuracy": 0.6370370370370371,
+  "precision": 0.6344812011338504,
+  "recall": 0.6370370370370371,
+  "f1_score": 0.6287311369973622,
+  "test_loss": 0.7300103902816772,
   "evaluated_model": "best_model.keras",
   "test_samples": 135
 }
