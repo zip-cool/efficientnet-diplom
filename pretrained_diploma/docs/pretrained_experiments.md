@@ -479,6 +479,41 @@ pretrained_diploma/results/dataset_splits/dataset_size_variants/manifest.csv
 
 Соответствие новым экспериментам:
 
+Серия удаления всех блоков с одним номером:
+
+В этой серии проверяется, что произойдёт, если из EfficientNetB0 удалить не последние стадии и не отдельные повторные блоки, а все MBConv-блоки с одним номером. Например, `exp50` удаляет `block1*`, `exp51` удаляет `block2*` и так далее.
+
+Эксперименты:
+
+- `exp50_drop_block1` - удаляется `block1a`;
+- `exp51_drop_block2` - удаляются `block2a`, `block2b`;
+- `exp52_drop_block3` - удаляются `block3a`, `block3b`;
+- `exp53_drop_block4` - удаляются `block4a`, `block4b`, `block4c`;
+- `exp54_drop_block5` - удаляются `block5a`, `block5b`, `block5c`;
+- `exp55_drop_block6` - удаляются `block6a`, `block6b`, `block6c`, `block6d`;
+- `exp56_drop_block7` - удаляется `block7a`;
+- `exp57_drop_block_none` - контрольный эксперимент: используется тот же pipeline реконструкции и переноса весов, но ни одна группа блоков не удаляется.
+
+После удаления выбранной группы оставшаяся EfficientNetB0 пересобирается, совместимые ImageNet-веса переносятся по имени слоя и форме весов. Слои backbone, которые получили ImageNet-веса, замораживаются. Слои backbone, для которых веса не перенеслись из-за изменения архитектуры или формы тензоров, остаются обучаемыми. Новая классификационная голова также обучается:
+
+```text
+GlobalAveragePooling2D
+→ Dropout
+→ Dense(3, activation="softmax")
+```
+
+Запустить всю серию на 10 эпохах:
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 50 --experiment-end 57 --epochs 10
+```
+
+Проверить, какие слои backbone будут обучаемыми после переноса весов и заморозки:
+
+```bash
+python pretrained_diploma/scripts/inspect_trainable_layers.py --experiment exp53_drop_block4
+```
+
 - `exp30_full_model_dataset_size` повторяет `exp00_full_model`;
 - `exp31_without_stage7_dataset_size` повторяет `exp06_without_stage7`;
 - `exp32_without_stages6_7_dataset_size` повторяет `exp07_without_stages6_7`;

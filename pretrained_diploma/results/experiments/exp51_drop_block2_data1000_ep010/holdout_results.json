@@ -1,0 +1,35 @@
+{
+  "holdout_dataset_dir": "pretrained_diploma\\data\\holdout_not_train_val_300_per_class\\test",
+  "holdout_evaluated_model": "best_model.keras",
+  "holdout_accuracy": 0.7611111402511597,
+  "holdout_sklearn_accuracy": 0.7611111111111111,
+  "holdout_loss": 0.5385284423828125,
+  "holdout_precision": 0.765007666072155,
+  "holdout_recall": 0.7611111111111111,
+  "holdout_f1_score": 0.7614574284409139,
+  "holdout_samples": 900,
+  "holdout_confusion_matrix_csv_path": "pretrained_diploma\\results\\experiments\\exp51_drop_block2_data1000_ep010\\holdout_confusion_matrix.csv",
+  "holdout_confusion_matrix_png_path": "pretrained_diploma\\results\\experiments\\exp51_drop_block2_data1000_ep010\\holdout_confusion_matrix.png",
+  "class_names": [
+    "Early_Blight",
+    "Healthy",
+    "Late_Blight"
+  ],
+  "confusion_matrix": [
+    [
+      218,
+      27,
+      55
+    ],
+    [
+      21,
+      268,
+      11
+    ],
+    [
+      96,
+      5,
+      199
+    ]
+  ]
+}

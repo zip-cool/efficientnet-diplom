@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import math
 from unittest import mock
 from typing import Any
 
@@ -76,38 +77,169 @@ def add_tail(
     return tf.keras.layers.Dense(num_classes, activation="softmax", name="predictions")(x)
 
 
-def build_reduced_repeats_backbone(config: dict[str, Any]) -> tuple[tf.keras.Model, dict[str, Any]]:
-    """Собрать EfficientNetB0 с настраиваемым числом повторов MBConv-блоков."""
+def build_backbone_with_preserved_block_numbers(
+    input_size: int,
+    blocks_args: list[dict[str, Any]],
+    dropped_block_numbers: set[int],
+) -> tf.keras.Model:
+    """Собрать EfficientNetB0, пропуская группы blockN*, но сохраняя исходные номера остальных групп.
 
-    stage_repeats = list(config["stage_repeats"])
+    Стандартный конструктор Keras перенумеровывает блоки после удаления элемента из `blocks_args`.
+    Для экспериментов `exp50-exp56` это опасно: если удалить `block2*`, в модели не должно
+    появляться впечатление, что бывший `block3*` стал называться `block2*`.
+    """
+
+    layers = keras_efficientnet.layers
+    backend = keras_efficientnet.backend
+    imagenet_utils = keras_efficientnet.imagenet_utils
+    activation = "swish"
+    drop_connect_rate = 0.2
+    depth_divisor = 8
+    width_coefficient = 1.0
+    depth_coefficient = 1.0
+
+    input_shape = imagenet_utils.obtain_input_shape(
+        (input_size, input_size, 3),
+        default_size=224,
+        min_size=32,
+        data_format=backend.image_data_format(),
+        require_flatten=False,
+        weights="imagenet",
+    )
+    img_input = layers.Input(shape=input_shape)
+    bn_axis = 3 if backend.image_data_format() == "channels_last" else 1
+
+    def round_filters(filters: int, divisor: int = depth_divisor) -> int:
+        filters *= width_coefficient
+        new_filters = max(divisor, int(filters + divisor / 2) // divisor * divisor)
+        if new_filters < 0.9 * filters:
+            new_filters += divisor
+        return int(new_filters)
+
+    def round_repeats(repeats: int) -> int:
+        return int(math.ceil(depth_coefficient * repeats))
+
+    x = layers.Rescaling(1.0 / 255.0)(img_input)
+    x = layers.Normalization(axis=bn_axis)(x)
+    x = layers.Rescaling([1.0 / math.sqrt(stddev) for stddev in keras_efficientnet.IMAGENET_STDDEV_RGB])(x)
+
+    x = layers.ZeroPadding2D(
+        padding=imagenet_utils.correct_pad(x, 3),
+        name="stem_conv_pad",
+    )(x)
+    x = layers.Conv2D(
+        round_filters(32),
+        3,
+        strides=2,
+        padding="valid",
+        use_bias=False,
+        kernel_initializer=keras_efficientnet.CONV_KERNEL_INITIALIZER,
+        name="stem_conv",
+    )(x)
+    x = layers.BatchNormalization(axis=bn_axis, name="stem_bn")(x)
+    x = layers.Activation(activation, name="stem_activation")(x)
+
+    remaining_blocks_args = [
+        args
+        for block_number, args in enumerate(blocks_args, start=1)
+        if block_number not in dropped_block_numbers
+    ]
+    total_repeats = float(sum(round_repeats(args["repeats"]) for args in remaining_blocks_args))
+    built_block_index = 0
+
+    for original_block_number, args in enumerate(copy.deepcopy(blocks_args), start=1):
+        if original_block_number in dropped_block_numbers:
+            continue
+        if args["repeats"] <= 0:
+            raise ValueError(
+                f"The number of repeats in EfficientNet block group must be > 0. "
+                f"Received: repeats={args['repeats']}"
+            )
+
+        args["filters_in"] = round_filters(args["filters_in"])
+        args["filters_out"] = round_filters(args["filters_out"])
+
+        for repeat_index in range(round_repeats(args.pop("repeats"))):
+            if repeat_index > 0:
+                args["strides"] = 1
+                args["filters_in"] = args["filters_out"]
+            x = keras_efficientnet.block(
+                x,
+                activation,
+                drop_connect_rate * built_block_index / total_repeats,
+                name=f"block{original_block_number}{chr(repeat_index + 97)}_",
+                **args,
+            )
+            built_block_index += 1
+
+    x = layers.Conv2D(
+        round_filters(1280),
+        1,
+        padding="same",
+        use_bias=False,
+        kernel_initializer=keras_efficientnet.CONV_KERNEL_INITIALIZER,
+        name="top_conv",
+    )(x)
+    x = layers.BatchNormalization(axis=bn_axis, name="top_bn")(x)
+    x = layers.Activation(activation, name="top_activation")(x)
+    return keras_efficientnet.Functional(img_input, x, name="efficientnetb0")
+
+
+def build_reduced_repeats_backbone(config: dict[str, Any]) -> tuple[tf.keras.Model, dict[str, Any]]:
+    """??????? EfficientNetB0 ? ?????????? ???????? ? ????????? ????? blockN*."""
+
+    standard_stage_repeats = [1, 2, 2, 3, 3, 4, 1]
+    stage_repeats = list(config.get("stage_repeats", standard_stage_repeats))
+    dropped_block_numbers = sorted(int(number) for number in config.get("drop_block_numbers", []))
+    dropped_block_number_set = set(dropped_block_numbers)
     default_blocks_args = copy.deepcopy(keras_efficientnet.DEFAULT_BLOCKS_ARGS)
+
     if len(stage_repeats) != len(default_blocks_args):
         raise ValueError(
             f"stage_repeats must contain {len(default_blocks_args)} values, got {len(stage_repeats)}."
         )
 
+    invalid_numbers = [number for number in dropped_block_numbers if number < 1 or number > len(default_blocks_args)]
+    if invalid_numbers:
+        raise ValueError(f"drop_block_numbers contains invalid EfficientNet block numbers: {invalid_numbers}")
+
     for block_args, repeat_count in zip(default_blocks_args, stage_repeats):
         block_args["repeats"] = int(repeat_count)
 
-    with mock.patch.object(tf.keras.Model, "load_weights", lambda self, *args, **kwargs: self):
-        backbone = keras_efficientnet.EfficientNet(
-            1.0,
-            1.0,
-            224,
-            include_top=False,
-            weights="imagenet",
-            input_shape=(int(config["input_size"]), int(config["input_size"]), 3),
+    if "drop_block_numbers" in config:
+        if len(dropped_block_number_set) == len(default_blocks_args):
+            raise ValueError("At least one EfficientNet block group must remain after dropping blocks.")
+        backbone = build_backbone_with_preserved_block_numbers(
+            input_size=int(config["input_size"]),
             blocks_args=default_blocks_args,
-            name="efficientnetb0",
-            weights_name="b0",
+            dropped_block_numbers=dropped_block_number_set,
         )
+    else:
+        with mock.patch.object(tf.keras.Model, "load_weights", lambda self, *args, **kwargs: self):
+            backbone = keras_efficientnet.EfficientNet(
+                1.0,
+                1.0,
+                224,
+                include_top=False,
+                weights="imagenet",
+                input_shape=(int(config["input_size"]), int(config["input_size"]), 3),
+                blocks_args=default_blocks_args,
+                name="efficientnetb0",
+                weights_name="b0",
+            )
+
     repeats_report = {
         "stage_repeats": stage_repeats,
         "removed_blocks": list(config.get("removed_blocks", [])),
-        "standard_stage_repeats": [1, 2, 2, 3, 3, 4, 1],
+        "standard_stage_repeats": standard_stage_repeats,
+        "dropped_block_numbers": dropped_block_numbers,
+        "remaining_block_numbers": [
+            block_index
+            for block_index in range(1, len(standard_stage_repeats) + 1)
+            if block_index not in dropped_block_number_set
+        ],
     }
     return backbone, repeats_report
-
 
 def transfer_imagenet_weights(target_model: tf.keras.Model, input_size: int) -> dict[str, Any]:
     """Перенести ImageNet-веса в совместимые слои сокращенной EfficientNetB0."""
@@ -172,6 +304,11 @@ def build_repeated_blocks_model(config: dict[str, Any]) -> tuple[tf.keras.Model,
     input_size = int(config["input_size"])
     backbone, repeats_report = build_reduced_repeats_backbone(config)
     weight_transfer_report = transfer_imagenet_weights(backbone, input_size)
+    trainable_untransferred_layers = [
+        skipped_layer["layer"]
+        for skipped_layer in weight_transfer_report.get("skipped_layers", [])
+    ]
+    backbone.trainable_untransferred_layer_names = set(trainable_untransferred_layers)
     outputs = add_tail(
         features=backbone.output,
         tail_type=config["tail_type"],
@@ -186,7 +323,10 @@ def build_repeated_blocks_model(config: dict[str, Any]) -> tuple[tf.keras.Model,
         "architecture_type": "reduced_stage_repeats",
         "stage_repeats": repeats_report["stage_repeats"],
         "standard_stage_repeats": repeats_report["standard_stage_repeats"],
+        "dropped_block_numbers": repeats_report["dropped_block_numbers"],
+        "remaining_block_numbers": repeats_report["remaining_block_numbers"],
         "removed_blocks": repeats_report["removed_blocks"],
+        "trainable_untransferred_layers": trainable_untransferred_layers,
         "tail_type": config["tail_type"],
         "base_layers": len(backbone.layers),
         "model_layers": len(model.layers),
@@ -204,7 +344,7 @@ def build_pretrained_model(config: dict[str, Any]) -> tuple[tf.keras.Model, tf.k
     обрезки добавляется новый хвост, который обучается с нуля.
     """
 
-    if "stage_repeats" in config:
+    if "stage_repeats" in config or "drop_block_numbers" in config:
         return build_repeated_blocks_model(config)
 
     input_size = int(config["input_size"])
@@ -242,10 +382,16 @@ def build_pretrained_model(config: dict[str, Any]) -> tuple[tf.keras.Model, tf.k
 
 
 def freeze_pretrained_base(base_model: tf.keras.Model) -> None:
-    """Заморозить всю предобученную часть EfficientNetB0."""
+    """?????????? ImageNet-???? ? ???????? ?????????? ?????????????? ???? backbone."""
 
-    base_model.trainable = False
+    trainable_untransferred = set(getattr(base_model, "trainable_untransferred_layer_names", set()))
+    if not trainable_untransferred:
+        base_model.trainable = False
+        return
 
+    base_model.trainable = True
+    for layer in base_model.layers:
+        layer.trainable = layer.name in trainable_untransferred
 
 def unfreeze_last_remaining_stage(base_model: tf.keras.Model, cut_layer: str) -> None:
     """Разморозить только последнюю оставшуюся стадию EfficientNetB0.

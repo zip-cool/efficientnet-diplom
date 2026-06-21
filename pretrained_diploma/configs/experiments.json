@@ -608,5 +608,122 @@
     "tail_type": "simple_mbconv",
     "source_experiment_id": "exp27_repeat_medium_tail_simple_mbconv",
     "fixed_epochs": 10
+  },
+  "exp50_drop_block1": {
+    "series": "drop_block_number",
+    "description": "Remove all EfficientNetB0 blocks with number 1",
+    "input_size": 224,
+    "drop_block_numbers": [
+      1
+    ],
+    "removed_blocks": [
+      "block1a"
+    ],
+    "cut_point": "without_block1",
+    "cut_layer": "top_activation",
+    "tail_type": "gap"
+  },
+  "exp51_drop_block2": {
+    "series": "drop_block_number",
+    "description": "Remove all EfficientNetB0 blocks with number 2",
+    "input_size": 224,
+    "drop_block_numbers": [
+      2
+    ],
+    "removed_blocks": [
+      "block2a",
+      "block2b"
+    ],
+    "cut_point": "without_block2",
+    "cut_layer": "top_activation",
+    "tail_type": "gap"
+  },
+  "exp52_drop_block3": {
+    "series": "drop_block_number",
+    "description": "Remove all EfficientNetB0 blocks with number 3",
+    "input_size": 224,
+    "drop_block_numbers": [
+      3
+    ],
+    "removed_blocks": [
+      "block3a",
+      "block3b"
+    ],
+    "cut_point": "without_block3",
+    "cut_layer": "top_activation",
+    "tail_type": "gap"
+  },
+  "exp53_drop_block4": {
+    "series": "drop_block_number",
+    "description": "Remove all EfficientNetB0 blocks with number 4",
+    "input_size": 224,
+    "drop_block_numbers": [
+      4
+    ],
+    "removed_blocks": [
+      "block4a",
+      "block4b",
+      "block4c"
+    ],
+    "cut_point": "without_block4",
+    "cut_layer": "top_activation",
+    "tail_type": "gap"
+  },
+  "exp54_drop_block5": {
+    "series": "drop_block_number",
+    "description": "Remove all EfficientNetB0 blocks with number 5",
+    "input_size": 224,
+    "drop_block_numbers": [
+      5
+    ],
+    "removed_blocks": [
+      "block5a",
+      "block5b",
+      "block5c"
+    ],
+    "cut_point": "without_block5",
+    "cut_layer": "top_activation",
+    "tail_type": "gap"
+  },
+  "exp55_drop_block6": {
+    "series": "drop_block_number",
+    "description": "Remove all EfficientNetB0 blocks with number 6",
+    "input_size": 224,
+    "drop_block_numbers": [
+      6
+    ],
+    "removed_blocks": [
+      "block6a",
+      "block6b",
+      "block6c",
+      "block6d"
+    ],
+    "cut_point": "without_block6",
+    "cut_layer": "top_activation",
+    "tail_type": "gap"
+  },
+  "exp56_drop_block7": {
+    "series": "drop_block_number",
+    "description": "Remove all EfficientNetB0 blocks with number 7",
+    "input_size": 224,
+    "drop_block_numbers": [
+      7
+    ],
+    "removed_blocks": [
+      "block7a"
+    ],
+    "cut_point": "without_block7",
+    "cut_layer": "top_activation",
+    "tail_type": "gap"
+  },
+  "exp57_drop_block_none": {
+    "series": "drop_block_number",
+    "description": "Control experiment for exp50-exp56: use the same block-drop reconstruction pipeline without removing any EfficientNetB0 block group",
+    "input_size": 224,
+    "drop_block_numbers": [],
+    "removed_blocks": [],
+    "cut_point": "full_model_drop_pipeline",
+    "cut_layer": "top_activation",
+    "tail_type": "gap"
   }
 }
