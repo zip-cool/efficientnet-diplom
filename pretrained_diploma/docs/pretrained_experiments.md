@@ -491,8 +491,7 @@ pretrained_diploma/results/dataset_splits/dataset_size_variants/manifest.csv
 - `exp53_drop_block4` - удаляются `block4a`, `block4b`, `block4c`;
 - `exp54_drop_block5` - удаляются `block5a`, `block5b`, `block5c`;
 - `exp55_drop_block6` - удаляются `block6a`, `block6b`, `block6c`, `block6d`;
-- `exp56_drop_block7` - удаляется `block7a`;
-- `exp57_drop_block_none` - контрольный эксперимент: используется тот же pipeline реконструкции и переноса весов, но ни одна группа блоков не удаляется.
+- `exp56_drop_block7` - удаляется `block7a`.
 
 После удаления выбранной группы оставшаяся EfficientNetB0 пересобирается, совместимые ImageNet-веса переносятся по имени слоя и форме весов. Слои backbone, которые получили ImageNet-веса, замораживаются. Слои backbone, для которых веса не перенеслись из-за изменения архитектуры или формы тензоров, остаются обучаемыми. Новая классификационная голова также обучается:
 
@@ -505,7 +504,7 @@ GlobalAveragePooling2D
 Запустить всю серию на 10 эпохах:
 
 ```bash
-python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 50 --experiment-end 57 --epochs 10
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 50 --experiment-end 56 --epochs 10
 ```
 
 Проверить, какие слои backbone будут обучаемыми после переноса весов и заморозки:
@@ -605,7 +604,7 @@ python pretrained_diploma/scripts/evaluate_holdout.py
 Проверить только серию с разными размерами датасета:
 
 ```bash
-python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 30 --experiment-end 46
+python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 57 --experiment-end 57
 ```
 
 Проверить один конкретный запуск:
