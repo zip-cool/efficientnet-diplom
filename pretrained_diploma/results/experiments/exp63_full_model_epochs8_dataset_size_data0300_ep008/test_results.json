@@ -1,0 +1,12 @@
+{
+  "train_eval_accuracy": 0.9269841313362122,
+  "val_eval_accuracy": 0.9037036895751953,
+  "test_accuracy": 0.9185185432434082,
+  "accuracy": 0.9185185185185185,
+  "precision": 0.9194495980210265,
+  "recall": 0.9185185185185185,
+  "f1_score": 0.9180234171702101,
+  "test_loss": 0.30258727073669434,
+  "evaluated_model": "best_model.keras",
+  "test_samples": 135
+}

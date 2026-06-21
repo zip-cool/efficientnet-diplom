@@ -50,7 +50,13 @@ def main() -> None:
             continue
         if args.experiment_end is not None and (number is None or number > args.experiment_end):
             continue
-        epoch_values = [args.epochs] if args.epochs is not None else base_config["epoch_values"]
+        experiment = experiments[experiment_id]
+        if args.epochs is not None:
+            epoch_values = [args.epochs]
+        elif "fixed_epochs" in experiment:
+            epoch_values = [experiment["fixed_epochs"]]
+        else:
+            epoch_values = base_config["epoch_values"]
         if args.all_dataset_sizes:
             dataset_sizes = base_config["dataset_size_values"]
         elif args.dataset_sizes is not None:

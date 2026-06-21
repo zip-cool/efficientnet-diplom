@@ -54,7 +54,7 @@
     "400": "pretrained_diploma/data/dataset_size_variants/balanced_400_per_class_split",
     "600": "pretrained_diploma/data/dataset_size_variants/balanced_600_per_class_split",
     "800": "pretrained_diploma/data/dataset_size_variants/balanced_800_per_class_split",
-    "1000": "pretrained_diploma/data/balanced_1000_per_class_split",
+    "1000": "pretrained_diploma/data/dataset_size_variants/balanced_1000_per_class_split",
     "1200": "pretrained_diploma/data/dataset_size_variants/balanced_1200_per_class_split",
     "1400": "pretrained_diploma/data/dataset_size_variants/balanced_1400_per_class_split",
     "50": "pretrained_diploma/data/dataset_size_variants/balanced_50_per_class_split",

@@ -725,5 +725,50 @@
     "cut_point": "full_model_drop_pipeline",
     "cut_layer": "top_activation",
     "tail_type": "gap"
+  },
+  "exp60_full_model_epochs2_dataset_size": {
+    "series": "baseline_epoch_dataset_grid",
+    "description": "Full EfficientNetB0 baseline trained for 2 epochs on multiple dataset sizes",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "fixed_epochs": 2
+  },
+  "exp61_full_model_epochs4_dataset_size": {
+    "series": "baseline_epoch_dataset_grid",
+    "description": "Full EfficientNetB0 baseline trained for 4 epochs on multiple dataset sizes",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "fixed_epochs": 4
+  },
+  "exp62_full_model_epochs6_dataset_size": {
+    "series": "baseline_epoch_dataset_grid",
+    "description": "Full EfficientNetB0 baseline trained for 6 epochs on multiple dataset sizes",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "fixed_epochs": 6
+  },
+  "exp63_full_model_epochs8_dataset_size": {
+    "series": "baseline_epoch_dataset_grid",
+    "description": "Full EfficientNetB0 baseline trained for 8 epochs on multiple dataset sizes",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "fixed_epochs": 8
+  },
+  "exp64_full_model_epochs10_dataset_size": {
+    "series": "baseline_epoch_dataset_grid",
+    "description": "Full EfficientNetB0 baseline trained for 10 epochs on multiple dataset sizes",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "fixed_epochs": 10
   }
 }

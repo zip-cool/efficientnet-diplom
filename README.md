@@ -565,301 +565,6 @@ GFLOPs/s зависит от компьютера, версии TensorFlow, CPU/
 > `pretrained_diploma/` ниже. Для новых запусков используйте команды из раздела
 > "Новая актуальная серия: предобученная EfficientNetB0".
 
-Для новой версии дипломной работы создана отдельная папка:
-
-```text
-architectural_diploma/
-```
-
-В ней находится новая система экспериментов, отделенная от старого pipeline.
-Старые скрипты `src/train_efficientnet.py`, старые модели в `models/` и старые
-результаты в `results/` не удалялись и не переносились.
-
-Новая часть предназначена не для сравнения режимов transfer learning, а для
-исследования упрощения самой архитектуры EfficientNetB0-подобной сети,
-обучаемой с нуля.
-
-### Датасет для новой части
-
-Для всех новых архитектурных экспериментов используется фиксированное
-разбиение:
-
-```text
-architectural_diploma/data/balanced_1500_per_class_split/
-```
-
-Оно создано из очищенного датасета `data/processed` с `seed = 42`.
-В каждом классе используется по 1500 изображений:
-
-- `Early_Blight` - 1500;
-- `Healthy` - 1500;
-- `Late_Blight` - 1500.
-
-Разбиение `train / validation / test` выполнено в пропорции `70 / 15 / 15`.
-В каждом классе получается:
-
-- train - 1050 изображений;
-- validation - 225 изображений;
-- test - 225 изображений.
-
-### Что добавлено
-
-```text
-architectural_diploma/
-├── configs/
-│   ├── base_config.json
-│   └── experiments.json
-├── docs/
-│   └── architectural_experiments.md
-├── scripts/
-│   ├── run_experiment.py
-│   ├── run_all_experiments.py
-│   ├── plot_history.py
-│   ├── rebuild_summary.py
-│   ├── compare_experiments.py
-│   └── build_epoch_tables.py
-└── src/
-    ├── model/
-    │   ├── efficientnet_modified.py
-    │   ├── mbconv.py
-    │   └── scaling.py
-    ├── training/
-    │   ├── callbacks.py
-    │   └── trainer.py
-    └── utils/
-        ├── config.py
-        ├── plotting.py
-        ├── reproducibility.py
-        └── result_saver.py
-```
-
-### Новая модель
-
-В `architectural_diploma/src/model/` реализована собственная параметризуемая
-EfficientNetB0-подобная архитектура:
-
-- MBConv-блоки;
-- Squeeze-and-Excitation;
-- residual connection при совпадении размеров и `stride = 1`;
-- масштабирование ширины сети;
-- масштабирование глубины сети;
-- изменение `expansion_ratio`;
-- включение и отключение SE;
-- изменение depthwise-ядер;
-- изменение числа каналов в head;
-- изменение входного разрешения.
-
-Базовая функция построения модели находится в:
-
-```text
-architectural_diploma/src/model/efficientnet_modified.py
-```
-
-### Конфигурации экспериментов
-
-Общие параметры обучения находятся в:
-
-```text
-architectural_diploma/configs/base_config.json
-```
-
-Там задаются путь к датасету, путь для новых результатов, batch size, learning
-rate, optimizer, loss, seed, dropout, callbacks и список чисел эпох.
-
-Список архитектурных экспериментов находится в:
-
-```text
-architectural_diploma/configs/experiments.json
-```
-
-Добавлены эксперименты:
-
-- `exp00_baseline`;
-- `exp01_width_075`;
-- `exp02_width_050`;
-- `exp03_width_035`;
-- `exp04_depth_080`;
-- `exp05_depth_060`;
-- `exp06_depth_040`;
-- `exp07_expansion_4`;
-- `exp08_expansion_3`;
-- `exp09_expansion_2`;
-- `exp10_se_0125`;
-- `exp11_no_se`;
-- `exp12_all_kernels_3`;
-- `exp13_head_640`;
-- `exp14_head_320`;
-- `exp15_head_160`;
-- `exp16_resolution_192`;
-- `exp17_resolution_160`;
-- `exp18_resolution_128`.
-
-`exp15_head_160` считается дополнительным и по умолчанию не запускается в общем
-запуске всех экспериментов.
-
-### Эксперименты по числу эпох
-
-Для каждого архитектурного варианта предусмотрены запуски на:
-
-```text
-5, 10, 20, 40, 60, 80, 100 эпох
-```
-
-Поэтому один базовый эксперимент получает отдельные идентификаторы запусков:
-
-```text
-exp00_baseline_ep005
-exp00_baseline_ep010
-exp00_baseline_ep020
-exp00_baseline_ep040
-exp00_baseline_ep060
-exp00_baseline_ep080
-exp00_baseline_ep100
-```
-
-Это нужно для того, чтобы потом строить таблицы и сравнивать качество модели не
-только по архитектуре, но и по количеству эпох обучения.
-
-### Запуск одного эксперимента
-
-Запуск одного эксперимента на конкретное число эпох:
-
-```bash
-# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
-```
-
-Запуск одного эксперимента сразу для всех чисел эпох:
-
-```bash
-# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
-```
-
-Если папка результата уже существует, повторный запуск без флага `--overwrite`
-остановится, чтобы случайно не перезаписать старые данные.
-
-Принудительная перезапись:
-
-```bash
-# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
-```
-
-### Запуск всех экспериментов
-
-Запуск всех обязательных архитектурных экспериментов для всех чисел эпох:
-
-```bash
-# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
-```
-
-Запуск вместе с дополнительным `exp15_head_160`:
-
-```bash
-# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
-```
-
-### Что сохраняется для каждого запуска
-
-Каждый запуск сохраняется в отдельную папку:
-
-```text
-architectural_diploma/results/experiments/<experiment_id>/
-```
-
-Например:
-
-```text
-architectural_diploma/results/experiments/exp00_baseline_ep020/
-```
-
-Внутри сохраняются:
-
-- `config.json`;
-- `model_structure.json`;
-- `class_indices.json`;
-- `model_summary.txt`;
-- `history.csv`;
-- `history.json`;
-- `epoch_times.csv`;
-- `training_log.csv`;
-- `final_metrics.json`;
-- `test_results.json`;
-- `best_model.keras`;
-- `final_model.keras`;
-- графики в папке `plots/`.
-
-Главная идея: графики можно восстановить из `history.csv` без повторного
-обучения модели.
-
-### Повторное построение графиков
-
-```bash
-# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
-```
-
-Скрипт читает:
-
-```text
-architectural_diploma/results/experiments/exp00_baseline_ep020/history.csv
-```
-
-и заново строит графики accuracy и loss.
-
-### Восстановление общей сводной таблицы
-
-```bash
-# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
-```
-
-Скрипт заново собирает:
-
-```text
-architectural_diploma/results/tables/experiments_summary.csv
-```
-
-по папкам отдельных экспериментов.
-
-### Таблицы по количеству эпох
-
-Для построения таблиц по числу эпох используется:
-
-```bash
-# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
-```
-
-Результаты сохраняются в:
-
-```text
-architectural_diploma/results/tables/by_epochs/
-```
-
-Создаются таблицы:
-
-- `epochs_005.csv`;
-- `epochs_010.csv`;
-- `epochs_020.csv`;
-- `epochs_040.csv`;
-- `epochs_060.csv`;
-- `epochs_080.csv`;
-- `epochs_100.csv`.
-
-Также создаются pivot-таблицы:
-
-- `pivot_test_accuracy.csv`;
-- `pivot_test_loss.csv`;
-- `pivot_best_val_accuracy.csv`;
-- `pivot_best_val_loss.csv`;
-- `pivot_total_training_time_seconds.csv`;
-- `pivot_average_epoch_time_seconds.csv`.
-
-Эти таблицы позволяют сравнивать один и тот же архитектурный эксперимент при
-разном количестве эпох обучения.
-
-### Сравнительные графики
-
-```bash
-# Архивная scratch-версия. Для актуальных экспериментов используйте pretrained_diploma ниже.
-```
-
 ## Новая актуальная серия: предобученная EfficientNetB0
 
 После пересмотра плана добавлена отдельная папка:
@@ -930,6 +635,20 @@ python pretrained_diploma/scripts/run_all_experiments.py
 python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 50 --experiment-end 57 --epochs 10
 ```
 
+Серия `exp60`-`exp64` проверяет базовую полную EfficientNetB0 на разных размерах датасета и фиксированных числах эпох:
+
+- `exp60_full_model_epochs2_dataset_size` - 2 эпохи;
+- `exp61_full_model_epochs4_dataset_size` - 4 эпохи;
+- `exp62_full_model_epochs6_dataset_size` - 6 эпох;
+- `exp63_full_model_epochs8_dataset_size` - 8 эпох;
+- `exp64_full_model_epochs10_dataset_size` - 10 эпох.
+
+Запуск серии для размеров `100`, `200`, `400`, `600`, `800`, `1000` изображений на класс:
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 60 --experiment-end 64 --dataset-size 100 200 400 600 800 1000
+```
+
 Новая серия `exp30`-`exp46` проверяет влияние размера датасета. Для неё созданы датасеты по `50`, `100`, `150`, `200`, `300`, `400`, `500`, `600`, `800`, `900`, `1100`, `1200`, `1300`, `1400` и `1500` изображений на класс, а точка `1000` изображений на класс добавлена копиями уже готовых запусков на основном датасете. Новые датасеты `50`, `150`, `300`, `500`, `900`, `1100`, `1200`, `1300`, `1400` и `1500` на класс собраны без изображений из holdout:
 
 ```text
@@ -965,7 +684,7 @@ pretrained_diploma/data/holdout_not_train_val_300_per_class/test/
 Проверка сохранённых моделей на holdout-выборке:
 
 ```bash
-python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 30 --experiment-end 46
+python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 60 --experiment-end 64
 ```
 
 Восстановление графиков без обучения:

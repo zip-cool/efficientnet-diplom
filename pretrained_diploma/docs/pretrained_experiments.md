@@ -504,7 +504,23 @@ GlobalAveragePooling2D
 Запустить всю серию на 10 эпохах:
 
 ```bash
-python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 50 --experiment-end 56 --epochs 10
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 50 --experiment-end 57 --epochs 10
+```
+
+Серия базовой модели по эпохам и размерам датасета:
+
+Серия `exp60`-`exp64` нужна для проверки полной EfficientNetB0 без удаления блоков на разных размерах обучающего набора. Один номер эксперимента соответствует одному фиксированному числу эпох, а размеры датасета задаются при запуске:
+
+- `exp60_full_model_epochs2_dataset_size` - 2 эпохи;
+- `exp61_full_model_epochs4_dataset_size` - 4 эпохи;
+- `exp62_full_model_epochs6_dataset_size` - 6 эпох;
+- `exp63_full_model_epochs8_dataset_size` - 8 эпох;
+- `exp64_full_model_epochs10_dataset_size` - 10 эпох.
+
+Запустить серию для размеров `100`, `200`, `400`, `600`, `800`, `1000` изображений на класс:
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 60 --experiment-end 64 --dataset-size 100 200 400 600 800 1000
 ```
 
 Проверить, какие слои backbone будут обучаемыми после переноса весов и заморозки:
