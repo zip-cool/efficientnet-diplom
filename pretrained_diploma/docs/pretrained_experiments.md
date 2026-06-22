@@ -661,7 +661,7 @@ python pretrained_diploma/scripts/evaluate_holdout.py
 Проверить только серию с разными размерами датасета:
 
 ```bash
-python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 85 --experiment-end 88
+python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 89 --experiment-end 90
 ```
 
 Проверить один конкретный запуск:
