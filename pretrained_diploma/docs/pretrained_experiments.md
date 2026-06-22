@@ -652,6 +652,15 @@ pretrained_diploma/results/dataset_splits/holdout_not_train_val_300_per_class/ma
 python pretrained_diploma/scripts/create_holdout_not_train_val.py --overwrite
 ```
 
+Дополнительные fine-tuning эксперименты с большим числом размороженных слоев:
+
+- `exp89_finetune_last25_layers_after8_epochs_dataset_size` - 8 эпох обучается голова, затем 2 эпохи с 25 размороженными весовыми слоями backbone;
+- `exp90_finetune_last40_layers_after8_epochs_dataset_size` - 8 эпох обучается голова, затем 2 эпохи с 40 размороженными весовыми слоями backbone.
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 89 --experiment-end 90 --dataset-size 100 200 400 600 800 1000
+```
+
 Проверить сохранённые модели на этой holdout-выборке и дописать метрики в финальные отчёты:
 
 ```bash

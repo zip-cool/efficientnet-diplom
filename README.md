@@ -649,7 +649,7 @@ python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 50 -
 python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 60 --experiment-end 64 --dataset-size 100 200 400 600 800 1000
 ```
 
-Серия `exp65`-`exp68` и `exp82`-`exp84` проверяет двухэтапное обучение полной EfficientNetB0 на разных размерах датасета. На первом этапе 8 эпох обучается только классификационная голова, на втором этапе дополнительно размораживаются последние весовые слои backbone:
+Серия `exp65`-`exp68`, `exp82`-`exp84` и `exp89`-`exp90` проверяет двухэтапное обучение полной EfficientNetB0 на разных размерах датасета. На первом этапе 8 эпох обучается только классификационная голова, на втором этапе дополнительно размораживаются последние весовые слои backbone:
 
 - `exp65_finetune_last1_layer_after8_epochs_dataset_size` - второй этап с 1 размороженным слоем;
 - `exp66_finetune_last2_layers_after8_epochs_dataset_size` - второй этап с 2 размороженными слоями;
@@ -657,7 +657,9 @@ python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 60 -
 - `exp68_finetune_last4_layers_after8_epochs_dataset_size` - второй этап с 4 размороженными слоями;
 - `exp82_finetune_last5_layers_after8_epochs_dataset_size` - второй этап с 5 размороженными слоями;
 - `exp83_finetune_last10_layers_after8_epochs_dataset_size` - второй этап с 10 размороженными слоями;
-- `exp84_finetune_last15_layers_after8_epochs_dataset_size` - второй этап с 15 размороженными слоями.
+- `exp84_finetune_last15_layers_after8_epochs_dataset_size` - второй этап с 15 размороженными слоями;
+- `exp89_finetune_last25_layers_after8_epochs_dataset_size` - второй этап с 25 размороженными слоями;
+- `exp90_finetune_last40_layers_after8_epochs_dataset_size` - второй этап с 40 размороженными слоями.
 
 Запуск серии для размеров `100`, `200`, `400`, `600`, `800`, `1000` изображений на класс:
 
@@ -669,6 +671,12 @@ python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 65 -
 
 ```bash
 python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 82 --experiment-end 84 --dataset-size 100 200 400 600 800 1000
+```
+
+Запуск дополнительной серии с `25` и `40` размороженными слоями:
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 89 --experiment-end 90 --dataset-size 100 200 400 600 800 1000
 ```
 
 Серия `exp85`-`exp88` проверяет влияние dropout в классификационной голове полной EfficientNetB0 на 8 эпохах:

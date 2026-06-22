@@ -1044,5 +1044,31 @@
     "tail_type": "gap",
     "dropout_rate": 0.25,
     "fixed_epochs": 8
+  },
+  "exp89_finetune_last25_layers_after8_epochs_dataset_size": {
+    "series": "two_stage_finetune_layers_dataset_grid",
+    "description": "Full EfficientNetB0: train head for 8 epochs, then fine-tune with the last 25 backbone weight layers unfrozen",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "finetune_enabled": true,
+    "head_epochs": 8,
+    "finetune_epochs": 2,
+    "fine_tune_layers": 25,
+    "fixed_epochs": 10
+  },
+  "exp90_finetune_last40_layers_after8_epochs_dataset_size": {
+    "series": "two_stage_finetune_layers_dataset_grid",
+    "description": "Full EfficientNetB0: train head for 8 epochs, then fine-tune with the last 40 backbone weight layers unfrozen",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "finetune_enabled": true,
+    "head_epochs": 8,
+    "finetune_epochs": 2,
+    "fine_tune_layers": 40,
+    "fixed_epochs": 10
   }
 }
