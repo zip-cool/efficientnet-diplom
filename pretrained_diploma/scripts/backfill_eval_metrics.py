@@ -20,7 +20,8 @@ def parse_args() -> argparse.Namespace:
     """Описать параметры пересчета train/validation метрик для готовых запусков."""
 
     parser = argparse.ArgumentParser(description="Backfill train/validation evaluation metrics for completed runs.")
-    parser.add_argument("--experiments", nargs="+", required=True)
+    parser.add_argument("--experiments", nargs="+", default=None)
+    parser.add_argument("--run-ids", nargs="+", default=None)
     parser.add_argument("--epochs", nargs="+", type=int, default=None)
     parser.add_argument("--results-dir", type=Path, default=Path("pretrained_diploma/results/experiments"))
     return parser.parse_args()
@@ -32,14 +33,23 @@ def load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def available_epochs(results_dir: Path, experiment: str) -> list[int]:
-    """Найти завершенные эпохи для выбранного эксперимента."""
+def matching_run_dirs(results_dir: Path, experiment: str, epochs: list[int] | None) -> list[Path]:
+    """Найти завершенные run-директории эксперимента, включая варианты с `dataXXXX`."""
 
-    epochs: list[int] = []
-    for run_dir in sorted(results_dir.glob(f"{experiment}_ep*")):
-        if (run_dir / "final_metrics.json").exists():
-            epochs.append(int(run_dir.name.rsplit("_ep", maxsplit=1)[-1]))
-    return epochs
+    run_dirs = [
+        run_dir
+        for run_dir in sorted(results_dir.glob(f"{experiment}*"))
+        if run_dir.is_dir() and (run_dir / "final_metrics.json").exists()
+    ]
+    if epochs is None:
+        return run_dirs
+
+    allowed_epochs = set(epochs)
+    return [
+        run_dir
+        for run_dir in run_dirs
+        if "_ep" in run_dir.name and int(run_dir.name.rsplit("_ep", maxsplit=1)[-1]) in allowed_epochs
+    ]
 
 
 def metric_prefix(prefix: str, metrics: dict[str, Any]) -> dict[str, float]:
@@ -122,10 +132,19 @@ def main() -> None:
     """Пересчитать train/validation eval метрики для выбранных экспериментов."""
 
     args = parse_args()
+    if args.run_ids:
+        for run_id in args.run_ids:
+            backfill_run(args.results_dir / run_id)
+        return
+    if not args.experiments:
+        raise ValueError("Specify --experiments or --run-ids.")
     for experiment in args.experiments:
-        epochs = args.epochs if args.epochs is not None else available_epochs(args.results_dir, experiment)
-        for epoch_count in epochs:
-            backfill_run(args.results_dir / f"{experiment}_ep{epoch_count:03d}")
+        run_dirs = matching_run_dirs(args.results_dir, experiment, args.epochs)
+        if not run_dirs:
+            print(f"No completed runs found for: {experiment}")
+            continue
+        for run_dir in run_dirs:
+            backfill_run(run_dir)
 
 
 if __name__ == "__main__":

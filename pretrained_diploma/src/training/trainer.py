@@ -315,6 +315,7 @@ def run_experiment(config: dict[str, Any], overwrite: bool = False) -> Path:
     seed = int(config["random_seed"])
 
     train_ds = load_split_dataset(dataset_dir / "train", image_size, batch_size, True, seed)
+    train_eval_ds = load_split_dataset(dataset_dir / "train", image_size, batch_size, False, seed)
     val_ds = load_split_dataset(dataset_dir / "val", image_size, batch_size, False, seed)
     test_ds = load_split_dataset(dataset_dir / "test", image_size, batch_size, False, seed)
     class_names = list(train_ds.class_names)
@@ -348,6 +349,7 @@ def run_experiment(config: dict[str, Any], overwrite: bool = False) -> Path:
     }
 
     train_ds = add_augmentation(train_ds, config).prefetch(tf.data.AUTOTUNE)
+    train_eval_ds = train_eval_ds.prefetch(tf.data.AUTOTUNE)
     val_ds = val_ds.prefetch(tf.data.AUTOTUNE)
     test_ds = test_ds.prefetch(tf.data.AUTOTUNE)
 
@@ -476,7 +478,7 @@ def run_experiment(config: dict[str, Any], overwrite: bool = False) -> Path:
         model.save(output_dir / "best_model.keras")
         checkpoint_path.unlink(missing_ok=True)
 
-    train_eval_metrics = None
+    train_eval_metrics = evaluate_model(model, train_eval_ds, class_names)
     val_eval_metrics = evaluate_model(model, val_ds, class_names)
     test_metrics = evaluate_model(model, test_ds, class_names)
 

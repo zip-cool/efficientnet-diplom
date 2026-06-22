@@ -1,5 +1,5 @@
 {
-  "train_eval_accuracy": null,
+  "train_eval_accuracy": 0.773809552192688,
   "val_eval_accuracy": 0.75,
   "test_accuracy": 0.7666666507720947,
   "accuracy": 0.7666666666666667,
