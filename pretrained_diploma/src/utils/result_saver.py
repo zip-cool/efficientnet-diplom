@@ -342,7 +342,7 @@ def build_full_metrics_report(
 
     stage_times: dict[str, float],
 
-    test_metrics: dict[str, Any],
+    test_metrics: dict[str, Any] | None,
     train_eval_metrics: dict[str, Any] | None,
     val_eval_metrics: dict[str, Any] | None,
     dataset_info: dict[str, Any],
@@ -353,9 +353,9 @@ def build_full_metrics_report(
 
     plot_path: Path,
 
-    confusion_csv_path: Path,
+    confusion_csv_path: Path | None,
 
-    confusion_png_path: Path,
+    confusion_png_path: Path | None,
 
 ) -> dict[str, Any]:
 
@@ -364,6 +364,12 @@ def build_full_metrics_report(
     last_epoch = history_rows[-1] if history_rows else {}
 
     finetune_enabled = bool(config.get("finetune_enabled", False))
+    unfreeze_from_start_layers = config.get("unfreeze_weight_layers_from_start")
+    training_strategy = (
+        "head_with_unfrozen_backbone_layers"
+        if unfreeze_from_start_layers is not None
+        else ("head_only" if not finetune_enabled else "head_then_finetune")
+    )
 
     report: dict[str, Any] = {
 
@@ -387,7 +393,7 @@ def build_full_metrics_report(
 
         "split_counts": dataset_info["split_counts"],
 
-        "training_strategy": "head_only" if not finetune_enabled else "head_then_finetune",
+        "training_strategy": training_strategy,
         "stage_repeats": config.get("stage_repeats"),
         "removed_blocks": config.get("removed_blocks"),
 
@@ -405,7 +411,11 @@ def build_full_metrics_report(
 
         "epochs_finetune": 0 if not finetune_enabled else config.get("finetune_epochs", 0),
 
-        "fine_tune_layers": 0 if not finetune_enabled else config.get("fine_tune_layers", 0),
+        "fine_tune_layers": (
+            int(unfreeze_from_start_layers)
+            if unfreeze_from_start_layers is not None
+            else (0 if not finetune_enabled else config.get("fine_tune_layers", 0))
+        ),
 
         "learning_rate_head": config["head_learning_rate"],
 
@@ -425,17 +435,17 @@ def build_full_metrics_report(
         "val_eval_precision": val_eval_metrics["precision"] if val_eval_metrics else None,
         "val_eval_recall": val_eval_metrics["recall"] if val_eval_metrics else None,
         "val_eval_f1_score": val_eval_metrics["f1_score"] if val_eval_metrics else None,
-        "test_accuracy": test_metrics["accuracy"],
+        "test_accuracy": test_metrics["accuracy"] if test_metrics else None,
 
-        "accuracy": test_metrics["sklearn_accuracy"],
+        "accuracy": test_metrics["sklearn_accuracy"] if test_metrics else None,
 
-        "precision": test_metrics["precision"],
+        "precision": test_metrics["precision"] if test_metrics else None,
 
-        "recall": test_metrics["recall"],
+        "recall": test_metrics["recall"] if test_metrics else None,
 
-        "f1_score": test_metrics["f1_score"],
+        "f1_score": test_metrics["f1_score"] if test_metrics else None,
 
-        "test_loss": test_metrics["loss"],
+        "test_loss": test_metrics["loss"] if test_metrics else None,
 
         "training_time_seconds": stage_times["total"],
 
@@ -451,9 +461,9 @@ def build_full_metrics_report(
 
         "plot_path": str(plot_path),
 
-        "confusion_matrix_csv_path": str(confusion_csv_path),
+        "confusion_matrix_csv_path": str(confusion_csv_path) if confusion_csv_path else None,
 
-        "confusion_matrix_png_path": str(confusion_png_path),
+        "confusion_matrix_png_path": str(confusion_png_path) if confusion_png_path else None,
 
         "class_names": dataset_info["class_names"],
 
@@ -495,7 +505,7 @@ def save_artifacts(
 
     stage_times: dict[str, float],
 
-    test_metrics: dict[str, Any],
+    test_metrics: dict[str, Any] | None,
     dataset_info: dict[str, Any],
     output_dir: Path,
     summary_csv: Path,
@@ -525,15 +535,19 @@ def save_artifacts(
 
     plot_path = output_dir / "plots" / "accuracy.png"
 
-    confusion_csv_path, confusion_png_path = save_confusion_matrix(
+    if test_metrics:
+        confusion_csv_path, confusion_png_path = save_confusion_matrix(
 
-        test_metrics["confusion_matrix"],
+            test_metrics["confusion_matrix"],
 
-        dataset_info["class_names"],
+            dataset_info["class_names"],
 
-        output_dir,
+            output_dir,
 
-    )
+        )
+    else:
+        confusion_csv_path = None
+        confusion_png_path = None
 
     final_metrics = build_full_metrics_report(
 
@@ -572,20 +586,20 @@ def save_artifacts(
 
             "train_eval_accuracy": train_eval_metrics["accuracy"] if train_eval_metrics else None,
             "val_eval_accuracy": val_eval_metrics["accuracy"] if val_eval_metrics else None,
-            "test_accuracy": test_metrics["accuracy"],
-            "accuracy": test_metrics["sklearn_accuracy"],
+            "test_accuracy": test_metrics["accuracy"] if test_metrics else None,
+            "accuracy": test_metrics["sklearn_accuracy"] if test_metrics else None,
 
-            "precision": test_metrics["precision"],
+            "precision": test_metrics["precision"] if test_metrics else None,
 
-            "recall": test_metrics["recall"],
+            "recall": test_metrics["recall"] if test_metrics else None,
 
-            "f1_score": test_metrics["f1_score"],
+            "f1_score": test_metrics["f1_score"] if test_metrics else None,
 
-            "test_loss": test_metrics["loss"],
+            "test_loss": test_metrics["loss"] if test_metrics else None,
 
             "evaluated_model": model_path.name,
 
-            "test_samples": test_metrics["samples"],
+            "test_samples": test_metrics["samples"] if test_metrics else None,
 
         },
 
@@ -617,9 +631,9 @@ def save_artifacts(
 
             "tail_type": config["tail_type"],
 
-            "test_accuracy": test_metrics["accuracy"],
+            "test_accuracy": test_metrics["accuracy"] if test_metrics else None,
 
-            "test_loss": test_metrics["loss"],
+            "test_loss": test_metrics["loss"] if test_metrics else None,
 
             "holdout_accuracy": None,
 
@@ -640,4 +654,5 @@ def save_artifacts(
         },
 
     )
+
 

@@ -770,5 +770,57 @@
     "cut_point": "full_model",
     "tail_type": "gap",
     "fixed_epochs": 10
+  },
+  "exp65_finetune_last1_layer_after8_epochs_dataset_size": {
+    "series": "two_stage_finetune_layers_dataset_grid",
+    "description": "Full EfficientNetB0: train head for 8 epochs, then fine-tune with the last 1 backbone weight layer unfrozen",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "finetune_enabled": true,
+    "head_epochs": 8,
+    "finetune_epochs": 2,
+    "fine_tune_layers": 1,
+    "fixed_epochs": 10
+  },
+  "exp66_finetune_last2_layers_after8_epochs_dataset_size": {
+    "series": "two_stage_finetune_layers_dataset_grid",
+    "description": "Full EfficientNetB0: train head for 8 epochs, then fine-tune with the last 2 backbone weight layers unfrozen",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "finetune_enabled": true,
+    "head_epochs": 8,
+    "finetune_epochs": 2,
+    "fine_tune_layers": 2,
+    "fixed_epochs": 10
+  },
+  "exp67_finetune_last3_layers_after8_epochs_dataset_size": {
+    "series": "two_stage_finetune_layers_dataset_grid",
+    "description": "Full EfficientNetB0: train head for 8 epochs, then fine-tune with the last 3 backbone weight layers unfrozen",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "finetune_enabled": true,
+    "head_epochs": 8,
+    "finetune_epochs": 2,
+    "fine_tune_layers": 3,
+    "fixed_epochs": 10
+  },
+  "exp68_finetune_last4_layers_after8_epochs_dataset_size": {
+    "series": "two_stage_finetune_layers_dataset_grid",
+    "description": "Full EfficientNetB0: train head for 8 epochs, then fine-tune with the last 4 backbone weight layers unfrozen",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "finetune_enabled": true,
+    "head_epochs": 8,
+    "finetune_epochs": 2,
+    "fine_tune_layers": 4,
+    "fixed_epochs": 10
   }
 }

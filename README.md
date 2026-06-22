@@ -649,6 +649,19 @@ python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 50 -
 python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 60 --experiment-end 64 --dataset-size 100 200 400 600 800 1000
 ```
 
+Серия `exp65`-`exp68` проверяет двухэтапное обучение полной EfficientNetB0 на разных размерах датасета. На первом этапе 8 эпох обучается только классификационная голова, на втором этапе дополнительно размораживаются последние весовые слои backbone:
+
+- `exp65_finetune_last1_layer_after8_epochs_dataset_size` - второй этап с 1 размороженным слоем;
+- `exp66_finetune_last2_layers_after8_epochs_dataset_size` - второй этап с 2 размороженными слоями;
+- `exp67_finetune_last3_layers_after8_epochs_dataset_size` - второй этап с 3 размороженными слоями;
+- `exp68_finetune_last4_layers_after8_epochs_dataset_size` - второй этап с 4 размороженными слоями.
+
+Запуск серии для размеров `100`, `200`, `400`, `600`, `800`, `1000` изображений на класс:
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 65 --experiment-end 68 --dataset-size 100 200 400 600 800 1000
+```
+
 Новая серия `exp30`-`exp46` проверяет влияние размера датасета. Для неё созданы датасеты по `50`, `100`, `150`, `200`, `300`, `400`, `500`, `600`, `800`, `900`, `1100`, `1200`, `1300`, `1400` и `1500` изображений на класс, а точка `1000` изображений на класс добавлена копиями уже готовых запусков на основном датасете. Новые датасеты `50`, `150`, `300`, `500`, `900`, `1100`, `1200`, `1300`, `1400` и `1500` на класс собраны без изображений из holdout:
 
 ```text

@@ -406,3 +406,35 @@ def unfreeze_last_remaining_stage(base_model: tf.keras.Model, cut_layer: str) ->
         layer.trainable = any(layer.name.startswith(prefix) for prefix in prefixes)
         if isinstance(layer, tf.keras.layers.BatchNormalization):
             layer.trainable = False
+
+
+def unfreeze_last_weight_layers(base_model: tf.keras.Model, layer_count: int) -> list[str]:
+    """Разморозить последние N слоев backbone, у которых есть обучаемые веса.
+
+    BatchNormalization оставляется замороженной: на небольших датасетах обновление ее статистик
+    часто делает fine-tuning нестабильным. Слои без весов, например Activation, не учитываются,
+    потому что их "разморозка" не добавляет обучаемых параметров.
+    """
+
+    if layer_count <= 0:
+        freeze_pretrained_base(base_model)
+        return []
+
+    selected_layers: list[tf.keras.layers.Layer] = []
+    for layer in reversed(base_model.layers):
+        if isinstance(layer, tf.keras.layers.BatchNormalization):
+            continue
+        if not layer.trainable_weights and not layer.non_trainable_weights:
+            continue
+        selected_layers.append(layer)
+        if len(selected_layers) == layer_count:
+            break
+
+    selected_names = {layer.name for layer in selected_layers}
+    base_model.trainable = True
+    for layer in base_model.layers:
+        layer.trainable = layer.name in selected_names
+        if isinstance(layer, tf.keras.layers.BatchNormalization):
+            layer.trainable = False
+
+    return [layer.name for layer in reversed(selected_layers)]

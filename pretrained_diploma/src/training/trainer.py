@@ -20,6 +20,8 @@ from pretrained_diploma.src.model.pretrained_efficientnet import (
 
     unfreeze_last_remaining_stage,
 
+    unfreeze_last_weight_layers,
+
 )
 
 from pretrained_diploma.src.training.callbacks import TimeAndLearningRateCallback
@@ -297,7 +299,6 @@ def run_experiment(config: dict[str, Any], overwrite: bool = False) -> Path:
     seed = int(config["random_seed"])
 
     train_ds = load_split_dataset(dataset_dir / "train", image_size, batch_size, True, seed)
-    train_eval_ds = load_split_dataset(dataset_dir / "train", image_size, batch_size, False, seed)
     val_ds = load_split_dataset(dataset_dir / "val", image_size, batch_size, False, seed)
     test_ds = load_split_dataset(dataset_dir / "test", image_size, batch_size, False, seed)
     class_names = list(train_ds.class_names)
@@ -331,15 +332,29 @@ def run_experiment(config: dict[str, Any], overwrite: bool = False) -> Path:
     }
 
     train_ds = add_augmentation(train_ds, config).prefetch(tf.data.AUTOTUNE)
-    train_eval_ds = train_eval_ds.prefetch(tf.data.AUTOTUNE)
     val_ds = val_ds.prefetch(tf.data.AUTOTUNE)
     test_ds = test_ds.prefetch(tf.data.AUTOTUNE)
 
     model, base_model, structure = build_pretrained_model(config)
 
-    if bool(config.get("finetune_enabled", False)):
+    unfreeze_layers_from_start = config.get("unfreeze_weight_layers_from_start")
 
-        head_epochs, finetune_epochs = split_epochs(int(config["max_epochs"]), float(config["head_epoch_fraction"]))
+    if unfreeze_layers_from_start is not None:
+        head_epochs = int(config["max_epochs"])
+
+        finetune_epochs = 0
+
+    elif bool(config.get("finetune_enabled", False)):
+
+        if "head_epochs" in config and "finetune_epochs" in config:
+
+            head_epochs = int(config["head_epochs"])
+
+            finetune_epochs = int(config["finetune_epochs"])
+
+        else:
+
+            head_epochs, finetune_epochs = split_epochs(int(config["max_epochs"]), float(config["head_epoch_fraction"]))
 
     else:
 
@@ -369,6 +384,12 @@ def run_experiment(config: dict[str, Any], overwrite: bool = False) -> Path:
 
     freeze_pretrained_base(base_model)
 
+    if unfreeze_layers_from_start is not None:
+
+        structure["fine_tune_layer_names"] = unfreeze_last_weight_layers(base_model, int(unfreeze_layers_from_start))
+
+        structure["unfreeze_weight_layers_from_start"] = int(unfreeze_layers_from_start)
+
     compile_model(model, float(config["head_learning_rate"]), config["loss"], config["metric"])
 
     head_timer = TimeAndLearningRateCallback()
@@ -397,7 +418,11 @@ def run_experiment(config: dict[str, Any], overwrite: bool = False) -> Path:
 
     if finetune_epochs > 0:
 
-        unfreeze_last_remaining_stage(base_model, config["cut_layer"])
+        if "fine_tune_layers" in config:
+            fine_tune_layers = int(config["fine_tune_layers"])
+            structure["fine_tune_layer_names"] = unfreeze_last_weight_layers(base_model, fine_tune_layers)
+        else:
+            unfreeze_last_remaining_stage(base_model, config["cut_layer"])
 
         compile_model(model, float(config["finetune_learning_rate"]), config["loss"], config["metric"])
 
@@ -431,7 +456,7 @@ def run_experiment(config: dict[str, Any], overwrite: bool = False) -> Path:
         model.load_weights(checkpoint_path)
         model.save(output_dir / "best_model.keras")
 
-    train_eval_metrics = evaluate_model(model, train_eval_ds, class_names)
+    train_eval_metrics = None
     val_eval_metrics = evaluate_model(model, val_ds, class_names)
     test_metrics = evaluate_model(model, test_ds, class_names)
 

@@ -523,6 +523,21 @@ python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 50 -
 python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 60 --experiment-end 64 --dataset-size 100 200 400 600 800 1000
 ```
 
+Серия по количеству размороженных слоев:
+
+Серия `exp65`-`exp68` проверяет, как меняется качество полной EfficientNetB0, если с начала обучения оставить размороженными последние весовые слои backbone. BatchNormalization не размораживается, чтобы обучение было стабильнее на небольших датасетах. Двухэтапный режим здесь не используется.
+
+- `exp65_unfreeze_last1_layer_dataset_size` - 1 размороженный слой;
+- `exp66_unfreeze_last2_layers_dataset_size` - 2 размороженных слоя;
+- `exp67_unfreeze_last3_layers_dataset_size` - 3 размороженных слоя;
+- `exp68_unfreeze_last4_layers_dataset_size` - 4 размороженных слоя.
+
+Запустить серию для размеров `100`, `200`, `400`, `600`, `800`, `1000` изображений на класс:
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 66 --experiment-end 68 --dataset-size 100 200 400 600 800 1000 --overwrite
+```
+
 Проверить, какие слои backbone будут обучаемыми после переноса весов и заморозки:
 
 ```bash
@@ -620,7 +635,7 @@ python pretrained_diploma/scripts/evaluate_holdout.py
 Проверить только серию с разными размерами датасета:
 
 ```bash
-python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 56 --experiment-end 56
+python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 68 --experiment-end 68
 ```
 
 Проверить один конкретный запуск:
