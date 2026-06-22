@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+
 import time
 
 from pathlib import Path
@@ -378,11 +380,14 @@ def run_experiment(config: dict[str, Any], overwrite: bool = False) -> Path:
 
     history_rows: list[dict[str, Any]] = []
 
-    checkpoint_path = output_dir / "best_model.weights.h5"
+    checkpoint_dir = Path(config["results_dir"]).parent / "_checkpoints"
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
+    checkpoint_hash = hashlib.md5(config["experiment_id"].encode("utf-8")).hexdigest()[:16]
+    checkpoint_path = checkpoint_dir / f"{checkpoint_hash}.weights.h5"
 
     checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
 
-        checkpoint_path,
+        str(checkpoint_path),
 
         monitor="val_loss",
 
@@ -469,6 +474,7 @@ def run_experiment(config: dict[str, Any], overwrite: bool = False) -> Path:
     if checkpoint_path.exists():
         model.load_weights(checkpoint_path)
         model.save(output_dir / "best_model.keras")
+        checkpoint_path.unlink(missing_ok=True)
 
     train_eval_metrics = None
     val_eval_metrics = evaluate_model(model, val_ds, class_names)
