@@ -527,15 +527,21 @@ python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 60 -
 
 Серия `exp65`-`exp68` проверяет, как меняется качество полной EfficientNetB0, если с начала обучения оставить размороженными последние весовые слои backbone. BatchNormalization не размораживается, чтобы обучение было стабильнее на небольших датасетах. Двухэтапный режим здесь не используется.
 
-- `exp65_unfreeze_last1_layer_dataset_size` - 1 размороженный слой;
-- `exp66_unfreeze_last2_layers_dataset_size` - 2 размороженных слоя;
-- `exp67_unfreeze_last3_layers_dataset_size` - 3 размороженных слоя;
-- `exp68_unfreeze_last4_layers_dataset_size` - 4 размороженных слоя.
+- `exp65_finetune_last1_layer_after8_epochs_dataset_size` - второй этап с 1 размороженным слоем;
+- `exp66_finetune_last2_layers_after8_epochs_dataset_size` - второй этап с 2 размороженными слоями;
+- `exp67_finetune_last3_layers_after8_epochs_dataset_size` - второй этап с 3 размороженными слоями;
+- `exp68_finetune_last4_layers_after8_epochs_dataset_size` - второй этап с 4 размороженными слоями.
 
 Запустить серию для размеров `100`, `200`, `400`, `600`, `800`, `1000` изображений на класс:
 
 ```bash
-python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 66 --experiment-end 68 --dataset-size 100 200 400 600 800 1000 --overwrite
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 65 --experiment-end 68 --dataset-size 100 200 400 600 800 1000
+```
+
+Эксперимент `exp69_full_model_aug_epochs8_dataset_size` проверяет полную EfficientNetB0 на 8 эпохах с аугментацией обучающих данных. Аугментация применяется только к train split.
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 69 --experiment-end 69 --dataset-size 100 200 400 600 800 1000
 ```
 
 Проверить, какие слои backbone будут обучаемыми после переноса весов и заморозки:
@@ -635,7 +641,7 @@ python pretrained_diploma/scripts/evaluate_holdout.py
 Проверить только серию с разными размерами датасета:
 
 ```bash
-python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 68 --experiment-end 68
+python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 69 --experiment-end 69
 ```
 
 Проверить один конкретный запуск:

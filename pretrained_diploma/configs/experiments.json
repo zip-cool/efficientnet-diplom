@@ -822,5 +822,22 @@
     "finetune_epochs": 2,
     "fine_tune_layers": 4,
     "fixed_epochs": 10
+  },
+  "exp69_full_model_aug_epochs8_dataset_size": {
+    "series": "augmentation_dataset_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with train-time data augmentation on multiple dataset sizes",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "fixed_epochs": 8,
+    "augmentation": {
+      "enabled": true,
+      "random_flip": "horizontal",
+      "random_rotation": 0.08,
+      "random_zoom": 0.1,
+      "random_translation": 0.05,
+      "random_contrast": 0.1
+    }
   }
 }

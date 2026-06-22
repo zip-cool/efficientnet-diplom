@@ -662,6 +662,14 @@ python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 60 -
 python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 65 --experiment-end 68 --dataset-size 100 200 400 600 800 1000
 ```
 
+Эксперимент `exp69_full_model_aug_epochs8_dataset_size` проверяет полную EfficientNetB0 с аугментацией train-данных на 8 эпохах. Аугментация применяется только к `train`, validation и test остаются без изменений.
+
+Запуск для размеров `100`, `200`, `400`, `600`, `800`, `1000` изображений на класс:
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 69 --experiment-end 69 --dataset-size 100 200 400 600 800 1000
+```
+
 Новая серия `exp30`-`exp46` проверяет влияние размера датасета. Для неё созданы датасеты по `50`, `100`, `150`, `200`, `300`, `400`, `500`, `600`, `800`, `900`, `1100`, `1200`, `1300`, `1400` и `1500` изображений на класс, а точка `1000` изображений на класс добавлена копиями уже готовых запусков на основном датасете. Новые датасеты `50`, `150`, `300`, `500`, `900`, `1100`, `1200`, `1300`, `1400` и `1500` на класс собраны без изображений из holdout:
 
 ```text
