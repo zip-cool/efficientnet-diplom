@@ -90,13 +90,27 @@ def add_augmentation(dataset: tf.data.Dataset, config: dict[str, Any]) -> tf.dat
 
     return dataset.map(lambda images, labels: (augmentation(images, training=True), labels), num_parallel_calls=tf.data.AUTOTUNE)
 
-def compile_model(model: tf.keras.Model, learning_rate: float, loss: str, metric: str) -> None:
+def build_optimizer(optimizer_name: str, learning_rate: float) -> tf.keras.optimizers.Optimizer:
 
-    """Скомпилировать модель с Adam и заданным learning rate."""
+    """Создать оптимизатор по имени из конфига эксперимента."""
+
+    normalized_name = optimizer_name.lower()
+    if normalized_name == "adam":
+        return tf.keras.optimizers.Adam(learning_rate=learning_rate)
+    if normalized_name == "sgd":
+        return tf.keras.optimizers.SGD(learning_rate=learning_rate)
+    if normalized_name in {"rmsprop", "rmspror", "pmspror"}:
+        return tf.keras.optimizers.RMSprop(learning_rate=learning_rate)
+    raise ValueError(f"Unknown optimizer: {optimizer_name}")
+
+
+def compile_model(model: tf.keras.Model, optimizer_name: str, learning_rate: float, loss: str, metric: str) -> None:
+
+    """Скомпилировать модель с выбранным оптимизатором и learning rate."""
 
     model.compile(
 
-        optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
+        optimizer=build_optimizer(optimizer_name, learning_rate),
 
         loss=loss,
 
@@ -390,7 +404,7 @@ def run_experiment(config: dict[str, Any], overwrite: bool = False) -> Path:
 
         structure["unfreeze_weight_layers_from_start"] = int(unfreeze_layers_from_start)
 
-    compile_model(model, float(config["head_learning_rate"]), config["loss"], config["metric"])
+    compile_model(model, config["optimizer"], float(config["head_learning_rate"]), config["loss"], config["metric"])
 
     head_timer = TimeAndLearningRateCallback()
 
@@ -424,7 +438,7 @@ def run_experiment(config: dict[str, Any], overwrite: bool = False) -> Path:
         else:
             unfreeze_last_remaining_stage(base_model, config["cut_layer"])
 
-        compile_model(model, float(config["finetune_learning_rate"]), config["loss"], config["metric"])
+        compile_model(model, config["optimizer"], float(config["finetune_learning_rate"]), config["loss"], config["metric"])
 
         finetune_timer = TimeAndLearningRateCallback()
 

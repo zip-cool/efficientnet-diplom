@@ -839,5 +839,210 @@
       "random_translation": 0.05,
       "random_contrast": 0.1
     }
+  },
+  "exp70_resolution_190_epochs8_dataset_size": {
+    "series": "resolution_dataset_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with input resolution 190 on selected dataset sizes",
+    "input_size": 190,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "fixed_epochs": 8
+  },
+  "exp71_resolution_160_epochs8_dataset_size": {
+    "series": "resolution_dataset_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with input resolution 160 on selected dataset sizes",
+    "input_size": 160,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "fixed_epochs": 8
+  },
+  "exp72_resolution_128_epochs8_dataset_size": {
+    "series": "resolution_dataset_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with input resolution 128 on selected dataset sizes",
+    "input_size": 128,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "fixed_epochs": 8
+  },
+  "exp73_optimizer_adam_lr0100_epochs8_dataset_size": {
+    "series": "optimizer_learning_rate_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with Adam optimizer and learning rate 0.1",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "optimizer": "adam",
+    "head_learning_rate": 0.1,
+    "fixed_epochs": 8
+  },
+  "exp74_optimizer_adam_lr0010_epochs8_dataset_size": {
+    "series": "optimizer_learning_rate_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with Adam optimizer and learning rate 0.01",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "optimizer": "adam",
+    "head_learning_rate": 0.01,
+    "fixed_epochs": 8
+  },
+  "exp75_optimizer_adam_lr0001_epochs8_dataset_size": {
+    "series": "optimizer_learning_rate_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with Adam optimizer and learning rate 0.001",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "optimizer": "adam",
+    "head_learning_rate": 0.001,
+    "fixed_epochs": 8
+  },
+  "exp76_optimizer_sgd_lr0100_epochs8_dataset_size": {
+    "series": "optimizer_learning_rate_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with SGD optimizer and learning rate 0.1",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "optimizer": "sgd",
+    "head_learning_rate": 0.1,
+    "fixed_epochs": 8
+  },
+  "exp77_optimizer_sgd_lr0010_epochs8_dataset_size": {
+    "series": "optimizer_learning_rate_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with SGD optimizer and learning rate 0.01",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "optimizer": "sgd",
+    "head_learning_rate": 0.01,
+    "fixed_epochs": 8
+  },
+  "exp78_optimizer_sgd_lr0001_epochs8_dataset_size": {
+    "series": "optimizer_learning_rate_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with SGD optimizer and learning rate 0.001",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "optimizer": "sgd",
+    "head_learning_rate": 0.001,
+    "fixed_epochs": 8
+  },
+  "exp79_optimizer_rmsprop_lr0100_epochs8_dataset_size": {
+    "series": "optimizer_learning_rate_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with RMSprop optimizer and learning rate 0.1",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "optimizer": "rmsprop",
+    "head_learning_rate": 0.1,
+    "fixed_epochs": 8
+  },
+  "exp80_optimizer_rmsprop_lr0010_epochs8_dataset_size": {
+    "series": "optimizer_learning_rate_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with RMSprop optimizer and learning rate 0.01",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "optimizer": "rmsprop",
+    "head_learning_rate": 0.01,
+    "fixed_epochs": 8
+  },
+  "exp81_optimizer_rmsprop_lr0001_epochs8_dataset_size": {
+    "series": "optimizer_learning_rate_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with RMSprop optimizer and learning rate 0.001",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "optimizer": "rmsprop",
+    "head_learning_rate": 0.001,
+    "fixed_epochs": 8
+  },
+  "exp82_finetune_last5_layers_after8_epochs_dataset_size": {
+    "series": "two_stage_finetune_layers_dataset_grid",
+    "description": "Full EfficientNetB0: train head for 8 epochs, then fine-tune with the last 5 backbone weight layers unfrozen",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "finetune_enabled": true,
+    "head_epochs": 8,
+    "finetune_epochs": 2,
+    "fine_tune_layers": 5,
+    "fixed_epochs": 10
+  },
+  "exp83_finetune_last10_layers_after8_epochs_dataset_size": {
+    "series": "two_stage_finetune_layers_dataset_grid",
+    "description": "Full EfficientNetB0: train head for 8 epochs, then fine-tune with the last 10 backbone weight layers unfrozen",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "finetune_enabled": true,
+    "head_epochs": 8,
+    "finetune_epochs": 2,
+    "fine_tune_layers": 10,
+    "fixed_epochs": 10
+  },
+  "exp84_finetune_last15_layers_after8_epochs_dataset_size": {
+    "series": "two_stage_finetune_layers_dataset_grid",
+    "description": "Full EfficientNetB0: train head for 8 epochs, then fine-tune with the last 15 backbone weight layers unfrozen",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "finetune_enabled": true,
+    "head_epochs": 8,
+    "finetune_epochs": 2,
+    "fine_tune_layers": 15,
+    "fixed_epochs": 10
+  },
+  "exp85_dropout050_epochs8_dataset_size": {
+    "series": "dropout_dataset_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with classifier dropout rate 0.5",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "dropout_rate": 0.5,
+    "fixed_epochs": 8
+  },
+  "exp86_dropout010_epochs8_dataset_size": {
+    "series": "dropout_dataset_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with classifier dropout rate 0.1",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "dropout_rate": 0.1,
+    "fixed_epochs": 8
+  },
+  "exp87_dropout015_epochs8_dataset_size": {
+    "series": "dropout_dataset_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with classifier dropout rate 0.15",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "dropout_rate": 0.15,
+    "fixed_epochs": 8
+  },
+  "exp88_dropout025_epochs8_dataset_size": {
+    "series": "dropout_dataset_grid",
+    "description": "Full EfficientNetB0 trained for 8 epochs with classifier dropout rate 0.25",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "dropout_rate": 0.25,
+    "fixed_epochs": 8
   }
 }

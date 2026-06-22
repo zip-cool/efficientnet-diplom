@@ -530,7 +530,10 @@ python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 60 -
 - `exp65_finetune_last1_layer_after8_epochs_dataset_size` - второй этап с 1 размороженным слоем;
 - `exp66_finetune_last2_layers_after8_epochs_dataset_size` - второй этап с 2 размороженными слоями;
 - `exp67_finetune_last3_layers_after8_epochs_dataset_size` - второй этап с 3 размороженными слоями;
-- `exp68_finetune_last4_layers_after8_epochs_dataset_size` - второй этап с 4 размороженными слоями.
+- `exp68_finetune_last4_layers_after8_epochs_dataset_size` - второй этап с 4 размороженными слоями;
+- `exp82_finetune_last5_layers_after8_epochs_dataset_size` - второй этап с 5 размороженными слоями;
+- `exp83_finetune_last10_layers_after8_epochs_dataset_size` - второй этап с 10 размороженными слоями;
+- `exp84_finetune_last15_layers_after8_epochs_dataset_size` - второй этап с 15 размороженными слоями.
 
 Запустить серию для размеров `100`, `200`, `400`, `600`, `800`, `1000` изображений на класс:
 
@@ -538,10 +541,47 @@ python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 60 -
 python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 65 --experiment-end 68 --dataset-size 100 200 400 600 800 1000
 ```
 
+Дополнительные эксперименты с `5`, `10`, `15` размороженными слоями запускаются отдельно:
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 82 --experiment-end 84 --dataset-size 100 200 400 600 800 1000
+```
+
+Серия `exp85`-`exp88` проверяет влияние dropout в классификационной голове полной EfficientNetB0 на 8 эпохах:
+
+- `exp85_dropout050_epochs8_dataset_size` - dropout `0.5`;
+- `exp86_dropout010_epochs8_dataset_size` - dropout `0.1`;
+- `exp87_dropout015_epochs8_dataset_size` - dropout `0.15`;
+- `exp88_dropout025_epochs8_dataset_size` - dropout `0.25`.
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 85 --experiment-end 88 --dataset-size 800
+```
+
 Эксперимент `exp69_full_model_aug_epochs8_dataset_size` проверяет полную EfficientNetB0 на 8 эпохах с аугментацией обучающих данных. Аугментация применяется только к train split.
 
 ```bash
 python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 69 --experiment-end 69 --dataset-size 100 200 400 600 800 1000
+```
+
+Серия `exp70`-`exp72` проверяет снижение входного разрешения изображения на 8 эпохах:
+
+- `exp70_resolution_190_epochs8_dataset_size` - входное разрешение `190x190`;
+- `exp71_resolution_160_epochs8_dataset_size` - входное разрешение `160x160`;
+- `exp72_resolution_128_epochs8_dataset_size` - входное разрешение `128x128`.
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 70 --experiment-end 72 --dataset-size 200 600 1000
+```
+
+Серия `exp73`-`exp81` проверяет влияние оптимизатора и learning rate на полной EfficientNetB0 при 8 эпохах и размере датасета `800` изображений на класс:
+
+- `exp73-exp75` - `Adam` с learning rate `0.1`, `0.01`, `0.001`;
+- `exp76-exp78` - `SGD` с learning rate `0.1`, `0.01`, `0.001`;
+- `exp79-exp81` - `RMSprop` с learning rate `0.1`, `0.01`, `0.001`.
+
+```bash
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 73 --experiment-end 81 --dataset-size 800
 ```
 
 Проверить, какие слои backbone будут обучаемыми после переноса весов и заморозки:
@@ -641,7 +681,7 @@ python pretrained_diploma/scripts/evaluate_holdout.py
 Проверить только серию с разными размерами датасета:
 
 ```bash
-python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 69 --experiment-end 69
+python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 70 --experiment-end 72
 ```
 
 Проверить один конкретный запуск:
