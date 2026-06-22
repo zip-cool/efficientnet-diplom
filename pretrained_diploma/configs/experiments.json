@@ -726,6 +726,24 @@
     "cut_layer": "top_activation",
     "tail_type": "gap"
   },
+  "exp58_full_model_epochs3_dataset_size": {
+    "series": "baseline_epoch_dataset_grid",
+    "description": "Full EfficientNetB0 baseline trained for 3 epochs on multiple dataset sizes",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "fixed_epochs": 3
+  },
+  "exp59_full_model_epochs1_dataset_size": {
+    "series": "baseline_epoch_dataset_grid",
+    "description": "Full EfficientNetB0 baseline trained for 1 epoch on multiple dataset sizes",
+    "input_size": 224,
+    "cut_layer": "top_activation",
+    "cut_point": "full_model",
+    "tail_type": "gap",
+    "fixed_epochs": 1
+  },
   "exp60_full_model_epochs2_dataset_size": {
     "series": "baseline_epoch_dataset_grid",
     "description": "Full EfficientNetB0 baseline trained for 2 epochs on multiple dataset sizes",
@@ -771,18 +789,14 @@
     "tail_type": "gap",
     "fixed_epochs": 10
   },
-  "exp65_finetune_last1_layer_after8_epochs_dataset_size": {
-    "series": "two_stage_finetune_layers_dataset_grid",
-    "description": "Full EfficientNetB0: train head for 8 epochs, then fine-tune with the last 1 backbone weight layer unfrozen",
+  "exp65_full_model_epochs9_dataset_size": {
+    "series": "baseline_epoch_dataset_grid",
+    "description": "Full EfficientNetB0 baseline trained for 9 epochs on multiple dataset sizes",
     "input_size": 224,
     "cut_layer": "top_activation",
     "cut_point": "full_model",
     "tail_type": "gap",
-    "finetune_enabled": true,
-    "head_epochs": 8,
-    "finetune_epochs": 2,
-    "fine_tune_layers": 1,
-    "fixed_epochs": 10
+    "fixed_epochs": 9
   },
   "exp66_finetune_last2_layers_after8_epochs_dataset_size": {
     "series": "two_stage_finetune_layers_dataset_grid",

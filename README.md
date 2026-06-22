@@ -635,23 +635,25 @@ python pretrained_diploma/scripts/run_all_experiments.py
 python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 50 --experiment-end 57 --epochs 10
 ```
 
-Серия `exp60`-`exp64` проверяет базовую полную EfficientNetB0 на разных размерах датасета и фиксированных числах эпох:
+Серия `exp58`-`exp65` проверяет базовую полную EfficientNetB0 на разных размерах датасета и фиксированных числах эпох:
 
+- `exp58_full_model_epochs3_dataset_size` - 3 эпохи;
+- `exp59_full_model_epochs1_dataset_size` - 1 эпоха;
 - `exp60_full_model_epochs2_dataset_size` - 2 эпохи;
 - `exp61_full_model_epochs4_dataset_size` - 4 эпохи;
 - `exp62_full_model_epochs6_dataset_size` - 6 эпох;
 - `exp63_full_model_epochs8_dataset_size` - 8 эпох;
-- `exp64_full_model_epochs10_dataset_size` - 10 эпох.
+- `exp64_full_model_epochs10_dataset_size` - 10 эпох;
+- `exp65_full_model_epochs9_dataset_size` - 9 эпох.
 
 Запуск серии для размеров `100`, `200`, `400`, `600`, `800`, `1000` изображений на класс:
 
 ```bash
-python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 60 --experiment-end 64 --dataset-size 100 200 400 600 800 1000
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 58 --experiment-end 65 --dataset-size 100 200 400 600 800 1000
 ```
 
-Серия `exp65`-`exp68`, `exp82`-`exp84` и `exp89`-`exp90` проверяет двухэтапное обучение полной EfficientNetB0 на разных размерах датасета. На первом этапе 8 эпох обучается только классификационная голова, на втором этапе дополнительно размораживаются последние весовые слои backbone:
+Серия `exp66`-`exp68`, `exp82`-`exp84` и `exp89`-`exp90` проверяет двухэтапное обучение полной EfficientNetB0 на разных размерах датасета. На первом этапе 8 эпох обучается только классификационная голова, на втором этапе дополнительно размораживаются последние весовые слои backbone:
 
-- `exp65_finetune_last1_layer_after8_epochs_dataset_size` - второй этап с 1 размороженным слоем;
 - `exp66_finetune_last2_layers_after8_epochs_dataset_size` - второй этап с 2 размороженными слоями;
 - `exp67_finetune_last3_layers_after8_epochs_dataset_size` - второй этап с 3 размороженными слоями;
 - `exp68_finetune_last4_layers_after8_epochs_dataset_size` - второй этап с 4 размороженными слоями;
@@ -664,7 +666,7 @@ python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 60 -
 Запуск серии для размеров `100`, `200`, `400`, `600`, `800`, `1000` изображений на класс:
 
 ```bash
-python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 65 --experiment-end 68 --dataset-size 100 200 400 600 800 1000
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 66 --experiment-end 68 --dataset-size 100 200 400 600 800 1000
 ```
 
 Запуск дополнительной серии с `5`, `10`, `15` размороженными слоями:
@@ -759,7 +761,7 @@ pretrained_diploma/data/holdout_not_train_val_300_per_class/test/
 Проверка сохранённых моделей на holdout-выборке:
 
 ```bash
-python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 60 --experiment-end 64
+python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 58 --experiment-end 65
 ```
 
 Восстановление графиков без обучения:

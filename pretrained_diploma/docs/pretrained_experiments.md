@@ -509,8 +509,10 @@ python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 50 -
 
 Серия базовой модели по эпохам и размерам датасета:
 
-Серия `exp60`-`exp64` нужна для проверки полной EfficientNetB0 без удаления блоков на разных размерах обучающего набора. Один номер эксперимента соответствует одному фиксированному числу эпох, а размеры датасета задаются при запуске:
+Серия `exp58`-`exp64` нужна для проверки полной EfficientNetB0 без удаления блоков на разных размерах обучающего набора. Один номер эксперимента соответствует одному фиксированному числу эпох, а размеры датасета задаются при запуске:
 
+- `exp58_full_model_epochs3_dataset_size` - 3 эпохи;
+- `exp59_full_model_epochs1_dataset_size` - 1 эпоха;
 - `exp60_full_model_epochs2_dataset_size` - 2 эпохи;
 - `exp61_full_model_epochs4_dataset_size` - 4 эпохи;
 - `exp62_full_model_epochs6_dataset_size` - 6 эпох;
@@ -520,7 +522,7 @@ python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 50 -
 Запустить серию для размеров `100`, `200`, `400`, `600`, `800`, `1000` изображений на класс:
 
 ```bash
-python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 60 --experiment-end 64 --dataset-size 100 200 400 600 800 1000
+python pretrained_diploma/scripts/run_all_experiments.py --experiment-start 58 --experiment-end 64 --dataset-size 100 200 400 600 800 1000
 ```
 
 Серия по количеству размороженных слоев:
@@ -661,7 +663,7 @@ python pretrained_diploma/scripts/evaluate_holdout.py
 Проверить только серию с разными размерами датасета:
 
 ```bash
-python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 89 --experiment-end 90
+python pretrained_diploma/scripts/evaluate_holdout.py --experiment-start 58 --experiment-end 65
 ```
 
 Проверить один конкретный запуск:
