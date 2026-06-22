@@ -12,14 +12,26 @@ def plot_history_from_csv(history_csv: Path, plots_dir: Path) -> None:
     history = pd.read_csv(history_csv)
     plots_dir.mkdir(parents=True, exist_ok=True)
 
-    for metric, ylabel, output_name in [
-        ("accuracy", "Accuracy", "accuracy.png"),
-        ("loss", "Loss", "loss.png"),
+    for metric, ylabel, train_label, test_label, output_name in [
+        (
+            "accuracy",
+            "Точность",
+            "Точность на обучающей выборке",
+            "Точность на тестовой выборке",
+            "accuracy.png",
+        ),
+        (
+            "loss",
+            "Функция потерь",
+            "Функция потерь на обучающей выборке",
+            "Функция потерь на тестовой выборке",
+            "loss.png",
+        ),
     ]:
         plt.figure(figsize=(8, 5))
-        plt.plot(history["epoch"], history[metric], marker="o", label=f"train {metric}")
-        plt.plot(history["epoch"], history[f"val_{metric}"], marker="o", label=f"val {metric}")
-        plt.xlabel("Epoch")
+        plt.plot(history["epoch"], history[metric], marker="o", label=train_label)
+        plt.plot(history["epoch"], history[f"val_{metric}"], marker="o", label=test_label)
+        plt.xlabel("Количество эпох")
         plt.ylabel(ylabel)
         plt.grid(True, alpha=0.3)
         plt.legend()

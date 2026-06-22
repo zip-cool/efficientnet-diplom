@@ -1,8 +1,8 @@
 """Построение графиков обучения EfficientNet в стиле для диплома.
 
 Скрипт строит один PNG с двумя графиками:
-- Loss by Epoch;
-- Accuracy by Epoch.
+- функция потерь по эпохам;
+- точность по эпохам.
 
 Подписи эпох делятся на этапы ``head`` и ``finetune``, а граница между этапами
 показывается пунктирной линией. Такой формат удобнее для анализа двухэтапного
@@ -56,19 +56,19 @@ def plot_training_history(
 
     fig, axes = plt.subplots(1, 2, figsize=(18, 5))
 
-    axes[0].plot(x_values, history["loss"], marker="o", label="Train loss")
-    axes[0].plot(x_values, history["val_loss"], marker="o", label="Val loss")
-    axes[0].set_title("Loss by Epoch")
-    axes[0].set_xlabel("Global epoch")
-    axes[0].set_ylabel("Loss")
+    axes[0].plot(x_values, history["loss"], marker="o", label="Функция потерь на обучающей выборке")
+    axes[0].plot(x_values, history["val_loss"], marker="o", label="Функция потерь на тестовой выборке")
+    axes[0].set_title("Функция потерь по эпохам")
+    axes[0].set_xlabel("Количество эпох")
+    axes[0].set_ylabel("Функция потерь")
     axes[0].grid(True, alpha=0.3)
     axes[0].legend()
 
-    axes[1].plot(x_values, history["accuracy"], marker="o", label="Train accuracy")
-    axes[1].plot(x_values, history["val_accuracy"], marker="o", label="Val accuracy")
-    axes[1].set_title("Accuracy by Epoch")
-    axes[1].set_xlabel("Global epoch")
-    axes[1].set_ylabel("Accuracy")
+    axes[1].plot(x_values, history["accuracy"], marker="o", label="Точность на обучающей выборке")
+    axes[1].plot(x_values, history["val_accuracy"], marker="o", label="Точность на тестовой выборке")
+    axes[1].set_title("Точность по эпохам")
+    axes[1].set_xlabel("Количество эпох")
+    axes[1].set_ylabel("Точность")
     axes[1].grid(True, alpha=0.3)
     axes[1].legend()
 
