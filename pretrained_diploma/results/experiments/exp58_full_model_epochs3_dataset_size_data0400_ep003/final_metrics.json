@@ -85,7 +85,7 @@
   "estimated_gflops_per_second": 4.8887104759274385,
   "holdout_dataset_dir": "pretrained_diploma\\data\\holdout_not_train_val_300_per_class\\test",
   "holdout_evaluated_model": "best_model.keras",
-  "holdout_accuracy": 0.8277778029441833,
+  "holdout_accuracy": 0.84111118029441833,
   "holdout_sklearn_accuracy": 0.8277777777777777,
   "holdout_loss": 0.4588686227798462,
   "holdout_precision": 0.8263844466527108,
